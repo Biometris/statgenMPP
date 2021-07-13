@@ -1,0 +1,17 @@
+seed	-1234	         ; fixed start seed
+genome	1 100            ; 1 chromosomes of 50 cM 
+markers mapfile 11 2	 ; 11 markers per chromosome (equally spaced), 2 alleles
+dist eval.txt 5.0        ; file with evaluation points with distance 1.0 cM 
+
+mu  5.0 ; overall mean
+var 1.0 ; variance residual error
+
+inbfnd BLACK --	  
+inbfnd BLUE  -+	   
+inbfnd GREEN ++	   
+
+qtl qtl1 1 25.0  1.0  1.0       
+qtl qtl2 1 75.0  1.0  0.0  
+epi qtl1 qtl2    1.0
+
+pop cross C3S4DH BLACK BLUE GREEN 10

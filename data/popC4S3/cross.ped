@@ -1,0 +1,16 @@
+       BLACK      INBPAR           0           0
+        BLUE      INBPAR           0           0
+       GREEN      INBPAR           0           0
+         RED      INBPAR           0           0
+          H1      HYBRID       BLACK        BLUE
+          H2      HYBRID       GREEN         RED
+   cross0001        C4S3          H1          H2
+   cross0002        C4S3          H1          H2
+   cross0003        C4S3          H1          H2
+   cross0004        C4S3          H1          H2
+   cross0005        C4S3          H1          H2
+   cross0006        C4S3          H1          H2
+   cross0007        C4S3          H1          H2
+   cross0008        C4S3          H1          H2
+   cross0009        C4S3          H1          H2
+   cross0010        C4S3          H1          H2

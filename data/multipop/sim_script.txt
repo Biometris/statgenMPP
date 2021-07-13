@@ -1,0 +1,18 @@
+seed	-1234	         ; fixed start seed
+genome	5 100            ; 1 chromosomes of 50 cM 
+markers mapfile 11 2	 ; 11 markers per chromosome (equally spaced), 2 alleles
+dist eval.txt 5.0        ; file with evaluation points with distance 1.0 cM 
+
+mu  5.0 ; overall mean
+var 1.0 ; variance residual error
+
+inbfnd A -++	  
+inbfnd B +-+
+inbfnd C ++- 
+
+qtl qtl1 1 25.0  1.0  0.0       
+qtl qtl2 2 75.0  1.0  0.0  
+qtl qtl3 3 75.0  1.0  0.0  
+
+pop AxB F4DH A B 100
+pop AxC F4DH A C  80
