@@ -16,7 +16,7 @@ calcIBDmpp<-function(par.names,cross.names,loc.names,qua.names,pop.types,mapfile
     
     for (i in 1:length(pos.names)) {
       one.pos<-pos.names[i]
-      df1 <- as.data.frame(getQTL(IBD.cross1, c(one.pos)))
+      df1 <- as.data.frame(getQTLProb(IBD.cross1, c(one.pos)))
       
       one.pos.IBDs<-matrix(0, ncol = length(unipar.names),nrow = nrow(df1))
       one.pos.IBDs<-as.data.frame(one.pos.IBDs)
@@ -65,7 +65,7 @@ calcIBDmpp<-function(par.names,cross.names,loc.names,qua.names,pop.types,mapfile
       
       for (i in 1:length(pos.names)) {
         one.pos<-pos.names[i]
-        df1 <- as.data.frame(getQTL(IBD.cross1, c(one.pos)))
+        df1 <- as.data.frame(getQTLProb(IBD.cross1, c(one.pos)))
         
         one.pos.IBDs<-matrix(0, ncol = length(unipar.names),nrow = nrow(df1))
         one.pos.IBDs<-as.data.frame(one.pos.IBDs)
