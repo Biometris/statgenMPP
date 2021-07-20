@@ -22,18 +22,19 @@ calcIBDmpp<-function(par.names,cross.names,loc.names,qua.names,pop.types,mapfile
       one.pos.IBDs<-as.data.frame(one.pos.IBDs)
       
       colnames(one.pos.IBDs)<-paste0(one.pos,'_p',unipar.names)
-      rownames(one.pos.IBDs)<-rownames(df1)
+      rownames(one.pos.IBDs)<-df1$geno
       
-      IBD.Parent<-df1[,1:length(unipar.names)]
-      IBD.Het<-df1[,-c(1:length(unipar.names))]
+      IBD.Parent<-df1[,2:(length(unipar.names)+1)]
+      IBD.Het<-df1[,(length(unipar.names)+2):ncol(df1)]
       
       for (p in 1:length(unipar.names)) {
         one.parent<-unipar.names[p]
         par.ind<-grep(one.parent,names(IBD.Parent))
         
-        Het.names<-unlist(strsplit(names(IBD.Het), "_pHET_"))
-        HET.par.names<-Het.names[-which(Het.names==one.pos)]
-        HET.ind<-grep(par.ind,HET.par.names)
+        # Het.names<-unlist(strsplit(names(IBD.Het), "_pHET_"))
+        # 
+        # HET.par.names<-Het.names[-which(Het.names==one.pos)]
+        HET.ind <- grep(one.parent, colnames(IBD.Het))
         
         one.pos.IBDs[,p]<-IBD.Parent[,par.ind]*2+apply(IBD.Het[,HET.ind], 1, sum)
       }
@@ -71,10 +72,10 @@ calcIBDmpp<-function(par.names,cross.names,loc.names,qua.names,pop.types,mapfile
         one.pos.IBDs<-as.data.frame(one.pos.IBDs)
         
         colnames(one.pos.IBDs)<-paste0(one.pos,'_p',unipar.names)
-        rownames(one.pos.IBDs)<-rownames(df1)
+        rownames(one.pos.IBDs)<-df1$geno
         
-        one.pos.IBDs[which(names(one.pos.IBDs)==names(df1)[1])]<-df1[1]*2+df1[3]
-        one.pos.IBDs[which(names(one.pos.IBDs)==names(df1)[2])]<-df1[2]*2+df1[3]
+        one.pos.IBDs[which(names(one.pos.IBDs)==names(df1)[2])]<-df1[2]*2 #+df1[4]
+        one.pos.IBDs[which(names(one.pos.IBDs)==names(df1)[3])]<-df1[3]*2 #+df1[4]
         
         if (i==1){
           all.pos.IBDs<-one.pos.IBDs
@@ -125,11 +126,12 @@ randomQTLmodel<-function(MPPobj, trait.name='pheno',scan_pos=1,cof_pos=NULL,NULL
     fix = as.formula(paste0(trait.name, "~",cross))
   }
   
+  data$cross <- as.factor(data$cross)
   
   if (NULLmodel==TRUE) { ##NULL mode wwithout cofactor
       if (length(cof_pos)==0) {
-        obj <- LMMsolve(fixed=fix, residualterm=cross, data=data, eps=1.0e-8,
-                        monitor=FALSE, display= FALSE)
+        obj <- LMMsolver::LMMsolve(fixed=fix, residualterm=cross, data=data, eps=1.0e-8,
+                                   monitor=FALSE, display= FALSE)
         
       }  ##NULL mode with cofactor(s)
       if (length(cof_pos)!=0) {
@@ -141,7 +143,7 @@ randomQTLmodel<-function(MPPobj, trait.name='pheno',scan_pos=1,cof_pos=NULL,NULL
           Lgrp[[cof_name]]<-which(colnames(data) %in% cof_IBD_name)
         }
         
-        obj <- LMMsolve(fixed=fix, randomMatrices=Lgrp, 
+        obj <- LMMsolver::LMMsolve(fixed=fix, randomMatrices=Lgrp, 
                         residualterm=cross, data=data, eps=1.0e-8,
                         monitor=FALSE)
         
