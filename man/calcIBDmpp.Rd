@@ -2,7 +2,7 @@
 % Please edit documentation in R/calcIBDmpp.R
 \name{calcIBDmpp}
 \alias{calcIBDmpp}
-\title{IBDs calculation and prepare the design matrix----}
+\title{IBDs calculation and prepare the design matrix}
 \usage{
 calcIBDmpp(
   par.names,
@@ -14,6 +14,21 @@ calcIBDmpp(
   evaldist
 )
 }
+\arguments{
+\item{par.names}{...}
+
+\item{cross.names}{...}
+
+\item{loc.names}{...}
+
+\item{qua.names}{...}
+
+\item{pop.types}{...}
+
+\item{mapfile}{...}
+
+\item{evaldist}{...}
+}
 \description{
-IBDs calculation and prepare the design matrix----
+IBDs calculation and prepare the design matrix
 }

@@ -2,3 +2,10 @@
 
 export(calcIBDmpp)
 export(selQTLmpp)
+importFrom(graphics,abline)
+importFrom(graphics,axis)
+importFrom(graphics,box)
+importFrom(stats,as.formula)
+importFrom(stats,coef)
+importFrom(stats,pchisq)
+importFrom(utils,read.table)

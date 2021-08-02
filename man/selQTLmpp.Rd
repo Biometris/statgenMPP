@@ -12,6 +12,17 @@ selQTLmpp(
   CIM = TRUE
 )
 }
+\arguments{
+\item{MPPobj}{...}
+
+\item{QTLwindow}{...}
+
+\item{threshold}{...}
+
+\item{trait.name}{...}
+
+\item{CIM}{...}
+}
 \description{
 multi-round genome scans and select cofactors
 }
