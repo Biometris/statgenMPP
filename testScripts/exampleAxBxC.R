@@ -16,8 +16,8 @@ mapfile <- "testScripts/data/multipop/mapfile.map" # map file names
 evaldist <- 5 # distance for IBD calc
 
 # 2. calculate IBDs and create the data frame
-MPPobj <- calcIBDmpp(par.names, cross.names, loc.names, qua.names,
-                     pop.types, mapfile, evaldist)
+MPPobj <- calcIBDmppOrig(par.names, cross.names, loc.names, qua.names,
+                         pop.types, mapfile, evaldist)
 head(MPPobj$calcIBDres$IBDdata)[1:6,1:10] # pheno + design matrix for LMMsolve latter
 head(MPPobj$calcIBDres$IBDmatrix)[1:6,1:6]
 
@@ -25,3 +25,22 @@ head(MPPobj$calcIBDres$IBDmatrix)[1:6,1:6]
 MPPobj <- selQTLmpp(MPPobj, QTLwindow = 10, threshold = 3,
                     trait.name = "pheno", CIM = TRUE)
 MPPobj$Result$QTLcandidates
+
+
+
+crossNames <- c("AxB", "AxC") # cross name(s)
+locFiles <- c("testScripts/data/multipop/AxB.loc",
+              "testScripts/data/multipop/AxC.loc") # loc files
+quaFiles <- c("testScripts/data/multipop/AxB.qua",
+              "testScripts/data/multipop/AxC.qua") # qua files
+poptypes <- c("F4DH", "F4DH") # cross type(s)
+mapFile <- "testScripts/data/multipop/mapfile.map" # map file names
+evaldist <- 5 # distance for IBD calc
+
+quaDat <- lapply(quaFiles, read.table, header = TRUE)
+
+
+
+
+MPPobj2 <- calcIBDmpp(crossNames, locFiles, quaDat,
+                      poptypes, mapFile, evaldist)

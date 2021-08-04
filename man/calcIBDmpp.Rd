@@ -5,27 +5,25 @@
 \title{IBDs calculation and prepare the design matrix}
 \usage{
 calcIBDmpp(
-  par.names,
-  cross.names,
-  loc.names,
-  qua.names,
-  pop.types,
-  mapfile,
-  evaldist
+  crossNames,
+  locFiles,
+  quaDat,
+  poptypes,
+  mapFile,
+  evaldist,
+  verbose = FALSE
 )
 }
 \arguments{
-\item{par.names}{...}
+\item{crossNames}{...}
 
-\item{cross.names}{...}
+\item{locFiles}{...}
 
-\item{loc.names}{...}
+\item{quaDat}{...}
 
-\item{qua.names}{...}
+\item{poptypes}{...}
 
-\item{pop.types}{...}
-
-\item{mapfile}{...}
+\item{mapFile}{...}
 
 \item{evaldist}{...}
 }
