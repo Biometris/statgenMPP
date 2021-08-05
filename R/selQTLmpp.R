@@ -1,43 +1,51 @@
 #' multi-round genome scans and select cofactors
 #'
 #' @param MPPobj ...
+#' @param trait ...
 #' @param QTLwindow ...
 #' @param threshold ...
-#' @param trait.name ...
 #' @param CIM ...
+#' @param maxIter ...
+#' @param maxCofactors ...
+#' @param verbose ...
 #'
 #' @export
 selQTLmpp <- function(MPPobj,
+                      trait = "pheno",
                       QTLwindow = 10,
                       threshold = 3,
-                      trait.name = "pheno",
-                      CIM = TRUE) {
-  data <- MPPobj$calcIBDres$IBDdata
-  par.names <- MPPobj$calcIBDres$par.names
-  map <- MPPobj$calcIBDres$map
-  nloc <- nrow(map)
+                      CIM = TRUE,
+                      maxIter = 100,
+                      maxCofactors = 5,
+                      verbose = FALSE) {
+  modDat <- MPPobj$calcIBDres$IBDdata
+  ## Initialize cofactors.
   cofactors <- NULL
-  for (i in 1:100) {
-    print(paste0("QTL scan for trait ", trait.name, ", ",
-                 length(cofactors), " cofactors"))
-    df.scan <- scanQTL(MPPobj, QTLwindow, cof = cofactors, trait.name)
-    plotQTLscan(df.scan, threshold = threshold, cofactors,
-                trait.name = trait.name)
-    # remove NAs from minlog10p values
-    df.scan.sel <- df.scan[!df.scan[["QTLregion"]] &
-                             !is.na(df.scan[["minlog10p"]]), ]
-    ord <- order(df.scan.sel$minlog10p, decreasing = TRUE)
-    max_value <- df.scan.sel[ord[1], ]$minlog10p
-    if (max_value < threshold) {
-      if (!is.null(cofactors)) cofactors <- sort(cofactors)
+  ## For Simple Interval Mapping do only 1 iteration.
+  if (!CIM) maxIter <- 1
+  for (i in seq_len(maxIter)) {
+    if (verbose) {
+      cat(paste0("QTL scan for trait ", trait, ", ",
+                 length(cofactors), " cofactors\n"))
     }
-    if (max_value < threshold) break
-    if (!CIM) break
-    cofactors <- c(cofactors, df.scan.sel[ord[1], ]$ndx)
-    # if (length(cofactors)==5) break # if there are too many cofactors,
-    # we can set where it should stop
+    scanRes <- scanQTL(MPPobj, QTLwindow, cof = cofactors, trait)
+    plotQTLscan(scanRes,
+                threshold = threshold,
+                cofactors = cofactors,
+                trait = trait)
+    ## Restrict to markers outside 'known' QTLRegions.
+    scanSel <- scanRes[!scanRes[["QTLRegion"]] &
+                             !is.na(scanRes[["minlog10p"]]), ]
+    minlog10pMax <- max(scanSel[["minlog10p"]])
+    if (minlog10pMax < threshold) {
+      cofactors <- sort(cofactors)
+      break
+    }
+    ## Add new cofactor to list of cofactor for next round of scanning.
+    cofactors <- c(cofactors, scanSel[which.max(scanSel[["minlog10p"]]), "ndx"])
+    if (length(cofactors) > maxCofactors) break
   }
-  results <- list(QTLcandidates = cofactors, scanResults = df.scan)
+  results <- list(QTLcandidates = cofactors, scanResults = scanRes)
   MPPobj[["Result"]] <- results
   return(MPPobj)
 }

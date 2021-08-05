@@ -1,11 +1,13 @@
 #' IBDs calculation and prepare the design matrix
 #'
-#' @param crossNames ...
-#' @param locFiles ...
-#' @param quaDat ...
-#' @param poptypes ...
-#' @param mapFile ...
-#' @param evaldist ...
+#' @param crossNames A character vector, the names of the crosses.
+#' @param locFiles A vector of locations of the loc files.
+#' @param quaDat A list of one or more data.frames with phenotypic information.
+#' @param poptypes A character vector with population types.
+#' @param mapFile A vector with the location of the map file.
+#' @param evaldist A numeric value, the maximum distance in cM between
+#' evaluation points.
+#' @param verbose Should progress be printed?
 #'
 #' @importFrom utils read.table
 #' @export
@@ -34,6 +36,8 @@ calcIBDmpp <- function(crossNames,
   crossProbs <- statgenIBD::getProbs(IBDprob = crossIBD,
                                      markers = rownames(crossIBD$markers),
                                      sumProbs = TRUE)
+  ## Get marker names.
+  markerNames <- colnames(crossProbs)
   ## Replace cross names by cross names provided in input.
   if (nCross == 1) {
     crossProbs[["cross"]] <- crossNames
@@ -59,6 +63,7 @@ calcIBDmpp <- function(crossNames,
                            calcIBDres = list(parents = crossIBD$parents,
                                              map = crossIBD$map,
                                              IBDdata = IBDdata)),
+                      markerNames = markerNames,
                       class = c("IBDProbsMPP", "list"))
   return(MPPobj)
 }

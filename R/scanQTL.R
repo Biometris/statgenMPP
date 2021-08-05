@@ -5,44 +5,56 @@
 scanQTL <- function(MPPobj,
                     QTLwindow = 10,
                     cof = NULL,
-                    trait.name = "pheno") {
+                    trait = "pheno",
+                    verbose = FALSE) {
+  ## Get info from MPP object.
   map <- MPPobj$calcIBDres$map
-  unipar.names <- MPPobj$calcIBDres$par.names
-  nloc <- nrow(map)
-  sel_markers <- c(1:nloc)
-  Loci <- map
-  minlog10p <- vector(length = nloc)
-  QTL_region <- rep(FALSE, nloc)
-  effects <- matrix(nrow = nloc, ncol = length(unipar.names))
-  colnames(effects) = unipar.names
-  for (i in 1:nloc) {
-    m <- sel_markers[i]
-    sel_cof <- select.cofactors(Loci, m, cof, QTLwindow)
-    if (length(sel_cof) != length(cof)) {
-      QTL_region[i] <- TRUE
+  parents <- MPPobj$MPPinfo$parents
+  nMarkers <- nrow(map)
+  ## Fit NULL model without cofactors.
+  fitNULLmod <- randomQTLmodel(MPPobj,
+                               trait,
+                               cofPos = NULL,
+                               NULLmodel = TRUE)
+  ## Initialize output.
+  minlog10p <- numeric(length = nMarkers)
+  QTLRegion <- rep(FALSE, nMarkers)
+  effects <- matrix(nrow = nMarkers, ncol = length(parents),
+                    dimnames = list(rownames(map), parents))
+  for (i in seq_len(nMarkers)) {
+    mrkCof <- selectCofactors(map = map,
+                              marker = i,
+                              cofactors = cof,
+                              QTLwindow = QTLwindow)
+    if (length(mrkCof) != length(cof)) {
+      QTLRegion[i] <- TRUE
     }
-    obj0 <- randomQTLmodel(MPPobj,
-                           trait.name,
-                           scan_pos = m,
-                           cof_pos = sel_cof,
-                           NULLmodel = TRUE)
-    obj1 <- randomQTLmodel(MPPobj,
-                           trait.name,
-                           scan_pos = m,
-                           cof_pos = sel_cof,
-                           NULLmodel = FALSE)
-    dev <- 2.0 * obj1$logL - 2.0 * obj0$logL
+    ## Fit model for current marker.
+    fitModMrk <- randomQTLmodel(MPPobj,
+                                trait,
+                                scanPos = i,
+                                cofPos = mrkCof,
+                                NULLmodel = FALSE)
+    dev <- 2.0 * fitModMrk$logL - 2.0 * fitNULLmod$logL
+    ## Refit NULL model only if cofactors are present for current marker.
+    if (!is.null(mrkCof)) {
+      fitModCof <- randomQTLmodel(MPPobj,
+                                  trait,
+                                  cofPos = mrkCof,
+                                  NULLmodel = TRUE)
+      dev <- 2.0 * fitModMrk$logL - 2.0 * fitModCof$logL
+    }
     minlog10p[i] <- -log10(0.5 * pchisq(dev, 1, lower.tail = FALSE))
-    effects[i,] <- coef(obj1)[[rownames(map)[m]]]
-    if (i %% 25 == 0) {
-      print(i)
+    effects[i, ] <- coef(fitModMrk)[[rownames(map)[i]]]
+    if (verbose && i %% 25 == 0) {
+      cat(paste(i, "\n"))
     }
   }
-  df <- data.frame(ndx = sel_markers,
-                   Loci[sel_markers,],
-                   minlog10p = minlog10p,
-                   eff = effects,
-                   QTLregion = QTL_region,
-                   trait = trait.name)
-  return(df)
+  res <- data.frame(ndx = seq_len(nMarkers),
+                    map,
+                    minlog10p = minlog10p,
+                    eff = effects,
+                    QTLRegion = QTLRegion,
+                    trait = trait)
+  return(res)
 }

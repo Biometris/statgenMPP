@@ -75,7 +75,7 @@ calcIBDmppOrig <- function(par.names,
         df1 <- as.data.frame(statgenIBD::getProbs(IBD.cross1, c(one.pos)))
         one.pos.IBDs <- matrix(0, ncol = length(unipar.names), nrow = nrow(df1))
         one.pos.IBDs <- as.data.frame(one.pos.IBDs)
-        colnames(one.pos.IBDs) <- paste0(one.pos, "_p", unipar.names)
+        colnames(one.pos.IBDs) <- paste0(one.pos, "_", unipar.names)
         rownames(one.pos.IBDs) <- df1$geno
         one.pos.IBDs[which(names(one.pos.IBDs) == names(df1)[2])] <- df1[2]*2 #+df1[4]
         one.pos.IBDs[which(names(one.pos.IBDs) == names(df1)[3])] <- df1[3]*2 #+df1[4]

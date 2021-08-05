@@ -15,17 +15,20 @@ calcIBDmpp(
 )
 }
 \arguments{
-\item{crossNames}{...}
+\item{crossNames}{A character vector, the names of the crosses.}
 
-\item{locFiles}{...}
+\item{locFiles}{A vector of locations of the loc files.}
 
-\item{quaDat}{...}
+\item{quaDat}{A list of one or more data.frames with phenotypic information.}
 
-\item{poptypes}{...}
+\item{poptypes}{A character vector with population types.}
 
-\item{mapFile}{...}
+\item{mapFile}{A vector with the location of the map file.}
 
-\item{evaldist}{...}
+\item{evaldist}{A numeric value, the maximum distance in cM between
+evaluation points.}
+
+\item{verbose}{Should progress be printed?}
 }
 \description{
 IBDs calculation and prepare the design matrix

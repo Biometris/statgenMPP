@@ -1,26 +1,26 @@
 #' cofactor selection based on the QTL windowsize
 #'
 #' @keywords internal
-calc.distance <- function(markers,
-                          m1,
-                          m2) {
-  dist <- ifelse(markers[m1, ]$chr == markers[m2, ]$chr,
-                 abs(markers[m1, ]$pos - markers[m2, ]$pos),
-                 1.0e5)
+calcDistance <- function(map,
+                         m1,
+                         m2) {
+  dist <- ifelse(map[m1, "chr"] == map[m2, "chr"],
+                 abs(map[m1, "pos"] - map[m2, "pos"]),
+                 Inf)
   return(dist)
 }
 
 #' @keywords internal
-select.cofactors <- function(markers,
-                             m,
-                             cofactors,
-                             QTLwindow) {
+selectCofactors <- function(map,
+                            marker,
+                            cofactors,
+                            QTLwindow) {
   if (length(cofactors) == 0) return(NULL)
-  min.dist <- 0.5 * QTLwindow
-  dist <- sapply(cofactors, function(x) calc.distance(markers, m, x))
-  ord <- order(dist)
-  if (dist[ord[1]] > min.dist) {
+  minDist <- 0.5 * QTLwindow
+  dist <- sapply(cofactors, function(x) calcDistance(map, marker, x))
+  if (min(dist) > minDist) {
     return(cofactors)
+  } else {
+    return(cofactors[-which.min(dist)])
   }
-  cofactors[-c(ord[1])]
 }

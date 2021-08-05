@@ -16,14 +16,14 @@ mapfile <- "testScripts/data/multipop/mapfile.map" # map file names
 evaldist <- 5 # distance for IBD calc
 
 # 2. calculate IBDs and create the data frame
-MPPobj <- calcIBDmppOrig(par.names, cross.names, loc.names, qua.names,
+MPPobj1 <- calcIBDmppOrig(par.names, cross.names, loc.names, qua.names,
                          pop.types, mapfile, evaldist)
-head(MPPobj$calcIBDres$IBDdata)[1:6,1:10] # pheno + design matrix for LMMsolve latter
-head(MPPobj$calcIBDres$IBDmatrix)[1:6,1:6]
+head(MPPobj1$calcIBDres$IBDdata)[1:6,1:10] # pheno + design matrix for LMMsolve latter
+head(MPPobj1$calcIBDres$IBDmatrix)[1:6,1:6]
 
 # 3. genome scan for multi-QTLs
-MPPobj <- selQTLmpp(MPPobj, QTLwindow = 10, threshold = 3,
-                    trait.name = "pheno", CIM = TRUE)
+MPPobj1a <- selQTLmppOrig(MPPobj1, QTLwindow = 10, threshold = 3,
+                          trait.name = "pheno", CIM = TRUE)
 MPPobj$Result$QTLcandidates
 
 
@@ -44,3 +44,5 @@ quaDat <- lapply(quaFiles, read.table, header = TRUE)
 
 MPPobj2 <- calcIBDmpp(crossNames, locFiles, quaDat,
                       poptypes, mapFile, evaldist)
+
+
