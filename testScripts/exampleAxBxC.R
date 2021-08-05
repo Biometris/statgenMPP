@@ -44,6 +44,7 @@ quaDat <- lapply(quaFiles, read.table, header = TRUE)
 # 2. calculate IBDs and create the data frame
 MPPobj2 <- calcIBDmpp(crossNames, locFiles, quaDat,
                       poptypes, mapFile, evaldist)
+
 # 3. genome scan for multi-QTLs
 MPPobj2a <- selQTLmpp(MPPobj2, QTLwindow = 10, threshold = 3,
                       trait = "pheno", CIM = TRUE)

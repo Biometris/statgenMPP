@@ -1,13 +1,21 @@
 Package: statgenMPP
-Title: What the Package Does (One Line, Title Case)
+Title: QTL mapping for Multi Parental Populations
 Version: 0.0.0.9000
-Authors@R: 
-    person(given = "First",
-           family = "Last",
-           role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+Authors@R: c(person(given = "Wenhao", 
+                    family = "Li", 
+                    email = "wenhao.li@wur.nl", 
+                    role = "aut",
+                    comment = c(ORCID = "0000-0000-0000-0000")),
+             person(given = "Martin", 
+                    family = "Boer", 
+                    email = "martin.boer@wur.nl", 
+                    role = "ctb"),
+             person(given = "Bart-Jan", 
+                    family = "van Rossum", 
+                    email = "bart-jan.vanrossum@wur.nl", 
+                    role = c("aut", "cre"),
+                    comment = c(ORCID = "0000-0002-8673-2514")))
+Description: QTL mapping for Multi Parental Populations.
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
