@@ -19,10 +19,10 @@ calcIBDmppOrig <- function(par.names,
                            evaldist) {
   n.cross <- length(loc.names)
   if (n.cross == 1) { # if there are only one cross, e.g., MAGIC
-    IBD.cross1 <- statgenIBD::calcIBD(poptype = pop.types[[1]],
-                                      locfile = loc.names[[1]],
-                                      mapfile = mapfile,
-                                      evaldist = evaldist)
+    IBD.cross1 <- statgenIBD::calcIBD(popType = pop.types[[1]],
+                                      markerFile = loc.names[[1]],
+                                      mapFile = mapfile,
+                                      evalDist = evaldist)
     map <- IBD.cross1$map
     pos.names <- rownames(IBD.cross1$map)
     unipar.names <- unique(unlist(par.names))
@@ -63,10 +63,10 @@ calcIBDmppOrig <- function(par.names,
   if (n.cross > 1) { # if there are multiple bi-parental crosses, e.g., NAM and diallel
     for (c in 1:n.cross) {
       print(paste0("calc IBD in cross: ", cross.names[[c]]))
-      IBD.cross1 <- statgenIBD::calcIBD(poptype = pop.types[[c]],
-                                        locfile = loc.names[[c]],
-                                        mapfile = mapfile,
-                                        evaldist = evaldist)
+      IBD.cross1 <- statgenIBD::calcIBD(popType = pop.types[[c]],
+                                        markerFile = loc.names[[c]],
+                                        mapFile = mapfile,
+                                        evalDist = evaldist)
       map <- IBD.cross1$map
       pos.names <- rownames(IBD.cross1$map)
       unipar.names <- unique(unlist(par.names))
