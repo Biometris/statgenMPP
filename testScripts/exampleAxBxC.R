@@ -1,5 +1,14 @@
 library(statgenMPP)
 
+# load original functions Wenhao:
+source("R/orig/calcIBDmppOrig.R")
+source("R/orig/selQTLmppOrig.R")
+source("R/orig/scanQTLOrig.R")
+source("R/orig/utilsOrig.R")
+source("R/orig/randomQTLmodelOrig.R")
+source("R/orig/plotQTLscanOrig.R")
+##
+
 # 1. specify files in lists
 ## 1.1. AxBxC
 par.names <- list(par.cross1 = c("A","B"),
@@ -43,7 +52,7 @@ quaDat <- lapply(quaFiles, read.table, header = TRUE)
 
 # 2. calculate IBDs and create the data frame
 MPPobj2 <- calcIBDmpp(crossNames, locFiles, quaDat,
-                      poptypes, mapFile, evaldist)
+                      poptypes, mapFile, evaldist,verbose=TRUE)
 
 # 3. genome scan for multi-QTLs
 MPPobj2a <- selQTLmpp(MPPobj2, QTLwindow = 10, threshold = 3,
