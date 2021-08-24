@@ -1,69 +1,108 @@
 #' IBDs calculation and prepare the design matrix
 #'
+#' IBD calculation for multiple
+#'
+#' IBD probabilities can be calculated for many different types of populations.
+#' In the following table all supported populations are listed. Note that the
+#' value of x in the population types is variable, with its maximum value
+#' depicted in the last column.
+#'
+#' | __Population type__ | __Cross__ | __Description__ | __max. x__ |
+#' | ------ | ----------------- | -------------------------------------- | --- |
+#' | DH | biparental | doubled haploid population | |
+#' | Fx | biparental | Fx population (F1, followed by x-1 generations of selfing) | 8 |
+#' | FxDH | biparental | Fx, followed by DH generation | 8 |
+#' | BCx | biparental | backcross, second parent is recurrent parent | 9 |
+#' | BCxDH | biparental | BCx, followed by DH generation | 9 |
+#' | BC1Sx | biparental | BC1, followed by x generations of selfing | 7 |
+#' | BC1SxDH | biparental | BC1, followed by x generations of selfing and DH | 6 |
+#' | C3 | three-way | three way cross: (AxB) x C |  |
+#' | C3DH | three-way | C3, followed by DH generation |  |
+#' | C3Sx | three-way | C3, followed by x generations of selfing | 7 |
+#' | C3SxDH | three-way | C3, followed by x generations of selfing and DH generation | 6 |
+#' | C4 | four-way | four-way cross: (AxB) x (CxD)	| |
+#' | C4DH | four-way | C4, followed by DH generation |  |
+#' | C4Sx | four-way | C4, followed by x generations of selfing | 6 |
+#' | C4SxDH | four-way | C4, followed by x generations of selfing and DH generation | 6 |
+#'
+#' @param markerFiles A character vector indicating the locations of the files
+#' with genotypic information for the populations. The files should be in
+#' tab-delimited format with a header containing marker names.
 #' @param crossNames A character vector, the names of the crosses.
-#' @param locFiles A vector of locations of the loc files.
-#' @param quaDat A list of one or more data.frames with phenotypic information.
-#' @param poptypes A character vector with population types.
-#' @param mapFile A vector with the location of the map file.
+#' @param pheno A data.frame or a list of data.frames with phenotypic data,
+#' with genotypes in the first column \code{genotype} and traits in the
+#' following columns. The trait columns should be numerical columns only.
+#' A list of data.frames can be used for replications, i.e. different
+#' trials.
+#' @param popType A character string indicating the type of population. One of
+#' DH, Fx, FxDH, BCx, BCxDH, BC1Sx, BC1SxDH, C3, C3DH, C3Sx, C3SxDH, C4, C4DH,
+#' C4Sx, C4SxDH (see Details).
+#' @param mapFile A character string indicating the location of the map file
+#' for the population. The file should be in tab-delimited format. It should
+#' consist of exactly three columns, marker, chromosome and position. There
+#' should be no header. The positions in the file should be in centimorgan.
 #' @param evaldist A numeric value, the maximum distance in cM between
 #' evaluation points.
+#' @param grid Should the extra markers that are added to assure the a
+#' maximum distince of \code{evalDist} be on a grid (\code{TRUE}) or in between
+#' marker existing marker positions (\code{FALSE}).
 #' @param verbose Should progress be printed?
 #'
 #' @importFrom utils read.table
 #' @export
 calcIBDmpp <- function(crossNames,
-                       locFiles,
-                       quaDat,
-                       poptypes,
+                       markerFiles,
+                       pheno,
+                       popType,
                        mapFile,
-                       evaldist,
+                       evalDist,
+                       grid = TRUE,
                        verbose = FALSE) {
-  ## Get number of crosses
-  nCross <- length(locFiles)
+  ## Get number of crosses.
+  nCross <- length(markerFiles)
   ## Calculate IBD probabilities per cross.
   crossIBD <- lapply(X = seq_len(nCross), FUN = function(i) {
     if (verbose) {
-      cat(paste0("calc IBD in cross: ", crossNames[i], ".\n"))
+      cat(paste0("calculating IBD in cross: ", crossNames[i], ".\n"))
     }
-    statgenIBD::calcIBD(popType = poptypes[i],
+    statgenIBD::calcIBD(popType = popType,
                         markerFile = locFiles[i],
                         mapFile = mapFile,
-                        evalDist = evaldist)
+                        evalDist = evalDist,
+                        grid = grid,
+                        verbose = verbose)
   })
   ## Concatenate results.
   crossIBD <- do.call(what = `c`, args = crossIBD)
-  ## Construct data.frame for further analyses.
-  crossProbs <- statgenIBD::getProbs(IBDprob = crossIBD,
-                                     markers = rownames(crossIBD$markers),
-                                     sumProbs = TRUE)
-  ## Get marker names.
-  markerNames <- colnames(crossProbs)
   ## Replace cross names by cross names provided in input.
   if (nCross == 1) {
-    crossProbs[["cross"]] <- crossNames
+    covar <- data.frame(cross = rep(x = crossNames,
+                                    times = ncol(crossIBD$markers)),
+                        row.names = colnames(crossIBD$markers))
   } else {
     crossDat <- data.frame(cross = paste0("cross", seq_len(nCross)),
                            crossName = crossNames)
-    crossProbs[["cross"]] <-
-      crossDat[["crossName"]][match(x = crossProbs[["cross"]],
+    covar <- attr(crossIBD, "genoCross")
+    covar[["cross"]] <-
+      crossDat[["crossName"]][match(x = covar[["cross"]],
                                     table = crossDat[["cross"]])]
+    row.names(covar) <- covar[["geno"]]
+    covar <- covar[, colnames(covar) != "geno", drop = FALSE]
   }
   ## Bind phenotypic data.
-  phenoTot <- do.call(what = rbind, args = quaDat)
-  ## Merge phenotypic data to probabilities.
-  IBDdata <- merge(phenoTot, crossProbs, by.x = "ID", by.y = "geno")
-  ## Construct output opbject.
-  MPPobj <- structure(list(MPPinfo = list(parents = crossIBD$parents,
-                                          crossNames = crossNames,
-                                          locFiles = locFiles,
-                                          quaFiles = quaDat,
-                                          poptypes = poptypes,
-                                          mapfile = mapFile,
-                                          evaldist = evaldist),
-                           calcIBDres = list(parents = crossIBD$parents,
-                                             map = crossIBD$map,
-                                             IBDdata = IBDdata)),
-                      markerNames = markerNames,
-                      class = c("IBDProbsMPP", "list"))
+  phenoTot <- do.call(what = rbind, args = pheno)
+  colnames(phenoTot)[1] <- "genotype"
+  ## Get marker names.
+  markerNames <- rownames(crossIBD$markers)
+  markers <- array(NA_real_, dim = dim(crossIBD$markers)[c(2, 1, 3)],
+                   dimnames = c(dimnames(crossIBD$markers)[c(2, 1)],
+                                list(crossIBD$parents)))
+  for (i in seq_along(markerNames)) {
+    markers[, i, ] <- markers3DtoMat(crossIBD, markerSel = markerNames[i])
+  }
+  MPPobj <- createGData(geno = markers,
+                        map = crossIBD$map,
+                        pheno = phenoTot,
+                        covar = covar)
   return(MPPobj)
 }

@@ -6,30 +6,69 @@
 \usage{
 calcIBDmpp(
   crossNames,
-  locFiles,
-  quaDat,
-  poptypes,
+  markerFiles,
+  pheno,
+  popType,
   mapFile,
-  evaldist,
+  evalDist,
+  grid = TRUE,
   verbose = FALSE
 )
 }
 \arguments{
 \item{crossNames}{A character vector, the names of the crosses.}
 
-\item{locFiles}{A vector of locations of the loc files.}
+\item{markerFiles}{A character vector indicating the locations of the files
+with genotypic information for the populations. The files should be in
+tab-delimited format with a header containing marker names.}
 
-\item{quaDat}{A list of one or more data.frames with phenotypic information.}
+\item{pheno}{A data.frame or a list of data.frames with phenotypic data,
+with genotypes in the first column \code{genotype} and traits in the
+following columns. The trait columns should be numerical columns only.
+A list of data.frames can be used for replications, i.e. different
+trials.}
 
-\item{poptypes}{A character vector with population types.}
+\item{popType}{A character string indicating the type of population. One of
+DH, Fx, FxDH, BCx, BCxDH, BC1Sx, BC1SxDH, C3, C3DH, C3Sx, C3SxDH, C4, C4DH,
+C4Sx, C4SxDH (see Details).}
 
-\item{mapFile}{A vector with the location of the map file.}
+\item{mapFile}{A character string indicating the location of the map file
+for the population. The file should be in tab-delimited format. It should
+consist of exactly three columns, marker, chromosome and position. There
+should be no header. The positions in the file should be in centimorgan.}
+
+\item{grid}{Should the extra markers that are added to assure the a
+maximum distince of \code{evalDist} be on a grid (\code{TRUE}) or in between
+marker existing marker positions (\code{FALSE}).}
+
+\item{verbose}{Should progress be printed?}
 
 \item{evaldist}{A numeric value, the maximum distance in cM between
 evaluation points.}
-
-\item{verbose}{Should progress be printed?}
 }
 \description{
-IBDs calculation and prepare the design matrix
+IBD calculation for multiple
+}
+\details{
+IBD probabilities can be calculated for many different types of populations.
+In the following table all supported populations are listed. Note that the
+value of x in the population types is variable, with its maximum value
+depicted in the last column.\tabular{llll}{
+   \strong{Population type} \tab \strong{Cross} \tab \strong{Description} \tab \strong{max. x} \cr
+   DH \tab biparental \tab doubled haploid population \tab  \cr
+   Fx \tab biparental \tab Fx population (F1, followed by x-1 generations of selfing) \tab 8 \cr
+   FxDH \tab biparental \tab Fx, followed by DH generation \tab 8 \cr
+   BCx \tab biparental \tab backcross, second parent is recurrent parent \tab 9 \cr
+   BCxDH \tab biparental \tab BCx, followed by DH generation \tab 9 \cr
+   BC1Sx \tab biparental \tab BC1, followed by x generations of selfing \tab 7 \cr
+   BC1SxDH \tab biparental \tab BC1, followed by x generations of selfing and DH \tab 6 \cr
+   C3 \tab three-way \tab three way cross: (AxB) x C \tab  \cr
+   C3DH \tab three-way \tab C3, followed by DH generation \tab  \cr
+   C3Sx \tab three-way \tab C3, followed by x generations of selfing \tab 7 \cr
+   C3SxDH \tab three-way \tab C3, followed by x generations of selfing and DH generation \tab 6 \cr
+   C4 \tab four-way \tab four-way cross: (AxB) x (CxD) \tab  \cr
+   C4DH \tab four-way \tab C4, followed by DH generation \tab  \cr
+   C4Sx \tab four-way \tab C4, followed by x generations of selfing \tab 6 \cr
+   C4SxDH \tab four-way \tab C4, followed by x generations of selfing and DH generation \tab 6 \cr
+}
 }
