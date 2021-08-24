@@ -2,14 +2,13 @@
 #'
 #' @importFrom stats as.formula
 #' @keywords internal
-randomQTLmodel <- function(MPPobj,
+randomQTLmodel <- function(modDat,
+                           map,
+                           parents,
                            trait = "pheno",
                            scanPos = 1,
                            cofPos = NULL,
                            NULLmodel = FALSE) {
-  modDat <- MPPobj$calcIBDres$IBDdata
-  map <- MPPobj$calcIBDres$map
-  parents <- MPPobj$MPPinfo$parents
   nCross <- length(unique(modDat[["cross"]]))
   nCof <- length(cofPos)
   if (nCross == 1) { # for MAGIC-type pop with one cross.
@@ -17,7 +16,6 @@ randomQTLmodel <- function(MPPobj,
   } else { # for NAM or diallel-type pops with > 1 cross
     fixed <- as.formula(paste(trait, "~cross"))
   }
-  modDat[["cross"]] <- as.factor(modDat[["cross"]])
   selPos <- c(cofPos, if (!NULLmodel) scanPos)
   Lgrp <- list()
   if (length(selPos) > 0) {

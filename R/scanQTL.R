@@ -2,18 +2,20 @@
 #'
 #' @importFrom stats coef pchisq
 #' @keywords internal
-scanQTL <- function(MPPobj,
+scanQTL <- function(modDat,
+                    map,
+                    parents,
                     QTLwindow = 10,
                     cof = NULL,
-                    trait = "pheno",
+                    trait = NULL,
                     verbose = FALSE) {
   ## Get info from MPP object.
-  map <- MPPobj$calcIBDres$map
-  parents <- MPPobj$MPPinfo$parents
   nMarkers <- nrow(map)
   ## Fit NULL model without cofactors.
-  fitNULLmod <- randomQTLmodel(MPPobj,
-                               trait,
+  fitNULLmod <- randomQTLmodel(modDat = modDat,
+                               map = map,
+                               parents = parents,
+                               trait = trait,
                                cofPos = NULL,
                                NULLmodel = TRUE)
   ## Initialize output.
@@ -30,16 +32,20 @@ scanQTL <- function(MPPobj,
       QTLRegion[i] <- TRUE
     }
     ## Fit model for current marker.
-    fitModMrk <- randomQTLmodel(MPPobj,
-                                trait,
+    fitModMrk <- randomQTLmodel(modDat = modDat,
+                                map = map,
+                                parents = parents,
+                                trait = trait,
                                 scanPos = i,
                                 cofPos = mrkCof,
                                 NULLmodel = FALSE)
     dev <- 2.0 * fitModMrk$logL - 2.0 * fitNULLmod$logL
     ## Refit NULL model only if cofactors are present for current marker.
     if (!is.null(mrkCof)) {
-      fitModCof <- randomQTLmodel(MPPobj,
-                                  trait,
+      fitModCof <- randomQTLmodel(modDat = modDat,
+                                  map = map,
+                                  parents = parents,
+                                  trait = trait,
                                   cofPos = mrkCof,
                                   NULLmodel = TRUE)
       dev <- 2.0 * fitModMrk$logL - 2.0 * fitModCof$logL

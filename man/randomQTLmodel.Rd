@@ -5,7 +5,9 @@
 \title{one position fitted in the mixed model}
 \usage{
 randomQTLmodel(
-  MPPobj,
+  modDat,
+  map,
+  parents,
   trait = "pheno",
   scanPos = 1,
   cofPos = NULL,

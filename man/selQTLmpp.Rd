@@ -6,7 +6,7 @@
 \usage{
 selQTLmpp(
   MPPobj,
-  trait = "pheno",
+  trait = NULL,
   QTLwindow = 10,
   threshold = 3,
   CIM = TRUE,

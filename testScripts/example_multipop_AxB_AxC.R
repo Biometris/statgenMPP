@@ -43,16 +43,22 @@ locFiles <- c("testScripts/data/multipop/AxB.loc",
               "testScripts/data/multipop/AxC.loc") # loc files
 quaFiles <- c("testScripts/data/multipop/AxB.qua",
               "testScripts/data/multipop/AxC.qua") # qua files
-poptypes <- c("F4DH", "F4DH") # cross type(s)
+popType <- "F4DH" # cross type(s)
 mapFile <- "testScripts/data/multipop/mapfile.map" # map file names
-evaldist <- 5 # distance for IBD calc
+evalDist <- 5 # distance for IBD calc
 
 ## Read phenotypic data.
 quaDat <- lapply(quaFiles, read.table, header = TRUE)
 
 # 2. calculate IBDs and create the data frame
-MPPobj2 <- calcIBDmpp(crossNames, locFiles, quaDat,
-                      poptypes, mapFile, evaldist,verbose=TRUE)
+MPPobj2 <- calcIBDmpp(crossNames = crossNames,
+                      markerFiles = locFiles,
+                      pheno = quaDat,
+                      popType = popType,
+                      mapFile = mapFile,
+                      evalDist = evalDist,
+                      grid = TRUE,
+                      verbose = TRUE)
 
 # 3. genome scan for multi-QTLs
 MPPobj2a <- selQTLmpp(MPPobj2, QTLwindow = 10, threshold = 3,
