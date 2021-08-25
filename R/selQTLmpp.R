@@ -47,10 +47,12 @@ selQTLmpp <- function(MPPobj,
                        trait = trait,
                        QTLwindow = QTLwindow,
                        cof = cofactors)
-    plotQTLscan(scanRes,
-                threshold = threshold,
-                cofactors = cofactors,
-                trait = trait)
+    if (verbose) {
+      plotIntermediateScan(scanRes,
+                           threshold = threshold,
+                           cofactors = cofactors,
+                           trait = trait)
+    }
     ## Restrict to markers outside 'known' QTLRegions.
     scanSel <- scanRes[!scanRes[["QTLRegion"]] &
                              !is.na(scanRes[["minlog10p"]]), ]
@@ -73,6 +75,6 @@ selQTLmpp <- function(MPPobj,
                      "within QTL window of significant SNP"))
   res <- createGWAS(GWAResult = list(pheno = GWARes),
                     signSnp = list(pheno = signSnp),
-                    thr = threshold)
+                    thr = list(pheno = setNames(threshold, "pheno")))
   return(res)
 }
