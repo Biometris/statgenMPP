@@ -73,8 +73,13 @@ selQTLmpp <- function(MPPobj,
     as.factor(ifelse(signSnp[["snp"]] %in% cofactors,
                      "significant SNP",
                      "within QTL window of significant SNP"))
+  ## Construct GWASInfo
+  GWASInfo <- list(parents = parents)
   res <- createGWAS(GWAResult = list(pheno = GWARes),
                     signSnp = list(pheno = signSnp),
-                    thr = list(pheno = setNames(threshold, "pheno")))
+                    thr = list(pheno = setNames(threshold, "pheno")),
+                    GWASInfo = GWASInfo)
+  ## Add QTLmpp class to simplify providing generic functions.
+  class(res) <- c("QTLmpp", class(res))
   return(res)
 }

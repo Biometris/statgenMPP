@@ -25,6 +25,7 @@ Imports:
     data.table,
     ggplot2,
     LMMsolver,
+    scales,
     statgenIBD,
     statgenGWAS
 Suggests: tinytest
