@@ -21,6 +21,7 @@ selQTLmpp <- function(MPPobj,
   parents <- dimnames(MPPobj$markers)[[3]]
   nPar <- length(parents)
   markerNames <- dimnames(MPPobj$markers)[[2]]
+  map <- MPPobj$map
   ## Construct model data by merging phenotypic and genotypic data.
   ## Merge phenotypic data and covar (cross).
   modDat <- merge(MPPobj$pheno[[1]], MPPobj$covar,
@@ -41,7 +42,7 @@ selQTLmpp <- function(MPPobj,
                  length(cofactors), " cofactors\n"))
     }
     scanRes <- scanQTL(modDat = modDat,
-                       map = MPPobj$map,
+                       map = map,
                        parents = parents,
                        trait = trait,
                        QTLwindow = QTLwindow,
@@ -59,10 +60,19 @@ selQTLmpp <- function(MPPobj,
       break
     }
     ## Add new cofactor to list of cofactor for next round of scanning.
-    cofactors <- c(cofactors, scanSel[which.max(scanSel[["minlog10p"]]), "ndx"])
+    cofactors <- c(cofactors, scanSel[which.max(scanSel[["minlog10p"]]), "snp"])
     if (length(cofactors) > maxCofactors) break
   }
-  results <- list(QTLcandidates = cofactors, scanResults = scanRes)
-  MPPobj[["Result"]] <- results
-  return(MPPobj)
+  ## Construct GWAResult and signSnp
+  colnames(scanRes)[colnames(scanRes) == "minlog10p"] <- "LOD"
+  GWARes <- scanRes[ , colnames(scanRes) != "QTLRegion"]
+  signSnp <- scanRes[scanRes[["QTLRegion"]], colnames(scanRes) != "QTLRegion"]
+  signSnp[["snpStatus"]] <-
+    as.factor(ifelse(signSnp[["snp"]] %in% cofactors,
+                     "significant SNP",
+                     "within QTL window of significant SNP"))
+  res <- createGWAS(GWAResult = list(pheno = GWARes),
+                    signSnp = list(pheno = signSnp),
+                    thr = threshold)
+  return(res)
 }

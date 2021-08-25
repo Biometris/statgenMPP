@@ -37,14 +37,14 @@ for the population. The file should be in tab-delimited format. It should
 consist of exactly three columns, marker, chromosome and position. There
 should be no header. The positions in the file should be in centimorgan.}
 
+\item{evalDist}{A numeric value, the maximum distance in cM between
+evaluation points.}
+
 \item{grid}{Should the extra markers that are added to assure the a
 maximum distince of \code{evalDist} be on a grid (\code{TRUE}) or in between
 marker existing marker positions (\code{FALSE}).}
 
 \item{verbose}{Should progress be printed?}
-
-\item{evaldist}{A numeric value, the maximum distance in cM between
-evaluation points.}
 }
 \description{
 IBD calculation for multiple

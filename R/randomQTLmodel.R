@@ -6,21 +6,20 @@ randomQTLmodel <- function(modDat,
                            map,
                            parents,
                            trait = "pheno",
-                           scanPos = 1,
-                           cofPos = NULL,
+                           scanMrk = NULL,
+                           cofMrk = NULL,
                            NULLmodel = FALSE) {
   nCross <- length(unique(modDat[["cross"]]))
-  nCof <- length(cofPos)
+  nCof <- length(cofMrk)
   if (nCross == 1) { # for MAGIC-type pop with one cross.
     fixed <- as.formula(paste(trait, "~1"))
   } else { # for NAM or diallel-type pops with > 1 cross
     fixed <- as.formula(paste(trait, "~cross"))
   }
-  selPos <- c(cofPos, if (!NULLmodel) scanPos)
+  selMrk <- c(cofMrk, if (!NULLmodel) scanMrk)
   Lgrp <- list()
-  if (length(selPos) > 0) {
-    for (i in seq_along(selPos)) {
-      selName <- rownames(map)[selPos[i]]
+  if (length(selMrk) > 0) {
+    for (selName in selMrk) {
       selIBDNames <- paste0(selName, "_", parents)
       Lgrp[[selName]] <- which(colnames(modDat) %in% selIBDNames)
     }

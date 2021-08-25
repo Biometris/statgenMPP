@@ -16,19 +16,20 @@ scanQTL <- function(modDat,
                                map = map,
                                parents = parents,
                                trait = trait,
-                               cofPos = NULL,
+                               cofMrk = NULL,
                                NULLmodel = TRUE)
   ## Initialize output.
   minlog10p <- numeric(length = nMarkers)
   QTLRegion <- rep(FALSE, nMarkers)
   effects <- matrix(nrow = nMarkers, ncol = length(parents),
-                    dimnames = list(rownames(map), parents))
+                    dimnames = list(rownames(map), paste0("eff_", parents)))
   for (i in seq_len(nMarkers)) {
-    mrkCof <- selectCofactors(map = map,
+    scanMrk <- rownames(map)[i]
+    cofMrk <- selectCofactors(map = map,
                               marker = i,
                               cofactors = cof,
                               QTLwindow = QTLwindow)
-    if (length(mrkCof) != length(cof)) {
+    if (length(cofMrk) != length(cof)) {
       QTLRegion[i] <- TRUE
     }
     ## Fit model for current marker.
@@ -36,17 +37,17 @@ scanQTL <- function(modDat,
                                 map = map,
                                 parents = parents,
                                 trait = trait,
-                                scanPos = i,
-                                cofPos = mrkCof,
+                                scanMrk = scanMrk,
+                                cofMrk = cofMrk,
                                 NULLmodel = FALSE)
     dev <- 2.0 * fitModMrk$logL - 2.0 * fitNULLmod$logL
     ## Refit NULL model only if cofactors are present for current marker.
-    if (!is.null(mrkCof)) {
+    if (!is.null(cofMrk)) {
       fitModCof <- randomQTLmodel(modDat = modDat,
                                   map = map,
                                   parents = parents,
                                   trait = trait,
-                                  cofPos = mrkCof,
+                                  cofMrk = cofMrk,
                                   NULLmodel = TRUE)
       dev <- 2.0 * fitModMrk$logL - 2.0 * fitModCof$logL
     }
@@ -56,11 +57,18 @@ scanQTL <- function(modDat,
       cat(paste(i, "\n"))
     }
   }
-  res <- data.frame(ndx = seq_len(nMarkers),
-                    map,
-                    minlog10p = minlog10p,
-                    eff = effects,
-                    QTLRegion = QTLRegion,
-                    trait = trait)
-  return(res)
+  scanRes <- data.table::data.table(trait = trait,
+                                    snp = rownames(map),
+                                    map,
+                                    pValue = 10 ^ -minlog10p,
+                                    effects,
+                                    minlog10p = minlog10p,
+                                    QTLRegion = QTLRegion)
+  return(scanRes)
 }
+
+
+
+
+
+

@@ -9,8 +9,8 @@ randomQTLmodel(
   map,
   parents,
   trait = "pheno",
-  scanPos = 1,
-  cofPos = NULL,
+  scanMrk = NULL,
+  cofMrk = NULL,
   NULLmodel = FALSE
 )
 }

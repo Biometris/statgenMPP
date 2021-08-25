@@ -66,9 +66,6 @@
 #' map <- data.frame(chr = c(1, 1, 2, 2, 2), pos = 1:5,
 #'                   row.names = paste0("M", 1:5))
 #'
-#' ## Compute kinship matrix.
-#' kin <- kinship(X = geno, method = "IBS")
-#'
 #' ## Create phenotypic data.
 #' pheno <- data.frame(paste0("G", 1:3),
 #'                     matrix(rnorm(n = 12, mean = 50, sd = 5), nrow = 3),
@@ -76,18 +73,14 @@
 #' dimnames(pheno) = list(paste0("G", 1:3), c("genotype", paste0("T", 1:4)))
 #'
 #' ## Combine all data in gData object.
-#' gData <- createGData(geno = geno, map = map, kin = kin, pheno = pheno)
+#' gData <- createGData(geno = geno, map = map, pheno = pheno)
 #' summary(gData)
 #'
 #' ## Construct covariate.
 #' covar <- data.frame(C1 = c("a", "a", "b"), row.names = paste0("G", 1:3))
 #'
-#' ## Compute alternative kinship matrix.
-#' kin2 <- kinship(X = geno, method = "astle")
-#'
-#' ## Add covariates to previously created gData object and overwrite
-#' ## current kinship matrix by newly computed one.
-#' gData2 <- createGData(gData = gData, kin = kin2, covar = covar)
+#' ## Add covariates to previously created gData object.
+#' gData2 <- createGData(gData = gData, covar = covar)
 #'
 #' @name gData
 NULL
