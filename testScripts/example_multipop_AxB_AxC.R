@@ -68,3 +68,4 @@ MPPobj2a$signSnp
 
 plot(MPPobj2a)
 plot(MPPobj2a, plotType = "parEffs")
+plot(MPPobj2a, plotType = "QTLRegion")

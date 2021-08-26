@@ -65,49 +65,24 @@
 #' @export
 plot.QTLmpp <- function(x,
                         ...,
-                        plotType = c("manhattan", "parEffs"),
+                        plotType = c("manhattan", "parEffs", "QTLRegion"),
                         title = NULL,
                         output = TRUE) {
   plotType <- match.arg(plotType)
   if (plotType == "manhattan") {
     plot.GWAS(x = x, ... = ..., plotType = plotType, trial = NULL,
               trait = NULL, title = title, type = "lines", output = output)
-  } else if (plotType == "parEffs") {
+  } else {
     dotArgs <- list(...)
-    parents <- x$GWASInfo$parents
     ## Get results.
     GWAResult <- x$GWAResult[[1]]
-    trait <- GWAResult[["trait"]][1]
-    ## Create effect data - basically a long format version of GWAResult
-    effectDat <- lapply(X = parents, FUN = function(parent) {
-      parDat <- GWAResult
-      parDat[["trait"]] <- parent
-      parDat[["effect"]] <- parDat[[paste0("eff_", parent)]]
-      return(parDat)
-    })
-    effectDat <- do.call(rbind, effectDat)
     ## Get peaks.
     signSnp <- x$signSnp[[1]]
     signSnp <- signSnp[signSnp[["snpStatus"]] == "significant SNP", ]
-    ## Convert signSnp to long format as well.
-    signSnpLong <- lapply(X = parents, FUN = function(parent) {
-      parDat <- signSnp
-      parDat[["trait"]] <- parent
-      parDat[["effect"]] <- parDat[[paste0("eff_", parent)]]
-      return(parDat)
-    })
-    signSnpLong <- do.call(rbind, signSnpLong)
-    ## Compute chromosome boundaries.
-    GWAResult <- GWAResult[!is.na(GWAResult$pos), ]
-    ## Select specific chromosome(s) for plotting.
-    if (!is.null(dotArgs$chr)) {
-      GWAResult <- GWAResult[GWAResult$chr %in% dotArgs$chr, ]
-      if (nrow(GWAResult) == 0) {
-        stop("Select at least one valid chromosome for plotting.\n")
-      }
-    }
+    ## Compute chromosome boundaries and map.
     GWAResComp <- GWAResult[GWAResult[["trait"]] == GWAResult[["trait"]][1], ]
-    chrBnd <- aggregate(x = GWAResComp$pos, by = list(GWAResComp$chr), FUN = max)
+    chrBnd <- aggregate(x = GWAResComp$pos, by = list(GWAResComp$chr),
+                        FUN = max)
     ## Compute cumulative positions.
     addPos <- data.frame(chr = chrBnd[, 1],
                          add = c(0, cumsum(chrBnd[, 2]))[1:nrow(chrBnd)],
@@ -115,16 +90,54 @@ plot.QTLmpp <- function(x,
     map <- GWAResComp[, c("snp", "chr", "pos", "LOD")]
     map <- merge(map, addPos, by = "chr")
     map[["cumPos"]] <- map[["pos"]] + map[["add"]]
-    do.call(effectPlot,
-            args = c(list(effectDat = effectDat,
-                          signSnp = signSnpLong,
-                          map = map,
-                          chrBoundaries = chrBnd,
-                          title = title,
-                          trait = trait,
-                          output = output),
-                     dotArgs[!(names(dotArgs) %in% c("effectDat", "signSnp",
-                                                     "map", "chrBoundaries"))]))
+    if (plotType == "parEffs") {
+      parents <- x$GWASInfo$parents
+      trait <- GWAResult[["trait"]][1]
+      ## Create effect data - basically a long format version of GWAResult
+      effectDat <- lapply(X = parents, FUN = function(parent) {
+        parDat <- GWAResult
+        parDat[["trait"]] <- parent
+        parDat[["effect"]] <- parDat[[paste0("eff_", parent)]]
+        return(parDat)
+      })
+      effectDat <- do.call(rbind, effectDat)
+      ## Convert signSnp to long format as well.
+      signSnpLong <- lapply(X = parents, FUN = function(parent) {
+        parDat <- signSnp
+        parDat[["trait"]] <- parent
+        parDat[["effect"]] <- parDat[[paste0("eff_", parent)]]
+        return(parDat)
+      })
+      signSnpLong <- do.call(rbind, signSnpLong)
+      ## Compute chromosome boundaries.
+      GWAResult <- GWAResult[!is.na(GWAResult$pos), ]
+      ## Select specific chromosome(s) for plotting.
+      if (!is.null(dotArgs$chr)) {
+        GWAResult <- GWAResult[GWAResult$chr %in% dotArgs$chr, ]
+        if (nrow(GWAResult) == 0) {
+          stop("Select at least one valid chromosome for plotting.\n")
+        }
+      }
+      do.call(effectPlot,
+              args = c(list(effectDat = effectDat,
+                            signSnp = signSnpLong,
+                            map = map,
+                            chrBoundaries = chrBnd,
+                            title = title,
+                            trait = trait,
+                            output = output),
+                       dotArgs[!(names(dotArgs) %in% c("effectDat", "signSnp",
+                                                       "map", "chrBoundaries"))]))
 
+    } else if (plotType == "QTLRegion") {
+        do.call(QTLRegionPlot,
+                args = c(list(signSnp = signSnp,
+                              map = map,
+                              chrBoundaries = chrBnd,
+                              title = title,
+                              output = output),
+                         dotArgs[!(names(dotArgs) %in% c("signSnp",
+                                                         "chrBoundaries"))]))
+    }
   }
 }

@@ -4,7 +4,13 @@
 \alias{plot.QTLmpp}
 \title{Plot function for the class \code{QTLmpp}}
 \usage{
-\method{plot}{QTLmpp}(x, ..., plotType = c("manhattan", "parEffs"), title = NULL, output = TRUE)
+\method{plot}{QTLmpp}(
+  x,
+  ...,
+  plotType = c("manhattan", "parEffs", "QTLRegion"),
+  title = NULL,
+  output = TRUE
+)
 }
 \arguments{
 \item{x}{An object of class \code{QTLmpp}.}
