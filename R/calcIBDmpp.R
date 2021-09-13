@@ -95,9 +95,13 @@ calcIBDmpp <- function(crossNames,
   colnames(phenoTot)[1] <- "genotype"
   ## Get marker names.
   markerNames <- rownames(crossIBD$markers)
-  markers <- array(NA_real_, dim = dim(crossIBD$markers)[c(2, 1, 3)],
+  ## Get number of parents.
+  nPar <- length(crossIBD$parents)
+  ## Construct empty marker matrix.
+  markers <- array(NA_real_, dim = c(dim(crossIBD$markers)[c(2, 1)], nPar),
                    dimnames = c(dimnames(crossIBD$markers)[c(2, 1)],
                                 list(crossIBD$parents)))
+  ## Fill marker matrix.
   for (i in seq_along(markerNames)) {
     markers[, i, ] <- markers3DtoMat(crossIBD, markerSel = markerNames[i])
   }
