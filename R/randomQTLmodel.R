@@ -25,10 +25,9 @@ randomQTLmodel <- function(modDat,
     }
   }
   fitMod <- LMMsolver::LMMsolve(fixed = fixed,
-                                randomMatrices = if (length(Lgrp) > 0) Lgrp,
-                                residualterm = "cross",
+                                group = if (length(Lgrp) > 0) Lgrp,
+                                residual = ~cross,
                                 data = modDat,
-                                eps = 1.0e-8,
-                                monitor = FALSE)
+                                tolerance = 1.0e-8)
   return(fitMod)
 }
