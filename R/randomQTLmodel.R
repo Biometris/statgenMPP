@@ -18,13 +18,24 @@ randomQTLmodel <- function(modDat,
   }
   selMrk <- c(cofMrk, if (!NULLmodel) scanMrk)
   Lgrp <- list()
+  ## MB: add grp() terms to random part of model
+  ranTerm <- NULL
   if (length(selMrk) > 0) {
     for (selName in selMrk) {
       selIBDNames <- paste0(selName, "_", parents)
       Lgrp[[selName]] <- which(colnames(modDat) %in% selIBDNames)
+      if (is.null(ranTerm)) {
+        ranTerm <- paste0(ranTerm, "~grp(", selName, ")")
+      } else {
+        ranTerm <- paste0(ranTerm, "+grp(", selName, ")")
+      }
     }
   }
+  if (!is.null(ranTerm)) {
+    ranTerm = as.formula(ranTerm)
+  }
   fitMod <- LMMsolver::LMMsolve(fixed = fixed,
+                                random = ranTerm,
                                 group = if (length(Lgrp) > 0) Lgrp,
                                 residual = ~cross,
                                 data = modDat,
