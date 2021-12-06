@@ -213,3 +213,80 @@ createGData <- function(gData = NULL,
   }
   return(gDataNw)
 }
+
+
+#' Plot function for the class \code{GWAS}
+#'
+#' Creates a plot of an object of S3 class \code{GWAS}. The following types of
+#' plot can be made:
+#' \itemize{
+#' \item{a plot of the genetic map.}
+#' \item{a plot of the IBD probabilities across the genome.}
+#' }
+#'
+#' @param x An object of class \code{gData}.
+#' @param ... Further arguments to be passed on to the actual plotting
+#' functions.
+#' @param plotType A character string indicating the type of plot to be made.
+#' One of "genMap".
+#' @param title A character string, the title of the plot.
+#' @param output Should the plot be output to the current device? If
+#' \code{FALSE}, only a list of ggplot objects is invisibly returned.
+#'
+#' @export
+plot.gData <- function(x,
+                       ...,
+                       plotType = c("genMap", "IBDMap"),
+                       title = NULL,
+                       output = TRUE) {
+  plotType <- match.arg(plotType)
+  map <- x$map
+  markers <- x$markers
+  if (is.null(markers) || length(dim(markers)) == 2 || plotType == "genMap") {
+    p <- statgenGWAS:::plot.gData(x = x, ... = ..., plotType = plotType,
+                                  title = title, output = FALSE)
+  } else { # specific IBD plots.
+    if (plotType == "IBDMap") {
+      parents <- dimnames(markers)[[3]]
+      ## Get max IBD value and parent per marker-position combination.
+      maxVals <- apply(X = markers, MARGIN = 1:2, FUN = max)
+      maxPars <- parents[apply(X = markers, MARGIN = 1:2, FUN = which.max)]
+      nGeno <- nrow(maxVals)
+      ## Create plot data.
+      plotDat <- data.frame(genotype = dimnames(maxVals)[[1]],
+                            marker = rep(dimnames(maxVals)[[2]], each = nGeno),
+                            maxVal = as.vector(maxVals),
+                            maxPar = as.vector(maxPars))
+      ## Construct title.
+      if (is.null(title)) {
+        title <- "IBD probabilities across the genome for all genotypes"
+      }
+      ## Get positions of start of new chromosomes.
+      newChrs <- which(!duplicated(map[["chr"]]))[-1] - 0.5
+      p <- ggplot2::ggplot(data = plotDat,
+                           ggplot2::aes_string(x = "marker", y = "genotype",
+                                               alpha = "maxVal",
+                                               fill = "maxPar"))+
+        ggplot2::geom_tile() +
+        ggplot2::labs(title = title, x = "Genome", y = "Genotypes",
+                      fill = "Parent", alpha = "Probability") +
+        ggplot2::geom_vline(xintercept = newChrs, linetype = "dashed",
+                            color = "black") +
+        ggplot2::theme(
+          panel.background = ggplot2::element_blank(),
+          plot.background = ggplot2::element_blank(),
+          axis.text = ggplot2::element_blank(),
+          axis.ticks = ggplot2::element_blank(),
+          panel.border = ggplot2::element_rect(fill = NA),
+          plot.title = ggplot2::element_text(hjust = 0.5)
+        )
+    }
+  }
+  if (output) {
+    plot(p)
+  }
+  invisible(p)
+}
+
+
+

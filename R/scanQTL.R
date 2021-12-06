@@ -51,8 +51,8 @@ scanQTL <- function(modDat,
                                   NULLmodel = TRUE)
       dev <- 2.0 * fitModMrk$logL - 2.0 * fitModCof$logL
     }
-    minlog10p[i] <- -log10(0.5 * pchisq(dev, 1, lower.tail = FALSE))
     effects[i, ] <- coef(fitModMrk)[[rownames(map)[i]]]
+    minlog10p[i] <- -log10(0.5 * pchisq(dev, 1, lower.tail = FALSE))
     if (verbose && i %% 25 == 0) {
       cat(paste(i, "\n"))
     }
