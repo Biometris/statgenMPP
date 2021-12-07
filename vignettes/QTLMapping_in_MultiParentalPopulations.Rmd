@@ -1,0 +1,42 @@
+---
+title: "QTL Mapping in Multi Parental Populations"
+author: "Wenhao Li and Martin Boer"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    toc: false
+    number_sections: true
+bibliography: bibliography.bib
+link-citations: yes
+vignette: >
+  %\VignetteIndexEntry{QTL Mapping in Multi Parental Populations}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.dim = c(7, 4)
+)
+library(statgenMPP)
+op <- options(width = 90)
+```
+
+
+
+
+
+
+
+
+
+```{r winddown, include = FALSE}
+options(op)
+```
+
+------------------------------------------------------------------------
+
+## References
+

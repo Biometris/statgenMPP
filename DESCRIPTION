@@ -28,4 +28,8 @@ Imports:
     scales,
     statgenIBD,
     statgenGWAS
-Suggests: tinytest
+Suggests: 
+    rmarkdown,
+    knitr,
+    tinytest
+VignetteBuilder: knitr
