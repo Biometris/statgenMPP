@@ -3,6 +3,9 @@
 manhattanPlot <- getFromNamespace(x = "manhattanPlot", ns = "statgenGWAS")
 
 #' @keywords internal
+plot.gData <- getFromNamespace(x = "plot.gData", ns = "statgenGWAS")
+
+#' @keywords internal
 createGWAS <- getFromNamespace(x = "createGWAS", ns = "statgenGWAS")
 
 #' @keywords internal

@@ -243,8 +243,8 @@ plot.gData <- function(x,
   map <- x$map
   markers <- x$markers
   if (is.null(markers) || length(dim(markers)) == 2 || plotType == "genMap") {
-    p <- statgenGWAS:::plot.gData(x = x, ... = ..., plotType = plotType,
-                                  title = title, output = FALSE)
+    p <- statgenGWAS::plot.gData(x = x, ... = ..., plotType = plotType,
+                                 title = title, output = FALSE)
   } else { # specific IBD plots.
     if (plotType == "IBDMap") {
       parents <- dimnames(markers)[[3]]

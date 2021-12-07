@@ -25,7 +25,6 @@ selectCofactors <- function(map,
   }
 }
 
-#' @importFrom graphics abline axis box
 #' @importFrom stats aggregate
 #'
 #' @keywords internal
