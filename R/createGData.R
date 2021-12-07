@@ -215,9 +215,9 @@ createGData <- function(gData = NULL,
 }
 
 
-#' Plot function for the class \code{GWAS}
+#' Plot function for the class \code{gData}
 #'
-#' Creates a plot of an object of S3 class \code{GWAS}. The following types of
+#' Creates a plot of an object of S3 class \code{gData}. The following types of
 #' plot can be made:
 #' \itemize{
 #' \item{a plot of the genetic map.}
@@ -240,11 +240,13 @@ plot.gData <- function(x,
                        title = NULL,
                        output = TRUE) {
   plotType <- match.arg(plotType)
+  dotArgs <- list(...)
   map <- x$map
   markers <- x$markers
-  if (is.null(markers) || length(dim(markers)) == 2 || plotType == "genMap") {
-    p <- statgenGWAS::plot.gData(x = x, ... = ..., plotType = plotType,
-                                 title = title, output = FALSE)
+  if (plotType == "genMap") {
+    highlight <- dotArgs$highlight
+    p <- geneticMapPlot(map = map, highlight = highlight,
+                        title = title, output = FALSE)
   } else { # specific IBD plots.
     if (plotType == "IBDMap") {
       parents <- dimnames(markers)[[3]]

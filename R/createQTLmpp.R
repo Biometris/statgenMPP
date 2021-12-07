@@ -130,14 +130,12 @@ plot.QTLmpp <- function(x,
                                                        "map", "chrBoundaries"))]))
 
     } else if (plotType == "QTLRegion") {
-        do.call(QTLRegionPlot,
-                args = c(list(signSnp = signSnp,
-                              map = map,
-                              chrBoundaries = chrBnd,
+        do.call(geneticMapPlot,
+                args = c(list(map = map,
+                              highlight = signSnp,
                               title = title,
                               output = output),
-                         dotArgs[!(names(dotArgs) %in% c("signSnp",
-                                                         "chrBoundaries"))]))
+                         dotArgs[!(names(dotArgs) %in% c("highlight", "map"))]))
     }
   }
 }
