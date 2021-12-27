@@ -4,7 +4,13 @@
 \alias{plot.gData}
 \title{Plot function for the class \code{gData}}
 \usage{
-\method{plot}{gData}(x, ..., plotType = c("genMap", "IBDMap"), title = NULL, output = TRUE)
+\method{plot}{gData}(
+  x,
+  ...,
+  plotType = c("genMap", "allGeno", "pedigree"),
+  title = NULL,
+  output = TRUE
+)
 }
 \arguments{
 \item{x}{An object of class \code{gData}.}

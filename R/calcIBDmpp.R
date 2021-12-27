@@ -66,7 +66,7 @@ calcIBDmpp <- function(crossNames,
     if (verbose) {
       cat(paste0("calculating IBD in cross: ", crossNames[i], ".\n"))
     }
-    statgenIBD::calcIBD(popType = popType,
+    statgenIBD::calcIBD(popType = popType[i],
                         markerFile = markerFiles[i],
                         mapFile = mapFile,
                         evalDist = evalDist,
@@ -96,18 +96,24 @@ calcIBDmpp <- function(crossNames,
   ## Get marker names.
   markerNames <- rownames(crossIBD$markers)
   ## Get number of parents.
-  nPar <- length(crossIBD$parents)
+  parents <- crossIBD$parents
+  nPar <- length(parents)
   ## Construct empty marker matrix.
   markers <- array(NA_real_, dim = c(dim(crossIBD$markers)[c(2, 1)], nPar),
                    dimnames = c(dimnames(crossIBD$markers)[c(2, 1)],
-                                list(crossIBD$parents)))
+                                list(parents)))
   ## Fill marker matrix.
   for (i in seq_along(markerNames)) {
-    markers[, i, ] <- markers3DtoMat(crossIBD, markerSel = markerNames[i])
+    markers[, i, ] <- markers3DtoMat(markers = crossIBD$markers,
+                                     parents = parents,
+                                     markerSel = markerNames[i])
   }
   MPPobj <- createGData(geno = markers,
                         map = crossIBD$map,
                         pheno = phenoTot,
                         covar = covar)
+  attr(x = MPPobj, which = "popType") <- crossIBD$popType
+  attr(x = MPPobj, which = "pedigree") <- crossIBD$pedigree
+  attr(x = MPPobj, which = "genoCross") <- attr(x = crossIBD, which = "genoCross")
   return(MPPobj)
 }

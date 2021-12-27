@@ -236,53 +236,29 @@ createGData <- function(gData = NULL,
 #' @export
 plot.gData <- function(x,
                        ...,
-                       plotType = c("genMap", "IBDMap"),
+                       plotType = c("genMap", "allGeno", "pedigree"),
                        title = NULL,
                        output = TRUE) {
   plotType <- match.arg(plotType)
   dotArgs <- list(...)
   map <- x$map
-  markers <- x$markers
+  markers <- aperm(x$markers, c(2, 1, 3))
+  parents <- dimnames(markers)[[3]]
+  pedigree <- attr(x = x, which = "pedigree")
+  genoCross <- attr(x = x, which = "genoCross")
+  popType <- attr(x = x, which = "popType")
   if (plotType == "genMap") {
     highlight <- dotArgs$highlight
     p <- geneticMapPlot(map = map, highlight = highlight,
                         title = title, output = FALSE)
-  } else { # specific IBD plots.
-    if (plotType == "IBDMap") {
-      parents <- dimnames(markers)[[3]]
-      ## Get max IBD value and parent per marker-position combination.
-      maxVals <- apply(X = markers, MARGIN = 1:2, FUN = max)
-      maxPars <- parents[apply(X = markers, MARGIN = 1:2, FUN = which.max)]
-      nGeno <- nrow(maxVals)
-      ## Create plot data.
-      plotDat <- data.frame(genotype = dimnames(maxVals)[[1]],
-                            marker = rep(dimnames(maxVals)[[2]], each = nGeno),
-                            maxVal = as.vector(maxVals),
-                            maxPar = as.vector(maxPars))
-      ## Construct title.
-      if (is.null(title)) {
-        title <- "IBD probabilities across the genome for all genotypes"
-      }
-      ## Get positions of start of new chromosomes.
-      newChrs <- which(!duplicated(map[["chr"]]))[-1] - 0.5
-      p <- ggplot2::ggplot(data = plotDat,
-                           ggplot2::aes_string(x = "marker", y = "genotype",
-                                               alpha = "maxVal",
-                                               fill = "maxPar"))+
-        ggplot2::geom_tile() +
-        ggplot2::labs(title = title, x = "Genome", y = "Genotypes",
-                      fill = "Parent", alpha = "Probability") +
-        ggplot2::geom_vline(xintercept = newChrs, linetype = "dashed",
-                            color = "black") +
-        ggplot2::theme(
-          panel.background = ggplot2::element_blank(),
-          plot.background = ggplot2::element_blank(),
-          axis.text = ggplot2::element_blank(),
-          axis.ticks = ggplot2::element_blank(),
-          panel.border = ggplot2::element_rect(fill = NA),
-          plot.title = ggplot2::element_text(hjust = 0.5)
-        )
-    }
+  } else if (plotType == "allGeno") {
+    p <- allGenoPlot(markers = markers, map = map, parents = parents,
+                     title = title)
+  } else if (plotType == "pedigree") {
+    p <- pedPlot(pedigree = pedigree, offSpring = colnames(markers),
+                 popType = popType,
+                 multiCross = length(unique(genoCross[["cross"]])) > 1,
+                 genoCross = genoCross, title = title)
   }
   if (output) {
     plot(p)
