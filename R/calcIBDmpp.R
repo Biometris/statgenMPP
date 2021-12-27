@@ -66,7 +66,7 @@ calcIBDmpp <- function(crossNames,
     if (verbose) {
       cat(paste0("calculating IBD in cross: ", crossNames[i], ".\n"))
     }
-    statgenIBD::calcIBD(popType = popType[i],
+    statgenIBD::calcIBD(popType = popType,
                         markerFile = markerFiles[i],
                         mapFile = mapFile,
                         evalDist = evalDist,
