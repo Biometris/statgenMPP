@@ -13,7 +13,9 @@ before_script:
   - apt-get install -y --no-install-recommends qpdf pandoc pandoc-citeproc
   - export PATH="/usr/local/lib/R/site-library/littler/examples/:${PATH}"
   - echo "options(Ncpus = $(nproc --all))" >> /usr/local/lib/R/etc/Rprofile.site
-  - install2.r devtools
+  - install2.r devtools remotes
+  - r -e 'remotes::install_github("Biometris/statgenGWAS", ref = "develop", dependencies = TRUE)'
+  - r -e 'remotes::install_github("Biometris/statgenIBD", ref = "develop", dependencies = TRUE)'
   - r -e 'devtools::install_dev_deps()'
 
 r-release:
