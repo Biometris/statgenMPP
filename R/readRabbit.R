@@ -41,5 +41,10 @@ readRABBIT <- function(infile) {
   dimnames(markArr) <- list(genoNames, rownames(map), foundNames)
   ## Create gData object.
   res <- createGData(geno = markArr, map = map)
+  attr(x = res, which = "popType") <- "RABBIT"
+
+  # attr(x = res, which = "pedigree") <- crossIBD$pedigree
+  # attr(x = res, which = "genoCross") <- attr(x = crossIBD, which = "genoCross")
+
   return(res)
 }
