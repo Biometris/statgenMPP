@@ -11,7 +11,7 @@
 #' @examples
 #' genoFile <- system.file("extdata", "BarleyMP_magicReconstruct_Summary.zip",
 #'                        package = "statgenMPP")
-#' barleyMPMPP <- readRABBIT(unzip(genoFile))
+#' barleyMPMPP <- readRABBIT(unzip(genoFile, exdir = tempdir()))
 #'
 #' @references Fine mapping of a major QTL for awn length in barley using a
 #' multiparent mapping population. Liller CB, Walla A, Boer MP, Hedley P,

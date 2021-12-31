@@ -20,7 +20,7 @@ Read a file with IBD probabilities computed by the RABBIT software package.
 \examples{
 genoFile <- system.file("extdata", "BarleyMP_magicReconstruct_Summary.zip",
                        package = "statgenMPP")
-barleyMPMPP <- readRABBIT(unzip(genoFile))
+barleyMPMPP <- readRABBIT(unzip(genoFile, exdir = tempdir()))
 
 }
 \references{
