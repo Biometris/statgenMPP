@@ -27,15 +27,15 @@ effectPlot <- function(effectDat,
     min(x) + (max(x) - min(x)) / 2
   })[, 2]
   ## Compute chromosome boundaries.
-  chrBnd <- cumsum(chrBoundaries[, 2])[-nrow(chrBoundaries)]
+  chrBnd <- c(0, cumsum(chrBoundaries[, 2]) + 10)
   ## Add cumulative position from map to effects.
   parEffData <- merge(effectDat, map[, c("snp", "cumPos")],
                       by = "snp", sort = FALSE)
   ## Add 5 to cumPos since geom_tile uses center of tile and has width 10.
   parEffData$cumPos <- parEffData$cumPos + 5
-  ## Only plotting the effects for significant SNPs. Set all others to NA.
-  parEffData[!interaction(parEffData$snp, parEffData$trait) %in%
-              interaction(signSnp$snp, signSnp$trait), "effect"] <- NA
+  ## Only plotting the effects for significant SNPs. Remove all others.
+  parEffData <- parEffData[interaction(parEffData$snp, parEffData$trait) %in%
+                            interaction(signSnp$snp, signSnp$trait), ]
   maxVal <- max(abs(parEffData$effect), na.rm = TRUE)
   ## Create title.
   if (is.null(title)) {
@@ -48,8 +48,9 @@ effectPlot <- function(effectDat,
     ggplot2::scale_fill_gradientn(colors = c("blue", "cyan", "white",
                                              "yellow","red"),
                                   values = scales::rescale(c(-1,
-                                                             0 - sqrt(.Machine$double.eps),
-                                                             0, 0 + sqrt(.Machine$double.eps),
+                                                             - sqrt(.Machine$double.eps),
+                                                             0,
+                                                             sqrt(.Machine$double.eps),
                                                              1)),
                                   limits = c(-maxVal, maxVal),
                                   na.value = "white") +
