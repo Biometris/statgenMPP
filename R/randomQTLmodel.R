@@ -25,9 +25,9 @@ randomQTLmodel <- function(modDat,
       selIBDNames <- paste0(selName, "_", parents)
       Lgrp[[selName]] <- which(colnames(modDat) %in% selIBDNames)
       if (is.null(ranTerm)) {
-        ranTerm <- paste0(ranTerm, "~grp(", selName, ")")
+        ranTerm <- paste0(ranTerm, "~grp(`", selName, "`)")
       } else {
-        ranTerm <- paste0(ranTerm, "+grp(", selName, ")")
+        ranTerm <- paste0(ranTerm, "+grp(`", selName, "`)")
       }
     }
   }
