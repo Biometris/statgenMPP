@@ -8,6 +8,17 @@
 #' @return A \code{gData} object with map and markers corresponding to the
 #' imported information in the imported .csv file.
 #'
+#' @examples
+#' genoFile <- system.file("extdata", "BarleyMP_magicReconstruct_Summary.zip",
+#'                        package = "statgenMPP")
+#' barleyMPMPP <- readRABBIT(unzip(genoFile))
+#'
+#' @references Fine mapping of a major QTL for awn length in barley using a
+#' multiparent mapping population. Liller CB, Walla A, Boer MP, Hedley P,
+#' Macaulay M, Effgen S, von Korff M, van Esse GW, Koornneef M.
+#' Theor Appl Genet. 2017 Feb;130(2):269-281. doi: 10.1007/s00122-016-2807-y.
+#' Epub 2016 Oct 12. PMID: 27734096
+#'
 #' @export
 readRABBIT <- function(infile) {
   if (missing(infile) || !is.character(infile) || length(infile) > 1 ||
