@@ -2,6 +2,8 @@
 #'
 #' Read a file with IBD probabilities computed by the RABBIT software package.
 #'
+#' @inheritParams createGData
+#'
 #' @param infile A character string, a link to a .csv file with IBD
 #' probabilities.
 #'
@@ -20,10 +22,17 @@
 #' Epub 2016 Oct 12. PMID: 27734096
 #'
 #' @export
-readRABBIT <- function(infile) {
+readRABBIT <- function(infile,
+                       pheno = NULL,
+                       covar = NULL) {
   if (missing(infile) || !is.character(infile) || length(infile) > 1 ||
       file.access(infile, mode = 4) == -1 || tools::file_ext(infile) != "csv") {
     stop("infile should be a character string indicating a readable .csv file")
+  }
+  if (!is.null(covar)) {
+    if (!hasName(x = covar, name = "cross")) {
+      stop("covar should at least contain a column cross.\n")
+    }
   }
   ## Read map and marker probabilities.
   markMap <- data.table::fread(infile, skip = "haploprob", fill = TRUE,
@@ -51,7 +60,7 @@ readRABBIT <- function(infile) {
   ## Add dimnames to markers: genotypes x markers x founders.
   dimnames(markArr) <- list(genoNames, rownames(map), foundNames)
   ## Create gData object.
-  res <- createGData(geno = markArr, map = map)
+  res <- createGData(geno = markArr, map = map, pheno = pheno, covar = covar)
   attr(x = res, which = "popType") <- "RABBIT"
 
   # attr(x = res, which = "pedigree") <- crossIBD$pedigree
