@@ -1,6 +1,9 @@
-#' IBDs calculation and prepare the design matrix
+#' IBD calculation for multi parental populations
 #'
-#' IBD calculation for multiple
+#' IBD calculation for multi parental populations. Per cross IBD probabilities
+#' are calculated using \code{calcIBD} in the statgenIBD package. These
+#' probabilities are combined with optional phenotypic data and stored in a
+#' single object of class \code{gData}.
 #'
 #' IBD probabilities can be calculated for many different types of populations.
 #' In the following table all supported populations are listed. Note that the
@@ -25,10 +28,10 @@
 #' | C4Sx | four-way | C4, followed by x generations of selfing | 6 |
 #' | C4SxDH | four-way | C4, followed by x generations of selfing and DH generation | 6 |
 #'
+#' @param crossNames A character vector, the names of the crosses.
 #' @param markerFiles A character vector indicating the locations of the files
 #' with genotypic information for the populations. The files should be in
 #' tab-delimited format with a header containing marker names.
-#' @param crossNames A character vector, the names of the crosses.
 #' @param pheno A data.frame or a list of data.frames with phenotypic data,
 #' with genotypes in the first column \code{genotype} and traits in the
 #' following columns. The trait columns should be numerical columns only.
@@ -48,6 +51,15 @@
 #' marker existing marker positions (\code{FALSE}).
 #' @param verbose Should progress be printed?
 #'
+#' @return An object of class \code{gData} with the following components:
+#' \item{\code{map}}{a data.frame containing map data. Map is sorted by
+#' chromosome and position.}
+#' \item{\code{markers}}{a 3D matrix containing IBD probabilities.}
+#' \item{\code{pheno}}{a list of data.frames containing phenotypic data.}
+#' \item{\code{kinship}}{a kinship matrix.}
+#' \item{\code{covar}}{a data.frame with extra covariates (including the
+#' name of the cross).}
+#'
 #' @importFrom utils read.table
 #' @importFrom stats setNames
 #' @export
@@ -59,6 +71,33 @@ calcIBDmpp <- function(crossNames,
                        evalDist,
                        grid = TRUE,
                        verbose = FALSE) {
+  ## Checks.
+  if (!is.character(crossNames)) {
+    stop("crossNames should be a character vector.\n")
+  }
+  if (!is.character(markerFiles)) {
+    stop("markerFiles should be a character vector.\n")
+  }
+  if (length(crossNames) != length(markerFiles)) {
+    stop("crossNames and markerFiles should have the same length.\n")
+  }
+  missFiles <- markerFiles[!file.exists(markerFiles)]
+  if (length(missFiles) > 0) {
+    stop("The following files don't exist: \n",
+         paste(missFiles, collapse = ","))
+  }
+  if (!is.character(popType) || length(popType) > 1) {
+    stop("popType should be a character string of length 1.\n")
+  }
+  if (!is.character(mapFile) || length(mapFile) > 1) {
+    stop("mapFile should be a character string of length 1.\n")
+  }
+  if (!file.exists(mapFile)) {
+    stop("mapFile doesn't exist.\n")
+  }
+  if (!is.numeric(evalDist) || length(evalDist) > 1 || evalDist < 0) {
+    stop("evalDist should be a positive numerical value.\n")
+  }
   ## Get number of crosses.
   nCross <- length(markerFiles)
   ## Calculate IBD probabilities per cross.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/calcIBDmpp.R
 \name{calcIBDmpp}
 \alias{calcIBDmpp}
-\title{IBDs calculation and prepare the design matrix}
+\title{IBD calculation for multi parental populations}
 \usage{
 calcIBDmpp(
   crossNames,
@@ -46,8 +46,21 @@ marker existing marker positions (\code{FALSE}).}
 
 \item{verbose}{Should progress be printed?}
 }
+\value{
+An object of class \code{gData} with the following components:
+\item{\code{map}}{a data.frame containing map data. Map is sorted by
+chromosome and position.}
+\item{\code{markers}}{a 3D matrix containing IBD probabilities.}
+\item{\code{pheno}}{a list of data.frames containing phenotypic data.}
+\item{\code{kinship}}{a kinship matrix.}
+\item{\code{covar}}{a data.frame with extra covariates (including the
+name of the cross).}
+}
 \description{
-IBD calculation for multiple
+IBD calculation for multi parental populations. Per cross IBD probabilities
+are calculated using \code{calcIBD} in the statgenIBD package. These
+probabilities are combined with optional phenotypic data and stored in a
+single object of class \code{gData}.
 }
 \details{
 IBD probabilities can be calculated for many different types of populations.
