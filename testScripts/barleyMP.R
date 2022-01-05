@@ -3,15 +3,14 @@ genoFile <- system.file("extdata", "BarleyMP_magicReconstruct_Summary.zip",
 
 pheno <- read.csv(system.file("extdata", "BarleyMP_pheno.csv",
                               package = "statgenMPP"))
-phenoDat <- pheno[1:2]
-colnames(phenoDat)[1] <- "genotype"
+colnames(pheno)[1] <- "genotype"
+colnames(pheno)[3] <- "cross"
+pheno$cross <- factor(pheno$cross)
+pheno <- pheno[, 1:3]
 
-covar <- pheno[, 3, drop = FALSE]
-covar$cross <- factor(paste0("cross", covar$pop))
-rownames(covar) <- phenoDat$genotype
 
 barleyMPMPP <- readRABBIT(infile = unzip(genoFile, exdir = tempdir()),
-                          pheno = phenoDat, covar = covar)
+                          pheno = pheno)
 
 barleyRes <- selQTLmpp(MPPobj = barleyMPMPP, trait = "Awn_length")
 

@@ -2,10 +2,11 @@
 #'
 #' Read a file with IBD probabilities computed by the RABBIT software package.
 #'
-#' @inheritParams createGData
-#'
 #' @param infile A character string, a link to a .csv file with IBD
 #' probabilities.
+#' @param pheno A data frame with at least columns "genotype" for the
+#' "genotype", "cross" indicating the cross the genotype comes from and one
+#' or more numerical columns containing phenotypic information.
 #'
 #' @return A \code{gData} object with map and markers corresponding to the
 #' imported information in the imported .csv file.
@@ -21,17 +22,31 @@
 #' Theor Appl Genet. 2017 Feb;130(2):269-281. doi: 10.1007/s00122-016-2807-y.
 #' Epub 2016 Oct 12. PMID: 27734096
 #'
+#' @importFrom utils hasName
 #' @export
 readRABBIT <- function(infile,
-                       pheno = NULL,
-                       covar = NULL) {
+                       pheno = NULL) {
   if (missing(infile) || !is.character(infile) || length(infile) > 1 ||
       file.access(infile, mode = 4) == -1 || tools::file_ext(infile) != "csv") {
     stop("infile should be a character string indicating a readable .csv file")
   }
-  if (!is.null(covar)) {
-    if (!hasName(x = covar, name = "cross")) {
-      stop("covar should at least contain a column cross.\n")
+  if (!is.null(pheno)) {
+    if (!inherits(pheno, "data.frame")) {
+      stop("pheno should be a data.frame.\n")
+    }
+    minCols <- c("genotype", "cross")
+    missCols <- minCols[!sapply(X = minCols, FUN = function(minCol) {
+      hasName(x = pheno, name = minCol)
+    })]
+    if (length(missCols) > 0) {
+      stop("The following columns are missing in pheno:\n",
+           paste(missCols, collapse = ", "))
+    }
+    trtCols <- colnames(pheno)[!colnames(pheno) %in% minCols]
+    nonNumCols <- trtCols[!sapply(X = pheno[trtCols], FUN = is.numeric)]
+    if (length(nonNumCols) > 0) {
+      stop("The following columns in pheno are not numeric:\n",
+           paste(nonNumCols, collapse = ", "))
     }
   }
   ## Read map and marker probabilities.
@@ -59,6 +74,10 @@ readRABBIT <- function(infile,
   foundNames <- as.character(foundNames[3:nrow(foundNames), ])
   ## Add dimnames to markers: genotypes x markers x founders.
   dimnames(markArr) <- list(genoNames, rownames(map), foundNames)
+  ## Split pheno in pheno and covar.
+  covar <- pheno["cross"]
+  rownames(covar) <- pheno[["genotype"]]
+  pheno <- pheno[-which(colnames(pheno) == "cross")]
   ## Create gData object.
   res <- createGData(geno = markArr, map = map, pheno = pheno, covar = covar)
   attr(x = res, which = "popType") <- "RABBIT"

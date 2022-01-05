@@ -4,20 +4,15 @@
 \alias{readRABBIT}
 \title{Read IBD probabilities}
 \usage{
-readRABBIT(infile, pheno = NULL, covar = NULL)
+readRABBIT(infile, pheno = NULL)
 }
 \arguments{
 \item{infile}{A character string, a link to a .csv file with IBD
 probabilities.}
 
-\item{pheno}{A data.frame or a list of data.frames with phenotypic data,
-with genotypes in the first column \code{genotype} and traits in the
-following columns. The trait columns should be numerical columns only.
-A list of data.frames can be used for replications, i.e. different
-environments.}
-
-\item{covar}{A data.frame with extra covariates per genotype. Genotypes
-should be in the rows.}
+\item{pheno}{A data frame with at least columns "genotype" for the
+"genotype", "cross" indicating the cross the genotype comes from and one
+or more numerical columns containing phenotypic information.}
 }
 \value{
 A \code{gData} object with map and markers corresponding to the

@@ -84,7 +84,7 @@ calcIBDmpp <- function(crossNames,
   missFiles <- markerFiles[!file.exists(markerFiles)]
   if (length(missFiles) > 0) {
     stop("The following files don't exist: \n",
-         paste(missFiles, collapse = ","))
+         paste(missFiles, collapse = ", "))
   }
   if (!is.character(popType) || length(popType) > 1) {
     stop("popType should be a character string of length 1.\n")
