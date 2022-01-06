@@ -106,3 +106,4 @@ gData2 <- createGData(gData = gData, covar = covar)
 \seealso{
 \code{\link{summary.gData}}
 }
+\keyword{internal}

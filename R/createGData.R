@@ -87,7 +87,7 @@ NULL
 
 #' @rdname gData
 #'
-#' @export
+#' @keywords internal
 createGData <- function(gData = NULL,
                         geno = NULL,
                         map = NULL,
