@@ -10,7 +10,6 @@ selQTLmpp(
   QTLwindow = 10,
   threshold = 3,
   CIM = TRUE,
-  maxIter = 100,
   maxCofactors = 5,
   verbose = FALSE
 )
@@ -24,8 +23,8 @@ selQTLmpp(
 \item{QTLwindow}{A numerical value indicating the window around a QTL that
 is considered as part of that QTL.}
 
-\item{threshold}{A numerical value indicating the threshold for the -10logp
-value of a marker to be considered a QTL}
+\item{threshold}{A numerical value indicating the threshold for the
+\eqn{-10logp} value of a marker to be considered a QTL.}
 
 \item{CIM}{Should Composite Interval Mapping be done? If \code{FALSE} only
 one round of QTL mapping is done without cofactors.}
@@ -38,9 +37,9 @@ include in the model.}
 \description{
 Multi round genome scans for QTL detection.\cr\cr
 Several rounds of QTL detection are performed. First a model is fitted
-without cofactors. If for at least one marker the $-10log(p)$ value is above
-the threshold the marker with the lowest p value is added as cofactor in the
-next round of QTL detection. This process continues until there are no new
-markers with a $-10log(p)$ value above the threshold or until the maximum
-number of cofactors is reached.
+without cofactors. If for at least one marker the \eqn{-10log(p)} value is
+above the threshold the marker with the lowest p-Value is added as cofactor
+in the next round of QTL detection. This process continues until there are
+no new markers with a \eqn{-10log(p)} value above the threshold or until
+the maximum number of cofactors is reached.
 }
