@@ -3,3 +3,4 @@
 ^testScripts$
 .gitlab-ci.yml
 ^README\.Rmd$
+^data-raw$
