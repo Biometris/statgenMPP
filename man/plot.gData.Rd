@@ -19,18 +19,26 @@
 functions.}
 
 \item{plotType}{A character string indicating the type of plot to be made.
-One of "genMap".}
+One of "genMap", "allGeno" or "pedigree".}
 
 \item{title}{A character string, the title of the plot.}
 
 \item{output}{Should the plot be output to the current device? If
-\code{FALSE}, only a list of ggplot objects is invisibly returned.}
+\code{FALSE}, only a ggplot object is invisibly returned.}
+}
+\value{
+A ggplot object is invisibly returned.
 }
 \description{
 Creates a plot of an object of S3 class \code{gData}. The following types of
 plot can be made:
 \itemize{
-\item{a plot of the genetic map.}
-\item{a plot of the IBD probabilities across the genome.}
+\item{\code{genMap}}{ A plot of the genetic map.}
+\item{\code{allGeno}}{ A plot showing for all genotypes the IBD
+probabilities of the parent with the highest probability per marker.}
+\item{\code{pedigree}}{ A plot showing the structure of the pedigree of
+the population.}
 }
+\cr
+See the respective sections for more details on the plots.
 }

@@ -82,11 +82,7 @@
 #' ## Add covariates to previously created gData object.
 #' gData2 <- createGData(gData = gData, covar = covar)
 #'
-#' @name gData
-NULL
-
-#' @rdname gData
-#'
+#' @noRd
 #' @keywords internal
 createGData <- function(gData = NULL,
                         geno = NULL,
@@ -220,18 +216,39 @@ createGData <- function(gData = NULL,
 #' Creates a plot of an object of S3 class \code{gData}. The following types of
 #' plot can be made:
 #' \itemize{
-#' \item{a plot of the genetic map.}
-#' \item{a plot of the IBD probabilities across the genome.}
+#' \item{\code{genMap}}{ A plot of the genetic map.}
+#' \item{\code{allGeno}}{ A plot showing for all genotypes the IBD
+#' probabilities of the parent with the highest probability per marker.}
+#' \item{\code{pedigree}}{ A plot showing the structure of the pedigree of
+#' the population.}
 #' }
+#' \cr
+#' See the respective sections for more details on the plots.
+#'
+#' @section genMap
+#' A plot is made showing the lengths of the chromosomes and the position of
+#' the markers that are present in the map. It is possible to highlight one
+#' or more markers using the extra parameter \code{highlight}.
+#'
+#' @section allGeno
+#' A plot is made showing all genotypes and markers. Each combinaton of
+#' genotype and marker is colored according to the parent with the highest
+#' probability. A darker color indicates a higher probability.
+#'
+#' @section pedigree
+#' A plot is made showing the structure of the pedigree for the population in
+#' the \code{gData} object.
 #'
 #' @param x An object of class \code{gData}.
 #' @param ... Further arguments to be passed on to the actual plotting
 #' functions.
 #' @param plotType A character string indicating the type of plot to be made.
-#' One of "genMap".
+#' One of "genMap", "allGeno" or "pedigree".
 #' @param title A character string, the title of the plot.
 #' @param output Should the plot be output to the current device? If
-#' \code{FALSE}, only a list of ggplot objects is invisibly returned.
+#' \code{FALSE}, only a ggplot object is invisibly returned.
+#'
+#' @return A ggplot object is invisibly returned.
 #'
 #' @export
 plot.gData <- function(x,
@@ -268,6 +285,4 @@ plot.gData <- function(x,
   }
   invisible(p)
 }
-
-
 
