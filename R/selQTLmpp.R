@@ -126,7 +126,7 @@ selQTLmpp <- function(MPPobj,
   GWASInfo <- list(parents = parents)
   res <- createGWAS(GWAResult = list(pheno = GWARes),
                     signSnp = list(pheno = signSnp),
-                    thr = list(pheno = setNames(threshold, "pheno")),
+                    thr = list(pheno = setNames(threshold, trait)),
                     GWASInfo = GWASInfo)
   ## Add QTLmpp class to simplify providing generic functions.
   class(res) <- c("QTLmpp", class(res))
