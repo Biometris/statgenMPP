@@ -8,6 +8,7 @@ scanQTL <- function(modDat,
                     QTLwindow = 10,
                     cof = NULL,
                     trait = NULL,
+                    maxIter = 100,
                     verbose = FALSE) {
   ## Get info from MPP object.
   nMarkers <- nrow(map)

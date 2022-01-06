@@ -11,6 +11,7 @@ scanQTL(
   QTLwindow = 10,
   cof = NULL,
   trait = NULL,
+  maxIter = 100,
   verbose = FALSE
 )
 }

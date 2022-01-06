@@ -2,7 +2,7 @@
 % Please edit documentation in R/selQTLmpp.R
 \name{selQTLmpp}
 \alias{selQTLmpp}
-\title{multi-round genome scans and select cofactors}
+\title{Multi round genome scans for QTL detection}
 \usage{
 selQTLmpp(
   MPPobj,
@@ -16,22 +16,31 @@ selQTLmpp(
 )
 }
 \arguments{
-\item{MPPobj}{...}
+\item{MPPobj}{An object of class gData, typically the output of either
+\code{\link{calcIBDmpp}} or \code{\link{readRABBIT}}.}
 
-\item{trait}{...}
+\item{trait}{A character string indicating the trait QTL mapping is done for.}
 
-\item{QTLwindow}{...}
+\item{QTLwindow}{A numerical value indicating the window around a QTL that
+is considered as part of that QTL.}
 
-\item{threshold}{...}
+\item{threshold}{A numerical value indicating the threshold for the -10logp
+value of a marker to be considered a QTL}
 
-\item{CIM}{...}
+\item{CIM}{Should Composite Interval Mapping be done? If \code{FALSE} only
+one round of QTL mapping is done without cofactors.}
 
-\item{maxIter}{...}
+\item{maxCofactors}{A numerical value, the maximum number of cofactor to
+include in the model.}
 
-\item{maxCofactors}{...}
-
-\item{verbose}{...}
+\item{verbose}{Should progress and intermediate plots be output?}
 }
 \description{
-multi-round genome scans and select cofactors
+Multi round genome scans for QTL detection.\cr\cr
+Several rounds of QTL detection are performed. First a model is fitted
+without cofactors. If for at least one marker the $-10log(p)$ value is above
+the threshold the marker with the lowest p value is added as cofactor in the
+next round of QTL detection. This process continues until there are no new
+markers with a $-10log(p)$ value above the threshold or until the maximum
+number of cofactors is reached.
 }
