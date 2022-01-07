@@ -19,52 +19,45 @@
 functions.}
 
 \item{plotType}{A character string indicating the type of plot to be made.
-One of "manhattan", and "matrix".}
+One of "manhattan", "parEffs", and "QTLRegion".}
 
 \item{title}{A character string, the title of the plot.}
 
 \item{output}{Should the plot be output to the current device? If
-\code{FALSE}, only a list of ggplot objects is invisibly returned.}
+\code{FALSE}, only a ggplot object is invisibly returned.}
 }
 \description{
 Creates a plot of an object of S3 class \code{QTLmpp}. The following types of
 plot can be made:
 \itemize{
-\item{a manhattan plot, i.e. a plot of LOD-scores per SNP}
-\item{a plot of effect sizes and directions per parent}
+\item{manhattan}{ A manhattan plot, i.e. a plot of \eqn{-10log(p)} values
+per marker.}
+\item{parEffs} { A plot of effect sizes and directions per parent.}
+\item{QTLRegion}{ A plot highlighting the QTLs found on the genetic map.}
 }
-Manhattan plots, qq plots and matrix plots are made for a single trait See
-details for a detailed description of the plots and the plot options
+See details for a detailed description of the plots and the plot options
 specific to the different plots.
 }
 \section{Manhattan Plot}{
 
-A LOD-profile of all marker positions and corresponding LOD-scores is
-plotted. Significant markers are highlighted with red dots. By default these
-are taken from the result of the GWAS analysis however the LOD-threshold for
-significant parameters may be modified using the parameter \code{yThr}. The
-treshold is plotted as a horizontal line. If there are previously known
-marker effect, false positives and true negatives can also be marked.\cr
+A profile of all marker positions and corresponding \eqn{-10log(p)} values is
+plotted. QTLs found are highlighted with red dots. The threshold is plotted
+as a horizontal line. If there are previously known marker effects, false
+positives and true negatives can also be marked.\cr
 Extra parameter options:
 \describe{
 \item{\code{xLab}}{A character string, the x-axis label. Default =
 \code{"Chromosomes"}}
 \item{\code{yLab}}{A character string, the y-axis label. Default =
 \code{-log10(p)}}
-\item{\code{effects}}{A character vector, indicating which SNPs correspond
+\item{\code{effects}}{A character vector, indicating which markers correspond
 to a real (known) effect. Used for determining true/false positives and
 false negatives. True positives are colored green, false positives orange and
 false negatives yellow.}
 \item{\code{colPalette}}{A color palette used for plotting. Default
 coloring is done by chromosome, using black and grey.}
-\item{\code{yThr}}{A numerical value for the LOD-threshold. The value from
-the GWAS analysis is used as default.}
 \item{\code{signLwd}}{A numerical value giving the thickness of the
 points that are false/true positives/negatives. Default = 0.6}
-\item{\code{lod}}{A positive numerical value. For the SNPs with a LOD-value
-below this value, only 5\\% is plotted. The chance of a SNP being plotting is
-proportional to its LOD-score. This option can be useful when plotting a
-large number of SNPs.}
 \item{\code{chr}}{A vector of chromosomes to be plotted. By default, all
 chromosomes are plotted. Using this option allows restricting the plot to a
 subset of chromosomes.}
@@ -73,8 +66,8 @@ subset of chromosomes.}
 
 \section{Parental effects Plot}{
 
-A plot of effect sizes for each of the parents for the significant SNPs
-found is created.\cr
+A plot of effect sizes for each of the parents for the QTLs found is
+created.\cr
 Extra parameter options:
 \describe{
 \item{\code{xLab}}{A character string, the x-axis label. Default =
@@ -84,3 +77,45 @@ Extra parameter options:
 }
 }
 
+\section{QTL Region Plot}{
+
+A plot of effect is created on which the positions of the QTLs found in
+the QTL detection are highlighted in red.\cr
+No extra parameter options.
+}
+
+\examples{
+## Read phenotypic data.
+pheno <- read.delim(system.file("extdata/multipop", "AxBxCpheno.txt",
+                               package = "statgenMPP"))
+## Rename first column to genotype.
+colnames(pheno)[1] <- "genotype"
+
+
+## Compute IBD probabilities for simulated population - AxB, AxC.
+ABC <- calcIBDmpp(crossNames = c("AxB", "AxC"),
+                  markerFiles = c(system.file("extdata/multipop", "AxB.txt",
+                                              package = "statgenMPP"),
+                                  system.file("extdata/multipop", "AxC.txt",
+                                              package = "statgenMPP")),
+                  pheno = pheno,
+                  popType = "F4DH",
+                  mapFile = system.file("extdata/multipop", "mapfile.txt",
+                                        package = "statgenMPP"),
+                  evalDist = 5)
+
+\dontrun{
+## Composite Interval Mapping.
+ABC_CIM <- selQTLmpp(ABC, trait = "pheno")
+
+## Manhattan plot.
+plot(ABC_CIM, plotType = "manhattan")
+
+## Plot of parental effects for QTLs found.
+plot(ABC_CIM, plotType = "parEffs")
+
+## Plot of genetic map highlighting positions of QTLs found.
+plot(ABC_CIM, plotType = "QTLRegion")
+}
+
+}

@@ -43,7 +43,7 @@
 #'                                         package = "statgenMPP"),
 #'                   evalDist = 5)
 #'
-#' ## Simple Interval Mapping
+#' ## Simple Interval Mapping.
 #' ABC_SIM <- selQTLmpp(ABC, trait = "pheno", CIM = FALSE)
 #'
 #' ## Composite Interval Mapping
