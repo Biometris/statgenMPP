@@ -4,3 +4,6 @@
 .gitlab-ci.yml
 ^README\.Rmd$
 ^data-raw$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
