@@ -51,7 +51,7 @@ or more markers using the extra parameter \code{highlight}.
 
 \section{allGeno}{
 
-A plot is made showing all genotypes and markers. Each combinaton of
+A plot is made showing all genotypes and markers. Each combination of
 genotype and marker is colored according to the parent with the highest
 probability. A darker color indicates a higher probability.
 }
@@ -63,11 +63,35 @@ the \code{gData} object.
 }
 
 \examples{
-## Compute IBD probabilities for simulated population - AxB, AxC
-calcIBDmpp(crossNames = c("AxB", "AxC"),
-          markerFiles = c(system.file("extdata/multipop", "AxB.txt"),
-                          system.file("extdata/multipop", "AxC.txt"),
-           )
+## Read phenotypic data.
+pheno <- read.delim(system.file("extdata/multipop", "AxBxCpheno.txt",
+                               package = "statgenMPP"))
+## Rename first column to genotype.
+colnames(pheno)[1] <- "genotype"
 
+
+## Compute IBD probabilities for simulated population - AxB, AxC.
+ABC <- calcIBDmpp(crossNames = c("AxB", "AxC"),
+                  markerFiles = c(system.file("extdata/multipop", "AxB.txt",
+                                              package = "statgenMPP"),
+                                  system.file("extdata/multipop", "AxC.txt",
+                                              package = "statgenMPP")),
+                  pheno = pheno,
+                  popType = "F4DH",
+                  mapFile = system.file("extdata/multipop", "mapfile.txt",
+                                        package = "statgenMPP"),
+                  evalDist = 5)
+
+## Plot the genetic map.
+plot(ABC, plotType = "genMap")
+
+## Plot the genetic map and highlight marker EXT_3_30.
+plot(ABC, plotType = "genMap", highlight = "EXT_3_30")
+
+## Plot the IBD probabilities across the genome for all genotypes.
+plot(ABC, plotType = "allGeno")
+
+## Plot the pedigree.
+plot(ABC, plotType = "pedigree")
 
 }
