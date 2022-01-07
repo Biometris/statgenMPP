@@ -58,9 +58,6 @@ selQTLmpp <- function(MPPobj,
   if (!is.numeric(threshold) || length(threshold) > 1 || threshold < 0) {
     stop("threshold should be a positive numerical value.\n")
   }
-  if (!is.numeric(maxIter) || length(maxIter) > 1 || maxIter < 0) {
-    stop("maxIter should be a positive numerical value.\n")
-  }
   if (!is.numeric(maxCofactors) || length(maxCofactors) > 1 ||
       maxCofactors < 0) {
     stop("maxCofactors should be a positive numerical value.\n")

@@ -42,3 +42,23 @@ the population.}
 \cr
 See the respective sections for more details on the plots.
 }
+\section{genMap}{
+
+A plot is made showing the lengths of the chromosomes and the position of
+the markers that are present in the map. It is possible to highlight one
+or more markers using the extra parameter \code{highlight}.
+}
+
+\section{allGeno}{
+
+A plot is made showing all genotypes and markers. Each combinaton of
+genotype and marker is colored according to the parent with the highest
+probability. A darker color indicates a higher probability.
+}
+
+\section{pedigree}{
+
+A plot is made showing the structure of the pedigree for the population in
+the \code{gData} object.
+}
+
