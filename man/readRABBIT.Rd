@@ -22,14 +22,12 @@ imported information in the imported .csv file.
 Read a file with IBD probabilities computed by the RABBIT software package.
 }
 \examples{
+## Read RABBIT data for barley.
 genoFile <- system.file("extdata", "BarleyMP_magicReconstruct_Summary.zip",
                        package = "statgenMPP")
 barleyMPMPP <- readRABBIT(unzip(genoFile, exdir = tempdir()))
 
 }
 \references{
-Fine mapping of a major QTL for awn length in barley using a
-multiparent mapping population. Liller CB, Walla A, Boer MP, Hedley P,
-Macaulay M, Effgen S, von Korff M, van Esse GW, Koornneef M.
-Theor Appl Genet. 2017 Feb;130(2):269-281. \doi{10.1007/s00122-016-2807-y}.
+Reference to RABBIT.....
 }

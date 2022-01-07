@@ -21,6 +21,36 @@
 #' include in the model.
 #' @param verbose Should progress and intermediate plots be output?
 #'
+#' @return An object of class \code{QTLmpp}
+#'
+#' @examples
+#' ## Read phenotypic data.
+#' pheno <- read.delim(system.file("extdata/multipop", "AxBxCpheno.txt",
+#'                                package = "statgenMPP"))
+#' ## Rename first column to genotype.
+#' colnames(pheno)[1] <- "genotype"
+#'
+#'
+#' ## Compute IBD probabilities for simulated population - AxB, AxC.
+#' ABC <- calcIBDmpp(crossNames = c("AxB", "AxC"),
+#'                   markerFiles = c(system.file("extdata/multipop", "AxB.txt",
+#'                                               package = "statgenMPP"),
+#'                                   system.file("extdata/multipop", "AxC.txt",
+#'                                               package = "statgenMPP")),
+#'                   pheno = pheno,
+#'                   popType = "F4DH",
+#'                   mapFile = system.file("extdata/multipop", "mapfile.txt",
+#'                                         package = "statgenMPP"),
+#'                   evalDist = 5)
+#'
+#' ## Simple Interval Mapping
+#' ABC_SIM <- selQTLmpp(ABC, trait = "pheno", CIM = FALSE)
+#'
+#' ## Composite Interval Mapping
+#' \dontrun{
+#' ABC_CIM <- selQTLmpp(ABC, trait = "pheno")
+#' }
+#'
 #' @export
 selQTLmpp <- function(MPPobj,
                       trait = NULL,

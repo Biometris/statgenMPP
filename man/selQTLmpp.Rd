@@ -34,6 +34,9 @@ include in the model.}
 
 \item{verbose}{Should progress and intermediate plots be output?}
 }
+\value{
+An object of class \code{QTLmpp}
+}
 \description{
 Multi round genome scans for QTL detection.\cr\cr
 Several rounds of QTL detection are performed. First a model is fitted
@@ -42,4 +45,33 @@ above the threshold the marker with the lowest p-Value is added as cofactor
 in the next round of QTL detection. This process continues until there are
 no new markers with a \eqn{-10log(p)} value above the threshold or until
 the maximum number of cofactors is reached.
+}
+\examples{
+## Read phenotypic data.
+pheno <- read.delim(system.file("extdata/multipop", "AxBxCpheno.txt",
+                               package = "statgenMPP"))
+## Rename first column to genotype.
+colnames(pheno)[1] <- "genotype"
+
+
+## Compute IBD probabilities for simulated population - AxB, AxC.
+ABC <- calcIBDmpp(crossNames = c("AxB", "AxC"),
+                  markerFiles = c(system.file("extdata/multipop", "AxB.txt",
+                                              package = "statgenMPP"),
+                                  system.file("extdata/multipop", "AxC.txt",
+                                              package = "statgenMPP")),
+                  pheno = pheno,
+                  popType = "F4DH",
+                  mapFile = system.file("extdata/multipop", "mapfile.txt",
+                                        package = "statgenMPP"),
+                  evalDist = 5)
+
+## Simple Interval Mapping
+ABC_SIM <- selQTLmpp(ABC, trait = "pheno", CIM = FALSE)
+
+## Composite Interval Mapping
+\dontrun{
+ABC_CIM <- selQTLmpp(ABC, trait = "pheno")
+}
+
 }
