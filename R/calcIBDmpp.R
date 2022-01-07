@@ -55,10 +55,33 @@
 #' \item{\code{map}}{a data.frame containing map data. Map is sorted by
 #' chromosome and position.}
 #' \item{\code{markers}}{a 3D matrix containing IBD probabilities.}
-#' \item{\code{pheno}}{a list of data.frames containing phenotypic data.}
+#' \item{\code{pheno}}{data.frame or list of data.frames containing phenotypic
+#' data.}
 #' \item{\code{kinship}}{a kinship matrix.}
 #' \item{\code{covar}}{a data.frame with extra covariates (including the
 #' name of the cross).}
+#'
+#' @examples
+#' ## Read phenotypic data.
+#' pheno <- read.delim(system.file("extdata/multipop", "AxBxCpheno.txt",
+#'                                package = "statgenMPP"))
+#' ## Rename first column to genotype.
+#' colnames(pheno)[1] <- "genotype"
+#'
+#'
+#' ## Compute IBD probabilities for simulated population - AxB, AxC.
+#' ABC <- calcIBDmpp(crossNames = c("AxB", "AxC"),
+#'                   markerFiles = c(system.file("extdata/multipop", "AxB.txt",
+#'                                               package = "statgenMPP"),
+#'                                   system.file("extdata/multipop", "AxC.txt",
+#'                                               package = "statgenMPP")),
+#'                   pheno = pheno,
+#'                   popType = "F4DH",
+#'                   mapFile = system.file("extdata/multipop", "mapfile.txt",
+#'                                         package = "statgenMPP"),
+#'                   evalDist = 5)
+#'
+#' summary(ABC)
 #'
 #' @importFrom utils read.table
 #' @importFrom stats setNames
@@ -85,6 +108,23 @@ calcIBDmpp <- function(crossNames,
   if (length(missFiles) > 0) {
     stop("The following files don't exist: \n",
          paste(missFiles, collapse = ", "))
+  }
+  if (!is.null(pheno) && !inherits(pheno, "data.frame") &&
+      !inherits(pheno, "list")) {
+    stop("pheno should be a data.frame or a list of data.frames.\n")
+  }
+  if (inherits(pheno, "data.frame") && !hasName(x = pheno, name = "genotype")) {
+    stop("pheno should have a column genotype.\n")
+  }
+  if (inherits(pheno, "list")) {
+    if (!all(sapply(X = pheno, FUN = inherits, "data.frame"))) {
+      stop("pheno should be a data.frame or a list of data.frames.\n")
+    }
+    if (!all(sapply(X = pheno, FUN = function(x) {
+      hasName(x = x, name = "genotype")
+    }))) {
+      stop("All data.frames in pheno should have a column genotype.\n")
+    }
   }
   if (!is.character(popType) || length(popType) > 1) {
     stop("popType should be a character string of length 1.\n")
@@ -130,8 +170,11 @@ calcIBDmpp <- function(crossNames,
     covar <- covar[, colnames(covar) != "geno", drop = FALSE]
   }
   ## Bind phenotypic data.
-  phenoTot <- do.call(what = rbind, args = pheno)
-  colnames(phenoTot)[1] <- "genotype"
+  if (inherits(pheno, "list")) {
+    phenoTot <- do.call(what = rbind, args = pheno)
+  } else {
+    phenoTot <- pheno
+  }
   ## Get marker names.
   markerNames <- rownames(crossIBD$markers)
   ## Get number of parents.
@@ -155,4 +198,4 @@ calcIBDmpp <- function(crossNames,
   attr(x = MPPobj, which = "pedigree") <- crossIBD$pedigree
   attr(x = MPPobj, which = "genoCross") <- attr(x = crossIBD, which = "genoCross")
   return(MPPobj)
-}
+  }

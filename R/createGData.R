@@ -248,6 +248,14 @@ createGData <- function(gData = NULL,
 #' @param output Should the plot be output to the current device? If
 #' \code{FALSE}, only a ggplot object is invisibly returned.
 #'
+#' @examples
+#' ## Compute IBD probabilities for simulated population - AxB, AxC
+#' calcIBDmpp(crossNames = c("AxB", "AxC"),
+#'           markerFiles = c(system.file("extdata/multipop", "AxB.txt"),
+#'                           system.file("extdata/multipop", "AxC.txt"),
+#'            )
+#'
+#'
 #' @return A ggplot object is invisibly returned.
 #'
 #' @export

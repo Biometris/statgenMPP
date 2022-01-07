@@ -62,3 +62,12 @@ A plot is made showing the structure of the pedigree for the population in
 the \code{gData} object.
 }
 
+\examples{
+## Compute IBD probabilities for simulated population - AxB, AxC
+calcIBDmpp(crossNames = c("AxB", "AxC"),
+          markerFiles = c(system.file("extdata/multipop", "AxB.txt"),
+                          system.file("extdata/multipop", "AxC.txt"),
+           )
+
+
+}
