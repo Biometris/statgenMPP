@@ -1,6 +1,6 @@
 #' S3 Class gData
 #'
-#' \code{createGData} creates an object of S3 class gData with genotypic and
+#' \code{createGDataMPP} creates an object of S3 class gData with genotypic and
 #' phenotypic data for usage in further analysis. All input to the function is
 #' optional, however at least one input should be provided. It is possible to
 #' provide an existing \code{gData} object as additional input in which case
@@ -73,23 +73,23 @@
 #' dimnames(pheno) = list(paste0("G", 1:3), c("genotype", paste0("T", 1:4)))
 #'
 #' ## Combine all data in gData object.
-#' gData <- createGData(geno = geno, map = map, pheno = pheno)
+#' gData <- createGDataMPP(geno = geno, map = map, pheno = pheno)
 #' summary(gData)
 #'
 #' ## Construct covariate.
 #' covar <- data.frame(C1 = c("a", "a", "b"), row.names = paste0("G", 1:3))
 #'
 #' ## Add covariates to previously created gData object.
-#' gData2 <- createGData(gData = gData, covar = covar)
+#' gData2 <- createGDataMPP(gData = gData, covar = covar)
 #'
 #' @noRd
 #' @keywords internal
-createGData <- function(gData = NULL,
-                        geno = NULL,
-                        map = NULL,
-                        kin = NULL,
-                        pheno = NULL,
-                        covar = NULL) {
+createGDataMPP <- function(gData = NULL,
+                           geno = NULL,
+                           map = NULL,
+                           kin = NULL,
+                           pheno = NULL,
+                           covar = NULL) {
   ## Check gData
   if (!is.null(gData) && !inherits(gData, "gData")) {
     stop("Provided gData object should be of class gData.\n")

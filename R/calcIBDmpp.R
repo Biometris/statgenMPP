@@ -190,12 +190,12 @@ calcIBDmpp <- function(crossNames,
                                      parents = parents,
                                      markerSel = markerNames[i])
   }
-  MPPobj <- createGData(geno = markers,
-                        map = crossIBD$map,
-                        pheno = phenoTot,
-                        covar = covar)
+  MPPobj <- createGDataMPP(geno = markers,
+                           map = crossIBD$map,
+                           pheno = phenoTot,
+                           covar = covar)
   attr(x = MPPobj, which = "popType") <- crossIBD$popType
   attr(x = MPPobj, which = "pedigree") <- crossIBD$pedigree
   attr(x = MPPobj, which = "genoCross") <- attr(x = crossIBD, which = "genoCross")
   return(MPPobj)
-  }
+}

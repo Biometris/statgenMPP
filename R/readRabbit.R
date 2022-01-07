@@ -76,7 +76,7 @@ readRABBIT <- function(infile,
   rownames(covar) <- pheno[["genotype"]]
   pheno <- pheno[-which(colnames(pheno) == "cross")]
   ## Create gData object.
-  res <- createGData(geno = markArr, map = map, pheno = pheno, covar = covar)
+  res <- createGDataMPP(geno = markArr, map = map, pheno = pheno, covar = covar)
   attr(x = res, which = "popType") <- "RABBIT"
 
   # attr(x = res, which = "pedigree") <- crossIBD$pedigree
