@@ -4,11 +4,14 @@
 \alias{readRABBIT}
 \title{Read IBD probabilities}
 \usage{
-readRABBIT(infile, pheno = NULL)
+readRABBIT(infile, pedFile = NULL, pheno = NULL)
 }
 \arguments{
 \item{infile}{A character string, a link to a .csv file with IBD
 probabilities.}
+
+\item{pedFile}{A character string, a link to a .csv file with pedigree
+information as used by RABBIT as input.}
 
 \item{pheno}{A data frame with at least columns "genotype" for the
 "genotype", "cross" indicating the cross the genotype comes from and one
@@ -20,6 +23,9 @@ imported information in the imported .csv file.
 }
 \description{
 Read a file with IBD probabilities computed by the RABBIT software package.
+It is possible to additionally read the pedigree file that is also used by
+RABBIT. Reading this file allows for plotting the pedigree. Phenotypic data
+can be added from a data.frame.
 }
 \examples{
 ## Read RABBIT data for barley.

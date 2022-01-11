@@ -309,9 +309,6 @@ plot.gData <- function(x,
     p <- allGenoPlot(markers = markers, map = map, parents = parents,
                      title = title)
   } else if (plotType == "pedigree") {
-    if (popType == "RABBIT") {
-      stop("pedigree plot not implemented for RABBIT output.\n")
-    }
     p <- pedPlot(pedigree = pedigree, offSpring = colnames(markers),
                  popType = popType,
                  multiCross = length(unique(genoCross[["cross"]])) > 1,

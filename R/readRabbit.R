@@ -1,9 +1,14 @@
 #' Read IBD probabilities
 #'
 #' Read a file with IBD probabilities computed by the RABBIT software package.
+#' It is possible to additionally read the pedigree file that is also used by
+#' RABBIT. Reading this file allows for plotting the pedigree. Phenotypic data
+#' can be added from a data.frame.
 #'
 #' @param infile A character string, a link to a .csv file with IBD
 #' probabilities.
+#' @param pedFile A character string, a link to a .csv file with pedigree
+#' information as used by RABBIT as input.
 #' @param pheno A data frame with at least columns "genotype" for the
 #' "genotype", "cross" indicating the cross the genotype comes from and one
 #' or more numerical columns containing phenotypic information.
@@ -22,10 +27,16 @@
 #' @importFrom utils hasName
 #' @export
 readRABBIT <- function(infile,
+                       pedFile = NULL,
                        pheno = NULL) {
   if (missing(infile) || !is.character(infile) || length(infile) > 1 ||
       file.access(infile, mode = 4) == -1 || tools::file_ext(infile) != "csv") {
     stop("infile should be a character string indicating a readable .csv file")
+  }
+  if (!is.null(pedFile) && (!is.character(pedFile) || length(pedFile) > 1 ||
+                            file.access(pedFile, mode = 4) == -1 ||
+                            tools::file_ext(pedFile) != "csv")) {
+    stop("pedFile should be a character string indicating a readable .csv file")
   }
   if (!is.null(pheno)) {
     if (!inherits(pheno, "data.frame")) {
@@ -64,23 +75,81 @@ readRABBIT <- function(infile,
     markArr[, i, ] <- matrix(as.numeric(markMap[, i + 1]),
                              ncol = nAlleles, byrow = TRUE)
   }
-  ## Read founder names from file.
-  foundNames <- data.table::fread(infile, header = FALSE, nrows = nAlleles + 2,
-                                  skip = "haplotypes in order",
-                                  data.table = FALSE, select = 3)
-  foundNames <- as.character(foundNames[3:nrow(foundNames), ])
-  ## Add dimnames to markers: genotypes x markers x founders.
-  dimnames(markArr) <- list(genoNames, rownames(map), foundNames)
+  ## Read parent names from file.
+  parents <- data.table::fread(infile, header = FALSE, nrows = nAlleles + 2,
+                               skip = "haplotypes in order",
+                               data.table = FALSE, select = 3)
+  parents <- as.character(parents[3:nrow(parents), ])
+  ## Add dimnames to markers: genotypes x markers x parents.
+  dimnames(markArr) <- list(genoNames, rownames(map), parents)
   ## Split pheno in pheno and covar.
-  covar <- pheno["cross"]
-  rownames(covar) <- pheno[["genotype"]]
-  pheno <- pheno[-which(colnames(pheno) == "cross")]
+  if (!is.null(pheno)) {
+    covar <- pheno["cross"]
+    rownames(covar) <- pheno[["genotype"]]
+    pheno <- pheno[-which(colnames(pheno) == "cross")]
+  } else {
+    covar <- NULL
+  }
+  ## Read pedigree.
+  if (!is.null(pedFile)) {
+    pedDat <- data.table::fread(pedFile, skip = "Generation",
+                                data.table = FALSE, fill = TRUE)
+    ## Get offspring.
+    offDat <- pedDat[pedDat[["Generation"]] %in% genoNames, ]
+    offDat[["ID"]] <- offDat[["Generation"]]
+    offDat[["type"]] <- "RABBIT"
+    ## Construct genoCross.
+    genoCross <- offDat[c("MemberID", "Generation")]
+    colnames(genoCross) <- c("cross", "geno")
+    ## Remove offspring.
+    pedDat <- pedDat[!is.na(pedDat[["MotherID"]]), ]
+    ## Generation is read as character because of presence of 2nd table.
+    ## Convert to numeric so max works as expected.
+    suppressWarnings(pedDat[["Generation"]] <- as.numeric(pedDat[["Generation"]]))
+    ## Split in generation0 and everything else.
+    gen0 <- pedDat[pedDat[["Generation"]] == 0, ]
+    gen1 <- pedDat[pedDat[["Generation"]] > 0 &
+                     pedDat[["MotherID"]] != pedDat[["FatherID"]], ]
+    ## Compress selfing levels at the end.
+    gen2 <- pedDat[pedDat[["Generation"]] > 0 &
+                     pedDat[["MotherID"]] == pedDat[["FatherID"]], ]
+    gen2[["MotherID"]] <- gen2[gen2[["Generation"]] == min(gen2[["Generation"]]),
+                               "MotherID"]
+    gen2[["FatherID"]] <- gen2[gen2[["Generation"]] == min(gen2[["Generation"]]),
+                               "FatherID"]
+    gen2 <- gen2[gen2[["Generation"]] == max(gen2[["Generation"]]), ]
+    ## Set ID.
+    gen0[["ID"]] <- parents
+    gen1[["ID"]] <- paste0("H", 1:(nrow(gen1)))
+    ## Set type.
+    gen0[["type"]] <- "INBPAR"
+    gen1[["type"]] <- paste0("HYBRID", gen1[["Generation"]])
+    pedDat <- rbind(gen0, gen1)
+    ## Get parents.
+    pedDat[["par1"]] <- pedDat[["ID"]][match(pedDat[["MotherID"]],
+                                             table = pedDat[["MemberID"]])]
+    pedDat[["par2"]] <- pedDat[["ID"]][match(pedDat[["FatherID"]],
+                                             table = pedDat[["MemberID"]])]
+    pedDat[is.na(pedDat[["par1"]]), "par1"] <- 0
+    pedDat[is.na(pedDat[["par2"]]), "par2"] <- 0
+    ## Set parents for offDat through gen2.
+    gen2[["par1"]] <- pedDat[["par1"]][match(gen2[["MotherID"]],
+                                             table = pedDat[["MemberID"]])]
+    gen2[["par2"]] <- pedDat[["par2"]][match(gen2[["FatherID"]],
+                                             table = pedDat[["MemberID"]])]
+    offDat[["par1"]] <- gen2[["par1"]][match(offDat[["MemberID"]],
+                                             table = gen2[["MemberID"]])]
+    offDat[["par2"]] <- gen2[["par2"]][match(offDat[["MemberID"]],
+                                             table = gen2[["MemberID"]])]
+    ## Remove last generation from pedDat.
+    pedDat <- pedDat[pedDat[["Generation"]] != max(pedDat[["Generation"]]), ]
+    pedDat <- rbind(pedDat, offDat)
+    pedDat <- pedDat[c("ID", "par1", "par2", "type")]
+  }
   ## Create gData object.
   res <- createGDataMPP(geno = markArr, map = map, pheno = pheno, covar = covar)
   attr(x = res, which = "popType") <- "RABBIT"
-
-  # attr(x = res, which = "pedigree") <- crossIBD$pedigree
-  # attr(x = res, which = "genoCross") <- attr(x = crossIBD, which = "genoCross")
-
+  attr(x = res, which = "pedigree") <- pedDat
+  attr(x = res, which = "genoCross") <- genoCross
   return(res)
 }
