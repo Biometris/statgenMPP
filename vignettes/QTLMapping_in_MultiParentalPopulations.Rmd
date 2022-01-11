@@ -5,7 +5,7 @@ date: "`r Sys.Date()`"
 output: 
   rmarkdown::html_vignette:
     toc: false
-    number_sections: true
+    number_sections: false
 bibliography: bibliography.bib
 link-citations: yes
 vignette: >
@@ -24,11 +24,59 @@ library(statgenMPP)
 op <- options(width = 90)
 ```
 
+## The statgenMPP package
 
+The `statgenMPP` package is developed as an easy-to-use package for Identity By Descent (IBD) calculations and QTL mapping for multi parental populations. It comes with several different ways of visualizing inputs and results.
 
+This vignette describes in detail how to perform the IBD calculations and how to do QTL mapping using the IBD probabilities. This will be done using two example data sets, and a data set for awn length in barley described in @Liller2017-jz. 
 
+### IBD Calculations
 
+The calculations of the IBDs are based on Hidden Markov Models (HMM) and inheritance vectors and are performed using the `statgenIBD` package. For details of the theory see @Lander1987 and @Huang2011. It is also possible to import IBD probabilities computed using the RABBIT software [@Zheng2019].
 
+#### Population types
+
+In the package, IBD probabilities can be calculated for many different types of populations. In the following table all supported populations are listed. Note that the value of x in the population types is variable, with its maximum value depicted in the last column.
+
++---------------------+------------+------------------------------------------------------------+------------+
+| **Population type** | **Cross**  | **Description**                                            | **max. x** |
++=====================+============+============================================================+============+
+| DH                  | biparental | doubled haploid population                                 |            |
++---------------------+------------+------------------------------------------------------------+------------+
+| Fx                  | biparental | Fx population (F1, followed by x-1 generations of selfing) | 8          |
++---------------------+------------+------------------------------------------------------------+------------+
+| FxDH                | biparental | Fx, followed by DH generation                              | 8          |
++---------------------+------------+------------------------------------------------------------+------------+
+| BCx                 | biparental | backcross, second parent is recurrent parent               | 9          |
++---------------------+------------+------------------------------------------------------------+------------+
+| BCxDH               | biparental | BCx, followed by DH generation                             | 9          |
++---------------------+------------+------------------------------------------------------------+------------+
+| BC1Sx               | biparental | BC1, followed by x generations of selfing                  | 7          |
++---------------------+------------+------------------------------------------------------------+------------+
+| BC1SxDH             | biparental | BC1, followed by x generations of selfing and DH           | 6          |
++---------------------+------------+------------------------------------------------------------+------------+
+| C3                  | three-way  | three way cross: (AxB) x C                                 |            |
++---------------------+------------+------------------------------------------------------------+------------+
+| C3DH                | three-way  | C3, followed by DH generation                              |            |
++---------------------+------------+------------------------------------------------------------+------------+
+| C3Sx                | three-way  | C3, followed by x generations of selfing                   | 7          |
++---------------------+------------+------------------------------------------------------------+------------+
+| C3SxDH              | three-way  | C3, followed by x generations of selfing and DH generation | 6          |
++---------------------+------------+------------------------------------------------------------+------------+
+| C4                  | four-way   | four-way cross: (AxB) x (CxD)                              |            |
++---------------------+------------+------------------------------------------------------------+------------+
+| C4DH                | four-way   | C4, followed by DH generation                              |            |
++---------------------+------------+------------------------------------------------------------+------------+
+| C4Sx                | four-way   | C4, followed by x generations of selfing                   | 6          |
++---------------------+------------+------------------------------------------------------------+------------+
+| C4SxDH              | four-way   | C4, followed by x generations of selfing and DH generation | 6          |
++---------------------+------------+------------------------------------------------------------+------------+
+
+#### Visualization
+
+### QTL Mapping
+
+#### Visualization
 
 
 
