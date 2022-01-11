@@ -59,3 +59,16 @@ plotIntermediateScan <- function(dat,
                 yThr = threshold,
                 title = title)
 }
+
+#' Helper function for creating summaries that always display NA.
+#'
+#' @noRd
+#' @keywords internal
+summaryNA <- function(dat) {
+  if (!any(is.na(dat))) {
+    return(c(summary(dat), "NA's" = 0))
+  } else{
+    return(summary(dat))
+  }
+}
+

@@ -2,6 +2,7 @@
 
 S3method(plot,QTLmpp)
 S3method(plot,gData)
+S3method(summary,gData)
 export(calcIBDmpp)
 export(readRABBIT)
 export(selQTLmpp)

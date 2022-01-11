@@ -211,6 +211,75 @@ createGDataMPP <- function(gData = NULL,
 }
 
 
+#' Summary function for the class \code{gData}
+#'
+#' Gives a summary for an object of S3 class \code{gData}.
+#'
+#' @param object An object of class \code{gData}.
+#' @param ... Not used.
+#' @param trials A vector of trials to include in the summary. These can
+#' be either numeric indices or character names of list items in \code{pheno}.
+#' If \code{NULL}, all trials are included.
+#'
+#' @return A list with a most four components:
+#' \describe{
+#' \item{mapSum}{A list with number of markers and number of chromosomes in
+#' the map.}
+#' \item{markerSum}{A list with number of markers, number of genotypes and
+#' the distribution of the values within the markers.}
+#' \item{phenoSum}{A list of data.frames, one per trial with a summary of all
+#' traits within the trial.}
+#' \item{covarSum}{A list of data.frames, one per trial with a summary of all
+#' covariates within the trial.}
+#' }
+#' All components are only present in the output if the corresponding content is
+#' present in the gData object.
+#'
+#' @export
+summary.gData <- function(object,
+                          ...,
+                          trials = NULL) {
+  if (length(dim(object$markers)) == 2) {
+    statgenGWAS::summary.gData(object, ..., trials)
+  } else {
+    ## If trials is null set trials to all trials in pheno.
+    if (is.null(trials)) {
+      trials <- seq_along(object$pheno)
+    }
+    map <- object$map
+    markers <- object$markers
+    pheno <-  object$pheno
+    covar <- object$covar
+    totSum <- vector(mode = "list")
+    if (!is.null(map)) {
+      mapSum <- list(nMarkers = nrow(map), nChr = length(unique(map[["chr"]])))
+      totSum$mapSum <- mapSum
+    }
+    if (!is.null(markers)) {
+      markerSum <- list(nMarkers = ncol(markers), nGeno = nrow(markers),
+                        markerContent = setNames(
+                          paste(dimnames(markers)[[3]], collapse = ", "),
+                          "parents:"))
+      totSum$markerSum <- markerSum
+    }
+    if (!is.null(pheno)) {
+      phenoSum <- sapply(X = names(pheno[trials]), FUN = function(trial) {
+        trSum <- do.call(cbind, lapply(X = pheno[[trial]][, -1, drop = FALSE],
+                                       FUN = summaryNA))
+        attr(x = trSum, which = "nGeno") <-
+          length(unique(pheno[[trial]][["genotype"]]))
+        return(trSum)
+      }, simplify = FALSE)
+      totSum$phenoSum <- phenoSum
+    }
+    if (!is.null(covar)) {
+      covarSum <- summary(covar)
+      totSum$covarSum <- covarSum
+    }
+    return(structure(totSum, class = "summary.gData"))
+  }
+}
+
 #' Plot function for the class \code{gData}
 #'
 #' Creates a plot of an object of S3 class \code{gData}. The following types of
