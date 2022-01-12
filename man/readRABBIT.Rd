@@ -14,8 +14,9 @@ probabilities.}
 information as used by RABBIT as input.}
 
 \item{pheno}{A data frame with at least columns "genotype" for the
-"genotype", "cross" indicating the cross the genotype comes from and one
-or more numerical columns containing phenotypic information.}
+"genotype" and one or more numerical columns containing phenotypic
+information. if \code{pedFile} is not specified also a column "cross"
+indicating the cross the genotype comes from is required.}
 }
 \value{
 A \code{gData} object with map and markers corresponding to the

@@ -10,8 +10,9 @@
 #' @param pedFile A character string, a link to a .csv file with pedigree
 #' information as used by RABBIT as input.
 #' @param pheno A data frame with at least columns "genotype" for the
-#' "genotype", "cross" indicating the cross the genotype comes from and one
-#' or more numerical columns containing phenotypic information.
+#' "genotype" and one or more numerical columns containing phenotypic
+#' information. if \code{pedFile} is not specified also a column "cross"
+#' indicating the cross the genotype comes from is required.
 #'
 #' @return A \code{gData} object with map and markers corresponding to the
 #' imported information in the imported .csv file.
@@ -42,10 +43,14 @@ readRABBIT <- function(infile,
     if (!inherits(pheno, "data.frame")) {
       stop("pheno should be a data.frame.\n")
     }
-    minCols <- c("genotype", "cross")
+    ## If pedFile is included cross will be read from there.
+    minCols <- c("genotype", if (is.null(pedFile)) "cross")
     missCols <- minCols[!sapply(X = minCols, FUN = function(minCol) {
       hasName(x = pheno, name = minCol)
     })]
+    if (!is.null(pedFile)) {
+      pheno <- pheno[-which(colnames(pheno) == "cross")]
+    }
     if (length(missCols) > 0) {
       stop("The following columns are missing in pheno:\n",
            paste(missCols, collapse = ", "))
@@ -83,12 +88,14 @@ readRABBIT <- function(infile,
   ## Add dimnames to markers: genotypes x markers x parents.
   dimnames(markArr) <- list(genoNames, rownames(map), parents)
   ## Split pheno in pheno and covar.
-  if (!is.null(pheno)) {
-    covar <- pheno["cross"]
-    rownames(covar) <- pheno[["genotype"]]
-    pheno <- pheno[-which(colnames(pheno) == "cross")]
-  } else {
-    covar <- NULL
+  if (is.null(pedFile)) {
+    if (!is.null(pheno)) {
+      covar <- pheno["cross"]
+      rownames(covar) <- pheno[["genotype"]]
+      pheno <- pheno[-which(colnames(pheno) == "cross")]
+    } else {
+      covar <- NULL
+    }
   }
   ## Read pedigree.
   if (!is.null(pedFile)) {
@@ -101,6 +108,9 @@ readRABBIT <- function(infile,
     ## Construct genoCross.
     genoCross <- offDat[c("MemberID", "Generation")]
     colnames(genoCross) <- c("cross", "geno")
+    ## Construct covar.
+    covar <- genoCross["cross"]
+    rownames(covar) <- genoCross[["geno"]]
     ## Remove offspring.
     pedDat <- pedDat[!is.na(pedDat[["MotherID"]]), ]
     ## Generation is read as character because of presence of 2nd table.
@@ -145,11 +155,16 @@ readRABBIT <- function(infile,
     pedDat <- pedDat[pedDat[["Generation"]] != max(pedDat[["Generation"]]), ]
     pedDat <- rbind(pedDat, offDat)
     pedDat <- pedDat[c("ID", "par1", "par2", "type")]
+  } else {
+    genoCross <- covar
+    genoCross[["geno"]] <- rownames(covar)
   }
   ## Create gData object.
   res <- createGDataMPP(geno = markArr, map = map, pheno = pheno, covar = covar)
   attr(x = res, which = "popType") <- "RABBIT"
-  attr(x = res, which = "pedigree") <- pedDat
   attr(x = res, which = "genoCross") <- genoCross
+  if (!is.null(pedFile)) {
+    attr(x = res, which = "pedigree") <- pedDat
+  }
   return(res)
 }
