@@ -1,5 +1,5 @@
 Package: statgenMPP
-Title: QTL mapping for Multi Parental Populations
+Title: QTL Mapping for Multi Parental Populations
 Version: 0.0.0.9000
 Authors@R: c(person(given = "Wenhao", 
                     family = "Li", 
@@ -9,20 +9,24 @@ Authors@R: c(person(given = "Wenhao",
              person(given = "Martin", 
                     family = "Boer", 
                     email = "martin.boer@wur.nl", 
-                    role = "ctb"),
+                    role = "ctb",
+                    comment = c(ORCID = "0000-0002-1879-4588")),
              person(given = "Bart-Jan", 
                     family = "van Rossum", 
                     email = "bart-jan.vanrossum@wur.nl", 
                     role = c("aut", "cre"),
                     comment = c(ORCID = "0000-0002-8673-2514")))
-Description: QTL mapping for Multi Parental Populations.
+Description: For Multi Parental Populations (MPP) Identity By Descend (IBD) 
+    probabilities are computed using Hidden Markov Models. These probabilities 
+    are then used in a mixed model approach for QTL Mapping as described in 
+    Li et al. \doi{10.1007/s00122-021-03919-7}.
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Depends:
-    R (>= 2.10),
+    R (>= 3.6),
     statgenGWAS
 Imports: 
     data.table,

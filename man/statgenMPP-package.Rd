@@ -4,9 +4,9 @@
 \name{statgenMPP-package}
 \alias{statgenMPP}
 \alias{statgenMPP-package}
-\title{statgenMPP: QTL mapping for Multi Parental Populations}
+\title{statgenMPP: QTL Mapping for Multi Parental Populations}
 \description{
-QTL mapping for Multi Parental Populations.
+For Multi Parental Populations (MPP) Identity By Descend (IBD) probabilities are computed using Hidden Markov Models. These probabilities are then used in a mixed model approach for QTL Mapping as described in Li et al. \doi{10.1007/s00122-021-03919-7}.
 }
 \author{
 \strong{Maintainer}: Bart-Jan van Rossum \email{bart-jan.vanrossum@wur.nl} (\href{https://orcid.org/0000-0002-8673-2514}{ORCID})
@@ -18,7 +18,7 @@ Authors:
 
 Other contributors:
 \itemize{
-  \item Martin Boer \email{martin.boer@wur.nl} [contributor]
+  \item Martin Boer \email{martin.boer@wur.nl} (\href{https://orcid.org/0000-0002-1879-4588}{ORCID}) [contributor]
 }
 
 }

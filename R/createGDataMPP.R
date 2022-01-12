@@ -240,7 +240,7 @@ summary.gData <- function(object,
                           ...,
                           trials = NULL) {
   if (length(dim(object$markers)) == 2) {
-    statgenGWAS::summary.gData(object, ..., trials)
+    NextMethod(generic = "summary", object, ..., trials)
   } else {
     ## If trials is null set trials to all trials in pheno.
     if (is.null(trials)) {
