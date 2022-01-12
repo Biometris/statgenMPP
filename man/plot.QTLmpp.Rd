@@ -7,7 +7,7 @@
 \method{plot}{QTLmpp}(
   x,
   ...,
-  plotType = c("manhattan", "parEffs", "QTLRegion"),
+  plotType = c("QTLProfile", "parEffs", "QTLRegion"),
   title = NULL,
   output = TRUE
 )
@@ -19,7 +19,7 @@
 functions.}
 
 \item{plotType}{A character string indicating the type of plot to be made.
-One of "manhattan", "parEffs", and "QTLRegion".}
+One of "QTLProfile", "parEffs", and "QTLRegion".}
 
 \item{title}{A character string, the title of the plot.}
 
@@ -30,7 +30,7 @@ One of "manhattan", "parEffs", and "QTLRegion".}
 Creates a plot of an object of S3 class \code{QTLmpp}. The following types of
 plot can be made:
 \itemize{
-\item{manhattan}{ A manhattan plot, i.e. a plot of \eqn{-10log(p)} values
+\item{QTLProfile}{ A QTL profile plot, i.e. a plot of \eqn{-10log(p)} values
 per marker.}
 \item{parEffs} { A plot of effect sizes and directions per parent.}
 \item{QTLRegion}{ A plot highlighting the QTLs found on the genetic map.}
@@ -38,7 +38,7 @@ per marker.}
 See details for a detailed description of the plots and the plot options
 specific to the different plots.
 }
-\section{Manhattan Plot}{
+\section{QTL Profile plot}{
 
 A profile of all marker positions and corresponding \eqn{-10log(p)} values is
 plotted. QTLs found are highlighted with red dots. The threshold is plotted
@@ -108,8 +108,8 @@ ABC <- calcIBDmpp(crossNames = c("AxB", "AxC"),
 ## Composite Interval Mapping.
 ABC_CIM <- selQTLmpp(ABC, trait = "pheno")
 
-## Manhattan plot.
-plot(ABC_CIM, plotType = "manhattan")
+## QTL Profile plot.
+plot(ABC_CIM, plotType = "QTLProfile")
 
 ## Plot of parental effects for QTLs found.
 plot(ABC_CIM, plotType = "parEffs")
