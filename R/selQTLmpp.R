@@ -137,7 +137,7 @@ selQTLmpp <- function(MPPobj,
       cofactors <- sort(cofactors)
       break
     }
-    ## Add new cofactor to list of cofactor for next round of scanning.
+    ## Add new cofactor to list of cofactors for next round of scanning.
     cofactors <- c(cofactors, scanSel[which.max(scanSel[["minlog10p"]]), "snp"])
   }
   ## Construct GWAResult and signSnp
