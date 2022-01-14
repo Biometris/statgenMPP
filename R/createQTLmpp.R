@@ -97,7 +97,8 @@
 #' @export
 plot.QTLmpp <- function(x,
                         ...,
-                        plotType = c("QTLProfile", "parEffs", "QTLRegion"),
+                        plotType = c("QTLProfile", "parEffs", "QTLRegion",
+                                     "QTLProfileExt"),
                         title = NULL,
                         output = TRUE) {
   plotType <- match.arg(plotType)
@@ -168,6 +169,20 @@ plot.QTLmpp <- function(x,
                                  title = title,
                                  output = output),
                             dotArgs[!(names(dotArgs) %in% c("highlight", "map"))]))
+    } else if (plotType == "QTLProfileExt") {
+      p1 <- plot(x, plotType = "QTLProfile") +
+        ggplot2::theme(axis.ticks.x = ggplot2::element_blank(),
+                       axis.text.x = ggplot2::element_blank(),
+                       axis.title.x = ggplot2::element_blank())
+      p2 <- plot(x, plotType = "parEffs")
+      ## Get widths.
+      g1 <- ggplot2::ggplotGrob(p1)
+      g2 <- ggplot2::ggplotGrob(p2)
+      maxWidth = grid::unit.pmax(g1$widths[2:9], g2$widths[2:9])
+      ## Set widths.
+      g1$widths[2:9] <- maxWidth
+      g2$widths[2:9] <- maxWidth
+      p <- gridExtra::grid.arrange(g1, g2)
     }
   }
   invisible(p)

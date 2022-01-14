@@ -7,7 +7,7 @@
 \method{plot}{QTLmpp}(
   x,
   ...,
-  plotType = c("QTLProfile", "parEffs", "QTLRegion"),
+  plotType = c("QTLProfile", "parEffs", "QTLRegion", "QTLProfileExt"),
   title = NULL,
   output = TRUE
 )
