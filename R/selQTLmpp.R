@@ -17,8 +17,9 @@
 #' \eqn{-10logp} value of a marker to be considered a QTL.
 #' @param CIM Should Composite Interval Mapping be done? If \code{FALSE} only
 #' one round of QTL mapping is done without cofactors.
-#' @param maxCofactors A numerical value, the maximum number of cofactor to
-#' include in the model.
+#' @param maxCofactors A numerical value, the maximum number of cofactors to
+#' include in the model. If \code{NULL} cofactors are added until no new
+#' cofactors are found.
 #' @param verbose Should progress and intermediate plots be output?
 #'
 #' @return An object of class \code{QTLmpp}
@@ -57,7 +58,7 @@ selQTLmpp <- function(MPPobj,
                       QTLwindow = 10,
                       threshold = 3,
                       CIM = TRUE,
-                      maxCofactors = 5,
+                      maxCofactors = NULL,
                       verbose = FALSE) {
   if (!inherits(MPPobj, "gData")) {
     stop("MPPobj should be an object of class gData.\n")
@@ -88,9 +89,13 @@ selQTLmpp <- function(MPPobj,
   if (!is.numeric(threshold) || length(threshold) > 1 || threshold < 0) {
     stop("threshold should be a positive numerical value.\n")
   }
-  if (!is.numeric(maxCofactors) || length(maxCofactors) > 1 ||
-      maxCofactors < 0) {
+  if (!is.null(maxCofactors) &&
+      (!is.numeric(maxCofactors) || length(maxCofactors) > 1 ||
+       maxCofactors < 0)) {
     stop("maxCofactors should be a positive numerical value.\n")
+  }
+  if (is.null(maxCofactors)) {
+    maxCofactors <- dim(markers)[2]
   }
   parents <- dimnames(markers)[[3]]
   nPar <- length(parents)

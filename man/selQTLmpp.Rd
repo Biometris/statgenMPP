@@ -10,7 +10,7 @@ selQTLmpp(
   QTLwindow = 10,
   threshold = 3,
   CIM = TRUE,
-  maxCofactors = 5,
+  maxCofactors = NULL,
   verbose = FALSE
 )
 }
@@ -29,8 +29,9 @@ is considered as part of that QTL.}
 \item{CIM}{Should Composite Interval Mapping be done? If \code{FALSE} only
 one round of QTL mapping is done without cofactors.}
 
-\item{maxCofactors}{A numerical value, the maximum number of cofactor to
-include in the model.}
+\item{maxCofactors}{A numerical value, the maximum number of cofactors to
+include in the model. If \code{NULL} cofactors are added until no new
+cofactors are found.}
 
 \item{verbose}{Should progress and intermediate plots be output?}
 }
