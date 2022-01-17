@@ -174,7 +174,7 @@ plot.QTLmpp <- function(x,
     } else if (plotType == "QTLProfileExt") {
       ## Construct title.
       if (is.null(title)) {
-        title <- paste("QTL Profile (upper panel) and parental effects ",
+        title <- paste("QTL Profile (upper panel) and parental effects",
                        "(lower panel):", GWAResult[["trait"]][1])
       }
       ## Construct data for vertical lines in QTL profile.
