@@ -114,6 +114,8 @@ plot.QTLmpp <- function(x,
     signSnp <- signSnp[signSnp[["snpStatus"]] == "significant SNP", ]
     ## Compute chromosome boundaries and map.
     GWAResComp <- GWAResult[GWAResult[["trait"]] == GWAResult[["trait"]][1], ]
+    GWAResComp[["chr"]] <- factor(GWAResComp[["chr"]],
+                                  levels = unique(GWAResComp[["chr"]]))
     chrBnd <- aggregate(x = GWAResComp$pos, by = list(GWAResComp$chr),
                         FUN = max)
     ## Compute cumulative positions.
