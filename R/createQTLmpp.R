@@ -172,11 +172,33 @@ plot.QTLmpp <- function(x,
                                  output = output),
                             dotArgs[!(names(dotArgs) %in% c("highlight", "map"))]))
     } else if (plotType == "QTLProfileExt") {
-      p1 <- plot(x, plotType = "QTLProfile") +
+      ## Construct title.
+      if (is.null(title)) {
+        title <- paste("QTL Profile (upper panel) and parental effects ",
+                       "(lower panel):", GWAResult[["trait"]][1])
+      }
+      ## Construct data for vertical lines in QTL profile.
+      ## Center line in empty space between chromosomes.
+      vertDat <- addPos
+      minPos <-  aggregate(x = GWAResComp$pos, by = list(GWAResComp$chr),
+                           FUN = min)
+      vertDat[["x"]] <- vertDat[["add"]] + c(0, minPos[-1, "x"]) / 2
+      ## Add title here to assure font is the same as for other plots.
+      p1 <- plot(x, plotType = "QTLProfile", title = title,
+                 output = FALSE) +
+        ggplot2::geom_vline(ggplot2::aes_string(xintercept = "x"),
+                            linetype = "dashed", data = vertDat[-1, ]) +
         ggplot2::theme(axis.ticks.x = ggplot2::element_blank(),
                        axis.text.x = ggplot2::element_blank(),
-                       axis.title.x = ggplot2::element_blank())
-      p2 <- plot(x, plotType = "parEffs")
+                       axis.title.x = ggplot2::element_blank(),
+                       plot.margin = ggplot2::unit(c(0.2, 0, 0, 0), "cm"),
+                       panel.background = ggplot2::element_blank(),
+                       panel.border = ggplot2::element_rect(fill = NA,
+                                                            color = "black",
+                                                            size = 0.5,
+                                                            linetype = "solid"))
+      p2 <- plot(x, plotType = "parEffs", title = "", output = FALSE) +
+        ggplot2::theme(plot.margin = ggplot2::unit(c(0, 0, 0, 0), "cm"))
       ## Get widths.
       g1 <- ggplot2::ggplotGrob(p1)
       g2 <- ggplot2::ggplotGrob(p2)
@@ -184,6 +206,7 @@ plot.QTLmpp <- function(x,
       ## Set widths.
       g1$widths[2:9] <- maxWidth
       g2$widths[2:9] <- maxWidth
+
       p <- gridExtra::grid.arrange(g1, g2)
     }
   }
