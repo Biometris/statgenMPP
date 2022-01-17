@@ -42,6 +42,7 @@ plotIntermediateScan <- function(dat,
     title <- paste0(title,", ", length(cofactors)," cofactors")
   }
   map <- dat[c("chr", "pos")]
+  map[["chr"]] <- factor(map[["chr"]], levels = unique(map[["chr"]]))
   ## Get the boundary for each of the chromosomes.
   ## Has to be converted to numeric to avoid integer overflow in the next step.
   chrBnd <- aggregate(x = map[["pos"]], by = list(map[["chr"]]),
