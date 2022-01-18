@@ -25,7 +25,7 @@
 #'
 #' @references Reference to RABBIT.....
 #'
-#' @importFrom utils hasName
+#' @importFrom utils hasName unzip
 #' @export
 readRABBIT <- function(infile,
                        pedFile = NULL,
@@ -161,6 +161,7 @@ readRABBIT <- function(infile,
   } else {
     genoCross <- covar
     genoCross[["geno"]] <- rownames(covar)
+    popType <- "RABBIT"
   }
   ## Create gData object.
   res <- createGDataMPP(geno = markArr, map = map, pheno = pheno, covar = covar)
