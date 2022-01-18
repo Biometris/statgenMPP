@@ -30,7 +30,7 @@ can be added from a data.frame.
 }
 \examples{
 ## Read RABBIT data for barley.
-genoFile <- system.file("extdata", "BarleyMP_magicReconstruct_Summary.zip",
+genoFile <- system.file("extdata/barley", "barley_magicReconstruct.zip",
                        package = "statgenMPP")
 barleyMPMPP <- readRABBIT(unzip(genoFile, exdir = tempdir()))
 

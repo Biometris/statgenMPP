@@ -2,10 +2,9 @@
 
 ## Define input files.
 
-genoFile <- system.file("extdata", "BarleyMP_magicReconstruct_Summary.zip",
+genoFile <- system.file("extdata/barley", "barley_magicReconstruct.zip",
                         package = "statgenMPP")
-pedFile <- system.file("extdata", "BarleyMP_magicReconstruct_Summary",
-                       "BarleyMP_pedInfor_RABBITinput.csv",
+pedFile <- system.file("extdata/barley", "barley_pedInfo.csv",
                        package = "statgenMPP")
 
 ## Checks for correct input.
