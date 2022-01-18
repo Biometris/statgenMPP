@@ -104,7 +104,6 @@ readRABBIT <- function(infile,
     ## Get offspring.
     offDat <- pedDat[pedDat[["Generation"]] %in% genoNames, ]
     offDat[["ID"]] <- offDat[["Generation"]]
-    offDat[["type"]] <- "RABBIT"
     ## Construct genoCross.
     genoCross <- offDat[c("MemberID", "Generation")]
     colnames(genoCross) <- c("cross", "geno")
@@ -123,6 +122,9 @@ readRABBIT <- function(infile,
     ## Compress selfing levels at the end.
     gen2 <- pedDat[pedDat[["Generation"]] > 0 &
                      pedDat[["MotherID"]] == pedDat[["FatherID"]], ]
+    ## Get number of selfing levels for popType.
+    nSelf <- length(unique(gen2[["Generation"]]))
+    popType <- paste0("F", nSelf)
     gen2[["MotherID"]] <- gen2[gen2[["Generation"]] == min(gen2[["Generation"]]),
                                "MotherID"]
     gen2[["FatherID"]] <- gen2[gen2[["Generation"]] == min(gen2[["Generation"]]),
@@ -153,6 +155,7 @@ readRABBIT <- function(infile,
                                              table = gen2[["MemberID"]])]
     ## Remove last generation from pedDat.
     pedDat <- pedDat[pedDat[["Generation"]] != max(pedDat[["Generation"]]), ]
+    offDat[["type"]] <- popType
     pedDat <- rbind(pedDat, offDat)
     pedDat <- pedDat[c("ID", "par1", "par2", "type")]
   } else {
@@ -161,7 +164,7 @@ readRABBIT <- function(infile,
   }
   ## Create gData object.
   res <- createGDataMPP(geno = markArr, map = map, pheno = pheno, covar = covar)
-  attr(x = res, which = "popType") <- "RABBIT"
+  attr(x = res, which = "popType") <- popType
   attr(x = res, which = "genoCross") <- genoCross
   if (!is.null(pedFile)) {
     attr(x = res, which = "pedigree") <- pedDat
