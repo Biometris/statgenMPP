@@ -34,6 +34,8 @@ plot can be made:
 per marker.}
 \item{parEffs} { A plot of effect sizes and directions per parent.}
 \item{QTLRegion}{ A plot highlighting the QTLs found on the genetic map.}
+\item{QTLProfileExt}{ A combination of the QTL profile and parental effects
+plotted above each other.}
 }
 See details for a detailed description of the plots and the plot options
 specific to the different plots.
@@ -84,6 +86,14 @@ the QTL detection are highlighted in red.\cr
 No extra parameter options.
 }
 
+\section{Extended QTL Profile Plot}{
+
+An extended version of the QTL Profile Plot, in which the QLT profile plot is
+combined with the parental effect plot to make it easier to assess the
+effects for each specific QTL found.\cr
+No extra parameter options.
+}
+
 \examples{
 ## Read phenotypic data.
 pheno <- read.delim(system.file("extdata/multipop", "AxBxCpheno.txt",
@@ -116,6 +126,9 @@ plot(ABC_CIM, plotType = "parEffs")
 
 ## Plot of genetic map highlighting positions of QTLs found.
 plot(ABC_CIM, plotType = "QTLRegion")
+
+## Extended QTL Profile plot.
+plot(ABC_CIM, plotType = "QTLProfileExt")
 }
 
 }

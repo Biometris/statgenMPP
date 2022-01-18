@@ -31,8 +31,6 @@ effectPlot <- function(effectDat,
   ## Add cumulative position from map to effects.
   parEffData <- merge(effectDat, map[, c("snp", "cumPos")],
                       by = "snp", sort = FALSE)
-  ## Add 5 to cumPos since geom_tile uses center of tile and has width 10.
-  #parEffData$cumPos <- parEffData$cumPos
   ## Only plotting the effects for significant SNPs. Remove all others.
   parEffData <- parEffData[interaction(parEffData$snp, parEffData$trait) %in%
                             interaction(signSnp$snp, signSnp$trait), ]
