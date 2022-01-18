@@ -36,7 +36,7 @@ The calculations of the IBDs are based on Hidden Markov Models (HMM) and inherit
 
 #### Population types
 
-In the package, IBD probabilities can be calculated for many different types of populations. In the following table all supported populations are listed. Note that the value of x in the population types is variable, with its maximum value depicted in the last column.
+In the package, IBD probabilities can be calculated for many different types of populations. In the following table all supported populations are listed. Note that the value of x in the population types is variable, with its maximum value depicted in the last column. when importing data from RABBIT there are no restrictions. 
 
 +---------------------+------------+------------------------------------------------------------+------------+
 | **Population type** | **Cross**  | **Description**                                            | **max. x** |
@@ -72,7 +72,120 @@ In the package, IBD probabilities can be calculated for many different types of 
 | C4SxDH              | four-way   | C4, followed by x generations of selfing and DH generation | 6          |
 +---------------------+------------+------------------------------------------------------------+------------+
 
-#### Visualization
+#### Example IBD Calculations
+
+As an example for performing IBD calculations for a multi parental population we use data for a maize NAM population described in @Giraud2014. The NAM population consists of 10 bi-parental double haploid (DH) crosses with central parent F353. The total population consists of 841 individuals. The trait of interest is the number of days to silking ("mean_DtSILK"). The data for this population is available from the package in zipped format.
+
+Before doing QTL detection we compute IBD probabilities on a grid of positions along the genome. This can be done using the `calcIBDmpp` function in the `statgenMPP` package. To perform IBD calculations a cross file is required for each of the populations. These files should be a tab-delimited file with first column ID identifying the genotype. The following columns should contain marker information. The first rows should contain the parents used in the cross. As an example, the file for the first cross starts like this:
+
+
+| ID | PZE.101000088 | PZE.101000344 | PZE.101000449 | ... |
+|---|---|---|---|---|
+| F353 | 2 | 1 | 1 | ... |
+| B73 | 2 | 2 | 1 | ... |
+| CFD02-003 | 2 | 2 | 1 | ... |
+| CFD02-006 | 2 | 2 | 1 | ... |
+
+A map file is also required. This should also be a tab-delimited file with three columns, "marker name", "chromosome" and "position". The map file has to be identical for all crosses.
+
+Phenotypic data can be added as a `data.frame` when computing IBD probabilities. Such a `data.frame` should have a first column "genotype" and all other columns have to be numerical.
+
+```{r maizeIBD}
+## Define names of crosses.
+crosses <- paste0("F353x", c("B73", "D06", "D09", "EC169", "F252", "F618", 
+                             "Mo17", "UH250", "UH304", "W117"))
+
+## Specify files containing crosses.
+## Extract them in a temporary directory.
+tempDir <- tempdir()
+crossFiles <- unzip(system.file("extdata/maize/maize.zip", package = "statgenMPP"), 
+                    files = paste0(crosses, ".txt"), exdir = tempDir)
+
+## Specify file containing map.
+mapFile <- unzip(system.file("extdata/maize/maize.zip", package = "statgenMPP"), 
+                 files = "map.txt", exdir = tempDir)
+
+## Read phenotypic data.
+phenoFile <- unzip(system.file("extdata/maize/maize.zip", package = "statgenMPP"),
+                   files = "EUmaizePheno.txt", exdir = tempDir)
+phenoDat <- read.delim(phenoFile)
+
+## Perform IBD calculations. 
+maizeMPP <- calcIBDmpp(crossNames = crosses, 
+                       markerFiles = crossFiles,
+                       pheno = phenoDat,
+                       popType = "DH",
+                       mapFile = mapFile,
+                       evalDist = 5)
+```
+
+With `calcIBDmpp` IBD probabilities are computed on a grid for each of the crosses separately and the combined into a single output object. The value of `evalDist` can be used to specify the maximum distance between two evaluation points on the grid. The exact distance depends on the length of the chromosomes.  
+
+To get some idea about the population and the computed IBD probabilities we can visualize the results. First we can have a look at the genetic map using `plotType = "genMap"`. This will display the genetic map of the population showing the length of each of the chromosomes and indicating the position of the markers. Optionally it is possible to highlight one or more markers using `highlight = ...`.
+
+```{r plotGMmaizeIBD}
+## Plot genetic map.
+# Highlight marker on chromosome 3 at position 121.61.
+plot(maizeMPP, plotType = "genMap", highlight = "EXT_3_121.61")
+```
+
+It is also possible to visualize the computed IBD probabilities across the genome for all genotypes using `plotType = "allGeno"`. This will show for all combinations of genotypes and positions on the genome the parent the has the highest probability.
+
+```{r plotAGmaizeIBD, fig.height=10}
+## Plot IBD probabilities across the genome.
+plot(maizeMPP, plotType = "allGeno")
+```
+
+Finally it is possible to plot the structure of the pedigree of the population using `plotType = "pedigree"`.
+
+```{r plotPmaizeIBD}
+## Plot structure of the pedigree.
+plot(maizeMPP, plotType = "pedigree")
+```
+#### Example RABBIT
+
+Instead of performing IBD calculations directly with the package, it is also possible to directly import IBD probabilities computed using RABBIT. The main advantage of using RABBIT for IBD calculations is that it can handle arbitrary populations and therefore can also be used in cases where the population structure is more complex than e.g. in the NAM population described above.
+
+As an example we use a barley population described in @Liller2017-jz. This RIL population consists of 5 parents. 4 Wild parents were crossed with the cultivar Morex and then back crossed with Morex once. This was followed by six generations of selfing. The trait of interest for this population is awn length ("Awn_length"). As for the NAM population, the data for this population is available in zipped format in the package.
+
+RABBIT output can be read using the `readRABBIT` function in `statgenMPP`. This has as input the standard RABBIT output summary file and the pedigree file that needs to be provided to RABBIT as well. This pedigree file is an optional input and is only used for plotting the pedigree structure of the population. Without it QTL mapping can still be performed. As for `calcIBDmpp` the phenotypic data has to be provided as a `data.frame`. This `data.frame` has been included in the package. 
+
+```{r barleyIBD}
+## Specify files containing RABBIT output.
+## Extract in a temporary directory.
+tempDir <- tempdir()
+inFile <- unzip(system.file("extdata/barley/barley_magicReconstruct.zip", 
+                            package = "statgenMPP"), exdir = tempDir)
+
+## Specify pedigree file.
+pedFile <- system.file("extdata/barley/barley_pedInfo.csv",
+                       package = "statgenMPP")
+
+## Read phenotypic data.
+data("barleyPheno")
+
+## read RABBIT output. 
+barleyMPP <- readRABBIT(infile = inFile,
+                        pedFile = pedFile,
+                        pheno = barleyPheno)
+```
+
+As for the maize example we can plot the imported data to get a first idea of its content.
+
+```{r plotGMbarleyIBD}
+## Plot genetic map.
+plot(barleyMPP, plotType = "genMap")
+```
+
+```{r plotAGbarleyIBD}
+## Plot IBD probabilities across the genome.
+plot(barleyMPP, plotType = "allGeno")
+```
+
+```{r plotPbarleyIBD}
+## Plot structure of the pedigree.
+plot(barleyMPP, plotType = "pedigree")
+```
 
 ### QTL Mapping
 
