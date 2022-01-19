@@ -189,8 +189,76 @@ plot(barleyMPP, plotType = "pedigree")
 
 ### QTL Mapping
 
-#### Visualization
+The actual QTL mapping can be done in two steps. First we can do a Simple Interval Mapping (SIM) to get a global idea of the QTL profile. After that Composite Interval Mapping (CIM) can be done.     
 
+We follow the methods described in @Li2021 for QTL mapping. In the SIM first a NULL model is fitted:
+
+$$Y = X\beta + \varepsilon, \varepsilon \sim { }N\left( {0, \oplus_{k = 1}^{F} I_{{n_{k} }} \sigma_{{\varepsilon_{k} }}^{2} } \right),$$
+where $Y$ is a vector with phenotypes, $X$ the design matrix for the cross structure, $\beta$ a vector of fixed cross intercepts, and the residual term $\varepsilon$ has a cross-specific variance covariance structure  $\oplus_{k = 1}^{C} I_{{n_{k} }}$ in which $\sigma_{{\varepsilon_{k} }}^{2} $ is the residual variance of the $k^{th}$ cross with family size $n_{k}$. 
+
+Then for each of the evaluation points $q$ in the map a second model is fitted:
+
+$$Y = X\beta + M_{q} a_{q} + \varepsilon, a_{q} \sim { }N\left( {0,I_{P} \sigma_{q}^{2} } \right), \varepsilon \sim { }N\left( {0, \oplus_{k = 1}^{F} I_{{n_{k} }} \sigma_{{\varepsilon_{k} }}^{2} } \right),$$
+where $M_{q}$ is the design matrix containing the expected number of parental alleles, $a_{q}$ is the vector of random parental effects with variance covariance structure $I_{P} \sigma_{q}^{2}$, where $\sigma_{q}^{2}$ is the genetic variance of the QTL effect.
+
+From these two model a p-value is then estimated for each of the putative QTLs using a likelihood ratio test (LRT).
+
+For CIM the first steps are the same. However after the first round of scanning the QTL with the lowest $-10log(p)$ value is added as a cofactor in the model and a new round of scanning is done. This is repeated until no new QTLs are found with a $-10log(p)$ value above the predefined `threshold`, or until the predefined maximum number of cofactors (`maxCofactors`) is added to the model. In a region of width `QTLwindow` around a cofactor no new cofactors can be detected.
+
+#### Example maize
+
+Going back to our maize example we can first perform SIM.
+
+```{r maizeSIM}
+## Perform simple interval mapping.
+maizeSIM <- selQTLmpp(MPPobj = maizeMPP,
+                      trait = "mean_DtSILK",
+                      CIM = FALSE)
+```
+
+The results of the SIM can be plotted using `plot` function with `plotType = "QTLProfile"`. 
+
+```{r QPmaizeSIM}
+##Plot QTL Profile for maize SIM.
+plot(maizeSIM, plotType = "QTLProfile")
+```
+
+Now we can do CIM. Based on the profile plot for the SIM the threshold is set to 5 to restrict a bit the number of QTLs that will be detected.
+
+```{r maizeCIM}
+## Perform simple interval mapping.
+maizeCIM <- selQTLmpp(MPPobj = maizeMPP,
+                      trait = "mean_DtSILK",
+                      CIM = TRUE,
+                      threshold = 5)
+```
+
+Now we can plot the positions of the QTLs found on the genetic map. This will produce a plot similar the the genetic map plot we have seen before, but now the QTLs will be highlighted. This plot can be made by specifying `plotType = "QTLRegion"`
+
+```{r plotQRmaizeCIM}
+##Plot QTL Profile for maize SIM.
+plot(maizeCIM, plotType = "QTLRegion")
+```
+
+As for the SIM we can also plot the QTL profile. The QTLs found will be highlighted in the profile in red.
+
+```{r plotQPmaizeCIM}
+##Plot QTL Profile for maize SIM.
+plot(maizeCIM, plotType = "QTLProfile")
+```
+
+It is also possible to plot the size of the parental effects for each of the QTLs found. Positive effects of a parent on the trait will be indicated by shades of red, negative effects by shades of blue. The stronger the color, the larger the effect for the specific parent is. This plot can be made using `plotType = "parEffs"`.
+
+```{r plotPEmaizeCIM}
+##Plot QTL Profile for maize SIM.
+plot(maizeCIM, plotType = "parEffs")
+```
+Finally a combined plot of the QTL profile and the parental can be made. In this plot the two previous plots are plotted above each other with the chromosomes and positions aligned to allow for easily getting an overview of which effect belongs to which QTL in the QTL profile. This plot can be made using `plotType = "QTLProfileExt"`.
+
+```{r plotQPEmaizeCIM}
+##Plot QTL Profile for maize SIM.
+plot(maizeCIM, plotType = "QTLProfileExt")
+```
 
 
 ```{r winddown, include = FALSE}
