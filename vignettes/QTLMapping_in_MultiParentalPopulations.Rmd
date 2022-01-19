@@ -209,7 +209,13 @@ For CIM the first steps are the same. However after the first round of scanning 
 
 Going back to our maize example we can first perform SIM.
 
-```{r maizeSIM}
+```{r loadMaize, include=FALSE}
+## Use saved data to speed up vignette building.
+#usethis::use_data(maizeSIM, maizeCIM, internal = TRUE, overwrite = TRUE)
+load(system.file("R/sysdata.rda", package = "statgenMPP"))
+```
+
+```{r maizeSIM, eval=FALSE}
 ## Perform simple interval mapping.
 maizeSIM <- selQTLmpp(MPPobj = maizeMPP,
                       trait = "mean_DtSILK",
@@ -225,7 +231,7 @@ plot(maizeSIM, plotType = "QTLProfile")
 
 Now we can do CIM. Based on the profile plot for the SIM the threshold is set to 5 to restrict a bit the number of QTLs that will be detected.
 
-```{r maizeCIM}
+```{r maizeCIM, eval=FALSE}
 ## Perform simple interval mapping.
 maizeCIM <- selQTLmpp(MPPobj = maizeMPP,
                       trait = "mean_DtSILK",
