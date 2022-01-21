@@ -182,7 +182,7 @@ plot.QTLmpp <- function(x,
     } else if (plotType == "QTLRegion") {
       p <- do.call(geneticMapPlot,
                    args = c(list(map = map,
-                                 highlight = signSnp,
+                                 highlight = if (nrow(signSnp) > 0) signSnp,
                                  title = title,
                                  output = output),
                             dotArgs[!(names(dotArgs) %in% c("highlight", "map"))]))
