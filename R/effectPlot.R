@@ -69,7 +69,7 @@ effectPlot <- function(effectDat,
                                                                1)),
                                     limits = c(-maxVal, maxVal),
                                     na.value = "white") +
-      ggplot2::scale_y_discrete(expand = c(0, 0))
+      ggplot2::scale_y_discrete(expand = c(0, 0), limits = rev)
   }
   if (output) {
     plot(p)

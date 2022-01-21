@@ -147,6 +147,8 @@ plot.QTLmpp <- function(x,
         return(parDat)
       })
       effectDat <- do.call(rbind, effectDat)
+      effectDat[["trait"]] <- factor(effectDat[["trait"]],
+                                     levels = parents)
       ## Convert signSnp to long format as well.
       if (nrow(signSnp) > 0) {
         signSnpLong <- lapply(X = parents, FUN = function(parent) {
