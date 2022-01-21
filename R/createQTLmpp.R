@@ -148,13 +148,17 @@ plot.QTLmpp <- function(x,
       })
       effectDat <- do.call(rbind, effectDat)
       ## Convert signSnp to long format as well.
-      signSnpLong <- lapply(X = parents, FUN = function(parent) {
-        parDat <- signSnp
-        parDat[["trait"]] <- parent
-        parDat[["effect"]] <- parDat[[paste0("eff_", parent)]]
-        return(parDat)
-      })
-      signSnpLong <- do.call(rbind, signSnpLong)
+      if (nrow(signSnp) > 0) {
+        signSnpLong <- lapply(X = parents, FUN = function(parent) {
+          parDat <- signSnp
+          parDat[["trait"]] <- parent
+          parDat[["effect"]] <- parDat[[paste0("eff_", parent)]]
+          return(parDat)
+        })
+        signSnpLong <- do.call(rbind, signSnpLong)
+      } else {
+        signSnpLong <- NULL
+      }
       ## Compute chromosome boundaries.
       GWAResult <- GWAResult[!is.na(GWAResult$pos), ]
       ## Select specific chromosome(s) for plotting.
