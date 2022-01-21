@@ -53,6 +53,7 @@ reference:
   - calcIBDmpp
   - readRABBIT
   - plot.gData
+  - summary.gData
   - selQTLmpp
   - plot.QTLmpp
   - barleyPheno
