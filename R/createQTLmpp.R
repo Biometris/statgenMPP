@@ -5,7 +5,7 @@
 #' @param object An object of class \code{QTLmpp}.
 #' @param ... Not used.
 #'
-#' #' @examples
+#' @examples
 #' \dontrun{
 #' ## Read phenotypic data.
 #' pheno <- read.delim(system.file("extdata/multipop", "AxBxCpheno.txt",

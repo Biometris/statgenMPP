@@ -9,9 +9,12 @@
 \arguments{
 \item{object}{An object of class \code{QTLmpp}.}
 
-\item{...}{Not used.
-
-#' @examples
+\item{...}{Not used.}
+}
+\description{
+Gives a summary for an object of S3 class \code{QTLmpp}.
+}
+\examples{
 \dontrun{
 ## Read phenotypic data.
 pheno <- read.delim(system.file("extdata/multipop", "AxBxCpheno.txt",
@@ -36,8 +39,6 @@ ABC_CIM <- selQTLmpp(ABC, trait = "pheno")
 
 ## Print summary.
 summary(ABC_CIM)
-}}
 }
-\description{
-Gives a summary for an object of S3 class \code{QTLmpp}.
+
 }

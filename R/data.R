@@ -11,3 +11,13 @@
 #' Macaulay M, Effgen S, von Korff M, van Esse GW, Koornneef M.
 #' Theor Appl Genet. 2017 Feb;130(2):269-281. \doi{10.1007/s00122-016-2807-y}.
 "barleyPheno"
+
+#' Pre-computed CIM output
+#'
+#' Pre-computed CIM output for maize data used in vignette.
+"maizeCIM"
+
+#' Pre-computed SIM output
+#'
+#' Pre-computed SIM output for maize data used in vignette.
+"maizeSIM"
