@@ -1,3 +1,74 @@
+#' Summary function for the class \code{QTLmpp}
+#'
+#' Gives a summary for an object of S3 class \code{QTLmpp}.
+#'
+#' @param object An object of class \code{QTLmpp}.
+#' @param ... Not used.
+#'
+#' #' @examples
+#' \dontrun{
+#' ## Read phenotypic data.
+#' pheno <- read.delim(system.file("extdata/multipop", "AxBxCpheno.txt",
+#'                                package = "statgenMPP"))
+#' ## Rename first column to genotype.
+#' colnames(pheno)[1] <- "genotype"#'
+#'
+#' ## Compute IBD probabilities for simulated population - AxB, AxC.
+#' ABC <- calcIBDmpp(crossNames = c("AxB", "AxC"),
+#'                   markerFiles = c(system.file("extdata/multipop", "AxB.txt",
+#'                                               package = "statgenMPP"),
+#'                                   system.file("extdata/multipop", "AxC.txt",
+#'                                               package = "statgenMPP")),
+#'                   pheno = pheno,
+#'                   popType = "F4DH",
+#'                   mapFile = system.file("extdata/multipop", "mapfile.txt",
+#'                                         package = "statgenMPP"),
+#'                   evalDist = 5)
+#'
+#' ## Composite Interval Mapping.
+#' ABC_CIM <- selQTLmpp(ABC, trait = "pheno")
+#'
+#' ## Print summary.
+#' summary(ABC_CIM)
+#' }
+#'
+#' @export
+summary.GWAS <- function(object,
+                         ...) {
+  GWAResult <- object$GWAResult[[1]]
+  signSnp <- object$signSnp[[1]]
+  GWASInfo <- object$GWASInfo
+  trait <- unique(GWAResult$trait)
+  ## Print traits.
+  cat("\tTraits analysed:", paste(unique(GWAResult$trait),
+                                  collapse = ", "), "\n\n")
+  ## Print SNP numbers.
+  cat("\tData are available for", length(unique(GWAResult$snp)),
+      "SNPs.\n")
+  ## Print significant SNP info.
+  cat("\t\tthreshold:", object$thr[[1]][trait], "\n")
+  ## Work around the problem that subsetting a data.table on a variable
+  ## by the same name as a column in the data is difficult.
+  snpTrait <- signSnp[["trait"]] == trait
+  signSnpTrait <- signSnp[signSnp[["snpStatus"]] == "significant SNP" &
+                            snpTrait, ]
+  if (!is.null(signSnpTrait)) {
+    nSignSnp <- nrow(signSnpTrait)
+    cat("\t\tNumber of QTLs:" , nSignSnp, "\n")
+    if (nSignSnp > 0) {
+      cat("\t\tSmallest p-value among the QTLs:",
+          min(signSnpTrait[["pValue"]]), "\n")
+      cat("\t\tLargest p-value among the QTLs: ",
+          max(signSnpTrait[["pValue"]]),
+          " (-10log(p) value: ", min(signSnpTrait[["LOD"]]), ")\n\n", sep = "")
+    } else {
+      cat("\n")
+    }
+  } else {
+    cat("\t\tNo QTLs found.","\n\n")
+  }
+}
+
 #' Plot function for the class \code{QTLmpp}
 #'
 #' Creates a plot of an object of S3 class \code{QTLmpp}. The following types of
@@ -69,6 +140,7 @@
 #' \code{FALSE}, only a ggplot object is invisibly returned.
 #'
 #' @examples
+#' \dontrun{
 #' ## Read phenotypic data.
 #' pheno <- read.delim(system.file("extdata/multipop", "AxBxCpheno.txt",
 #'                                package = "statgenMPP"))
@@ -88,7 +160,6 @@
 #'                                         package = "statgenMPP"),
 #'                   evalDist = 5)
 #'
-#' \dontrun{
 #' ## Composite Interval Mapping.
 #' ABC_CIM <- selQTLmpp(ABC, trait = "pheno")
 #'

@@ -95,6 +95,7 @@ No extra parameter options.
 }
 
 \examples{
+\dontrun{
 ## Read phenotypic data.
 pheno <- read.delim(system.file("extdata/multipop", "AxBxCpheno.txt",
                                package = "statgenMPP"))
@@ -114,7 +115,6 @@ ABC <- calcIBDmpp(crossNames = c("AxB", "AxC"),
                                         package = "statgenMPP"),
                   evalDist = 5)
 
-\dontrun{
 ## Composite Interval Mapping.
 ABC_CIM <- selQTLmpp(ABC, trait = "pheno")
 
