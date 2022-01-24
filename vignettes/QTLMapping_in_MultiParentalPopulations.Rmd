@@ -147,7 +147,7 @@ plot(maizeMPP, plotType = "allGeno")
 
 Instead of performing IBD calculations directly with the package, it is also possible to directly import IBD probabilities computed using RABBIT. The main advantage of using RABBIT for IBD calculations is that it can handle arbitrary populations and therefore can also be used in cases where the population structure is more complex than those described in the table above, e.g. in the NAM population described before.
 
-As an example we use a barley population described in @Liller2017-jz. This RIL population consists of 5 parents. 4 Wild parents were crossed with the cultivar Morex and then back crossed with Morex once. Individuals from the four families from the back crosses were then crossed with each other as in a full diallel design, which generated six F6 families through five generations of selfing. The trait of interest for this population is awn length ("Awn_length"). As for the NAM population, the data for this population is available in zipped format in the package.
+As an example we use a barley population described in @Liller2017-jz. This MPP design consists of 5 parents. 4 Wild parents were crossed with the cultivar Morex and then back crossed with Morex once. Individuals from the four families from the back crosses were then crossed with each other as in a full diallel design, which generated six F6 families through five generations of selfing. The trait of interest for this population is awn length ("Awn_length"). As for the NAM population, the data for this population is available in zipped format in the package.
 
 RABBIT output can be read using the `readRABBIT` function in `statgenMPP`. This has as input the standard RABBIT output summary file and the pedigree file that needs to be provided to RABBIT as well. This pedigree file is an optional input and is only used for plotting the pedigree structure of the population. Without it QTL mapping can still be performed. As for `calcIBDmpp` the phenotypic data has to be provided as a `data.frame`. This `data.frame` has been included in the package. 
 
@@ -225,14 +225,14 @@ maizeSIM <- selQTLmpp(MPPobj = maizeMPP,
 The results of the SIM can be plotted using `plot` function with `plotType = "QTLProfile"`. 
 
 ```{r QPmaizeSIM}
-##Plot QTL Profile for maize SIM.
+## Plot QTL Profile for maize SIM.
 plot(maizeSIM, plotType = "QTLProfile")
 ```
 
 Now we can do CIM. Based on the profile plot for the SIM the threshold is set to 5 to restrict a bit the number of QTLs that will be detected.
 
 ```{r maizeCIM, eval=FALSE}
-## Perform simple interval mapping.
+## Perform composite interval mapping.
 maizeCIM <- selQTLmpp(MPPobj = maizeMPP,
                       trait = "mean_DtSILK",
                       CIM = TRUE,
@@ -242,28 +242,28 @@ maizeCIM <- selQTLmpp(MPPobj = maizeMPP,
 Now we can plot the positions of the QTLs found on the genetic map. This will produce a plot similar the the genetic map plot we have seen before, but now the QTLs will be highlighted. This plot can be made by specifying `plotType = "QTLRegion"`
 
 ```{r plotQRmaizeCIM}
-##Plot QTL Profile for maize SIM.
+##Plot QTL Profile for maize CIM.
 plot(maizeCIM, plotType = "QTLRegion")
 ```
 
 As for the SIM we can also plot the QTL profile. The QTLs found will be highlighted in the profile in red.
 
 ```{r plotQPmaizeCIM}
-##Plot QTL Profile for maize SIM.
+##Plot QTL Profile for maize CIM.
 plot(maizeCIM, plotType = "QTLProfile")
 ```
 
 It is also possible to plot the size of the parental effects for each of the QTLs found. Positive effects of a parent on the trait will be indicated by shades of red, negative effects by shades of blue. The stronger the color, the larger the effect for the specific parent is. This plot can be made using `plotType = "parEffs"`.
 
 ```{r plotPEmaizeCIM}
-##Plot QTL Profile for maize SIM.
+##Plot QTL Profile for maize CIM.
 plot(maizeCIM, plotType = "parEffs")
 ```
 
 Finally a combined plot of the QTL profile and the parental can be made. In this plot the two previous plots are plotted above each other with the chromosomes and positions aligned to allow for easily getting an overview of which effect belongs to which QTL in the QTL profile. This plot can be made using `plotType = "QTLProfileExt"`.
 
 ```{r plotQPEmaizeCIM}
-##Plot QTL Profile for maize SIM.
+##Plot QTL Profile for maize CIM.
 plot(maizeCIM, plotType = "QTLProfileExt")
 ```
 
