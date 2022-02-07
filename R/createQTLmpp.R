@@ -11,7 +11,7 @@
 #' pheno <- read.delim(system.file("extdata/multipop", "AxBxCpheno.txt",
 #'                                package = "statgenMPP"))
 #' ## Rename first column to genotype.
-#' colnames(pheno)[1] <- "genotype"#'
+#' colnames(pheno)[1] <- "genotype"
 #'
 #' ## Compute IBD probabilities for simulated population - AxB, AxC.
 #' ABC <- calcIBDmpp(crossNames = c("AxB", "AxC"),
