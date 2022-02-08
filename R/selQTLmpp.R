@@ -116,13 +116,14 @@ selQTLmpp <- function(MPPobj,
   }
   ## Initialize parameters.
   cofactors <- NULL
+  mapScan <- map
   while (length(cofactors) <= maxCofactors) {
     if (verbose) {
       cat(paste0("QTL scan for trait ", trait, ", ",
                  length(cofactors), " cofactors\n"))
     }
     scanRes <- scanQTL(modDat = modDat,
-                       map = map,
+                       map = mapScan,
                        parents = parents,
                        trait = trait,
                        QTLwindow = QTLwindow,
@@ -144,6 +145,21 @@ selQTLmpp <- function(MPPobj,
     }
     ## Add new cofactor to list of cofactors for next round of scanning.
     cofactors <- c(cofactors, scanSel[which.max(scanSel[["minlog10p"]]), "snp"])
+    lowPScan <- scanRes[(!is.na(scanRes[["pValue"]]) &
+                          scanRes[["minlog10p"]] > 1) |
+                          (scanRes[["QTLRegion"]] &
+                             !scanRes[["snp"]] %in% cofactors), "snp"]
+    mapScan <- mapScan[rownames(mapScan) %in% lowPScan, ]
+  }
+  if (CIM) {
+    ## Final run with all markers and all cofactors.
+    scanRes <- scanQTL(modDat = modDat,
+                       map = map,
+                       parents = parents,
+                       trait = trait,
+                       QTLwindow = QTLwindow,
+                       cof = cofactors,
+                       verbose = verbose)
   }
   ## Construct GWAResult and signSnp
   colnames(scanRes)[colnames(scanRes) == "minlog10p"] <- "LOD"
