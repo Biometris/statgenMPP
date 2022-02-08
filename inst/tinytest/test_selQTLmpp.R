@@ -60,5 +60,5 @@ expect_equal(ABC_SIM, ABC_CIM1)
 ## Option verbose.
 expect_stdout(selQTLmpp(MPPobj = ABC, trait = "geno", maxCofactors = 1,
                         verbose = TRUE),
-              "QTL scan for trait geno, 1 cofactors")
+              "QTL scan for trait geno, 0 cofactors")
 
