@@ -146,7 +146,7 @@ selQTLmpp <- function(MPPobj,
     ## Add new cofactor to list of cofactors for next round of scanning.
     cofactors <- c(cofactors, scanSel[which.max(scanSel[["minlog10p"]]), "snp"])
     lowPScan <- scanRes[(!is.na(scanRes[["pValue"]]) &
-                           scanRes[["minlog10p"]] > 1) |
+                           scanRes[["minlog10p"]] > 0.31) |
                           (scanRes[["QTLRegion"]] &
                              !scanRes[["snp"]] %in% cofactors), "snp"]
     mapScan <- mapScan[rownames(mapScan) %in% lowPScan, ]
