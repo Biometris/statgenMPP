@@ -27,14 +27,14 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Depends:
     R (>= 3.6),
-    statgenGWAS
+    statgenGWAS (>= 1.0.8)
 Imports: 
     data.table,
     ggplot2,
     gridExtra,
     LMMsolver,
     scales,
-    statgenIBD
+    statgenIBD (>= 1.0.3)
 Suggests: 
     rmarkdown,
     knitr,
