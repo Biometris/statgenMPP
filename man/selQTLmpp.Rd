@@ -9,7 +9,6 @@ selQTLmpp(
   trait = NULL,
   QTLwindow = 10,
   threshold = 3,
-  CIM = TRUE,
   maxCofactors = NULL,
   verbose = FALSE
 )
@@ -25,9 +24,6 @@ is considered as part of that QTL.}
 
 \item{threshold}{A numerical value indicating the threshold for the
 \eqn{-10logp} value of a marker to be considered a QTL.}
-
-\item{CIM}{Should Composite Interval Mapping be done? If \code{FALSE} only
-one round of QTL mapping is done without cofactors.}
 
 \item{maxCofactors}{A numerical value, the maximum number of cofactors to
 include in the model. If \code{NULL} cofactors are added until no new
@@ -68,7 +64,7 @@ ABC <- calcIBDmpp(crossNames = c("AxB", "AxC"),
                   evalDist = 5)
 
 ## Simple Interval Mapping.
-ABC_SIM <- selQTLmpp(ABC, trait = "pheno", CIM = FALSE)
+ABC_SIM <- selQTLmpp(ABC, trait = "pheno", maxCofactors = 0)
 
 ## Composite Interval Mapping
 \dontrun{

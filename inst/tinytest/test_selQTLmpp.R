@@ -42,8 +42,7 @@ expect_error(selQTLmpp(MPPobj = ABC, trait = "geno", maxCofactors = "1"),
 expect_error(selQTLmpp(MPPobj = ABC, trait = "geno", maxCofactors = c(1, 2)),
              "maxCofactors should be a positive numerical value")
 
-ABC_SIM <- selQTLmpp(MPPobj = ABC, trait = "geno", CIM = FALSE)
-ABC_CIM1 <- selQTLmpp(MPPobj = ABC, trait = "geno", maxCofactors = 0)
+ABC_SIM <- selQTLmpp(MPPobj = ABC, trait = "geno", maxCofactors = 0)
 ABC_CIM_max <- selQTLmpp(MPPobj = ABC, trait = "geno")
 
 ## General structure.
@@ -53,9 +52,6 @@ expect_inherits(ABC_CIM_max, "GWAS")
 expect_equal(names(ABC_CIM_max),
              c("GWAResult", "signSnp", "kinship", "thr", "GWASInfo"))
 expect_equal_to_reference(ABC_CIM_max, "ABC_CIM_max", tolerance = 1e-6)
-
-# CIM and SIM with no cofactors should be the same.
-expect_equal(ABC_SIM, ABC_CIM1)
 
 ## Option verbose.
 expect_stdout(selQTLmpp(MPPobj = ABC, trait = "geno", maxCofactors = 1,

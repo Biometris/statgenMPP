@@ -110,7 +110,7 @@ mapFile <- unzip(system.file("extdata/maize/maize.zip", package = "statgenMPP"),
 phenoFile <- unzip(system.file("extdata/maize/maize.zip", package = "statgenMPP"),
                    files = "EUmaizePheno.txt", exdir = tempDir)
 phenoDat <- read.delim(phenoFile)
-head(phenoDat[,1:4])
+head(phenoDat[, 1:4])
 
 ## Perform IBD calculations. 
 maizeMPP <- calcIBDmpp(crossNames = crosses, 
@@ -221,7 +221,7 @@ Going back to our maize example we can first perform SIM.
 ## Perform simple interval mapping.
 maizeSIM <- selQTLmpp(MPPobj = maizeMPP,
                       trait = "mean_DtSILK",
-                      CIM = FALSE)
+                      maxCofactors = 0)
 ```
 
 The results of the SIM can be plotted using `plot` function with `plotType = "QTLProfile"`. 
@@ -237,7 +237,6 @@ Now we can do CIM. Based on the profile plot for the SIM the threshold is set to
 ## Perform composite interval mapping.
 maizeCIM <- selQTLmpp(MPPobj = maizeMPP,
                       trait = "mean_DtSILK",
-                      CIM = TRUE,
                       threshold = 5)
 ```
 

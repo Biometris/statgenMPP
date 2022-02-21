@@ -15,8 +15,6 @@
 #' is considered as part of that QTL.
 #' @param threshold A numerical value indicating the threshold for the
 #' \eqn{-10logp} value of a marker to be considered a QTL.
-#' @param CIM Should Composite Interval Mapping be done? If \code{FALSE} only
-#' one round of QTL mapping is done without cofactors.
 #' @param maxCofactors A numerical value, the maximum number of cofactors to
 #' include in the model. If \code{NULL} cofactors are added until no new
 #' cofactors are found.
@@ -45,7 +43,7 @@
 #'                   evalDist = 5)
 #'
 #' ## Simple Interval Mapping.
-#' ABC_SIM <- selQTLmpp(ABC, trait = "pheno", CIM = FALSE)
+#' ABC_SIM <- selQTLmpp(ABC, trait = "pheno", maxCofactors = 0)
 #'
 #' ## Composite Interval Mapping
 #' \dontrun{
@@ -57,7 +55,6 @@ selQTLmpp <- function(MPPobj,
                       trait = NULL,
                       QTLwindow = 10,
                       threshold = 3,
-                      CIM = TRUE,
                       maxCofactors = NULL,
                       verbose = FALSE) {
   if (!inherits(MPPobj, "gData")) {
@@ -110,10 +107,6 @@ selQTLmpp <- function(MPPobj,
   colnames(markers) <- paste0(rep(markerNames, each = nPar), "_", parents)
   ## Merge markers to modDat.
   modDat <- merge(modDat, markers, by.x = "genotype", by.y = "row.names")
-  ## For Simple Interval Mapping do only 1 iteration.
-  if (!CIM) {
-    maxCofactors <- 0
-  }
   ## Initialize parameters.
   cofactors <- NULL
   mapScan <- map
