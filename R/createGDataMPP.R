@@ -288,6 +288,8 @@ summary.gData <- function(object,
 #' \item{\code{genMap}}{ A plot of the genetic map.}
 #' \item{\code{allGeno}}{ A plot showing for all genotypes the IBD
 #' probabilities of the parent with the highest probability per marker.}
+#' \item{\code{singleGeno}}{ A plot for a single genotype showing the IBD
+#' probabilities for all parents across the genome.}
 #' \item{\code{pedigree}}{ A plot showing the structure of the pedigree of
 #' the population.}
 #' }
@@ -304,6 +306,11 @@ summary.gData <- function(object,
 #' genotype and marker is colored according to the parent with the highest
 #' probability. A darker color indicates a higher probability.
 #'
+#' @section singleGeno:
+#' A plot is made for a single genotype, specified by
+#' \code{genotpye = "name_of_genotype"} showing the IBD probabilities for the
+#' selected genotype for all parents across the genome.
+#'
 #' @section pedigree:
 #' A plot is made showing the structure of the pedigree for the population in
 #' the \code{gData} object.
@@ -313,6 +320,8 @@ summary.gData <- function(object,
 #' functions.
 #' @param plotType A character string indicating the type of plot to be made.
 #' One of "genMap", "allGeno" or "pedigree".
+#' @param genotype A character string indicating the genotype for which the
+#' plot should be made. Only for \code{plotType = "singleGeno"}.
 #' @param title A character string, the title of the plot.
 #' @param output Should the plot be output to the current device? If
 #' \code{FALSE}, only a ggplot object is invisibly returned.
@@ -346,6 +355,9 @@ summary.gData <- function(object,
 #' ## Plot the IBD probabilities across the genome for all genotypes.
 #' plot(ABC, plotType = "allGeno")
 #'
+#' ## Plot the IBD probabilities for genotype AxB0001.
+#' plot(ABC, plotType = "singleGeno", genotype = "AxB0001")
+#'
 #' ## Plot the pedigree.
 #' plot(ABC, plotType = "pedigree")
 #'
@@ -354,7 +366,9 @@ summary.gData <- function(object,
 #' @export
 plot.gData <- function(x,
                        ...,
-                       plotType = c("genMap", "allGeno", "pedigree"),
+                       plotType = c("genMap", "allGeno", "singleGeno",
+                                    "pedigree"),
+                       genotype = NULL,
                        title = NULL,
                        output = TRUE) {
   plotType <- match.arg(plotType)
@@ -377,6 +391,10 @@ plot.gData <- function(x,
   } else if (plotType == "allGeno") {
     p <- allGenoPlot(markers = markers, map = map, parents = parents,
                      title = title)
+  } else if (plotType == "singleGeno") {
+    dimnames(markers)[[3]] <- paste0("p",  parents)
+    p <- singleGenoPlot(markers = markers, map = map, parents = parents,
+                        genotype = genotype, title = title)
   } else if (plotType == "pedigree") {
     p <- pedPlot(pedigree = pedigree, offSpring = colnames(markers),
                  popType = popType,

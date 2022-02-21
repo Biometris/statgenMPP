@@ -18,4 +18,7 @@ markers3DtoMat <- getFromNamespace(x = "markers3DtoMat", ns = "statgenIBD")
 allGenoPlot <- getFromNamespace(x = "allGenoPlot", ns = "statgenIBD")
 
 #' @keywords internal
+singleGenoPlot <- getFromNamespace(x = "singleGenoPlot", ns = "statgenIBD")
+
+#' @keywords internal
 pedPlot <- getFromNamespace(x = "pedPlot", ns = "statgenIBD")

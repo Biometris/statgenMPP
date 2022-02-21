@@ -7,7 +7,8 @@
 \method{plot}{gData}(
   x,
   ...,
-  plotType = c("genMap", "allGeno", "pedigree"),
+  plotType = c("genMap", "allGeno", "singleGeno", "pedigree"),
+  genotype = NULL,
   title = NULL,
   output = TRUE
 )
@@ -20,6 +21,9 @@ functions.}
 
 \item{plotType}{A character string indicating the type of plot to be made.
 One of "genMap", "allGeno" or "pedigree".}
+
+\item{genotype}{A character string indicating the genotype for which the
+plot should be made. Only for \code{plotType = "singleGeno"}.}
 
 \item{title}{A character string, the title of the plot.}
 
@@ -36,6 +40,8 @@ plot can be made:
 \item{\code{genMap}}{ A plot of the genetic map.}
 \item{\code{allGeno}}{ A plot showing for all genotypes the IBD
 probabilities of the parent with the highest probability per marker.}
+\item{\code{singleGeno}}{ A plot for a single genotype showing the IBD
+probabilities for all parents across the genome.}
 \item{\code{pedigree}}{ A plot showing the structure of the pedigree of
 the population.}
 }
@@ -54,6 +60,13 @@ or more markers using the extra parameter \code{highlight}.
 A plot is made showing all genotypes and markers. Each combination of
 genotype and marker is colored according to the parent with the highest
 probability. A darker color indicates a higher probability.
+}
+
+\section{singleGeno}{
+
+A plot is made for a single genotype, specified by
+\code{genotpye = "name_of_genotype"} showing the IBD probabilities for the
+selected genotype for all parents across the genome.
 }
 
 \section{pedigree}{
@@ -90,6 +103,9 @@ plot(ABC, plotType = "genMap", highlight = "EXT_3_30")
 
 ## Plot the IBD probabilities across the genome for all genotypes.
 plot(ABC, plotType = "allGeno")
+
+## Plot the IBD probabilities for genotype AxB0001.
+plot(ABC, plotType = "singleGeno", genotype = "AxB0001")
 
 ## Plot the pedigree.
 plot(ABC, plotType = "pedigree")
