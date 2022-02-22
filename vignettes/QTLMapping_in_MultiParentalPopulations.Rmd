@@ -21,7 +21,8 @@ knitr::opts_chunk$set(
   fig.dim = c(7, 4)
 )
 library(statgenMPP)
-op <- options(width = 90)
+op <- options(width = 90, 
+              digits = 3)
 ```
 
 ## The statgenMPP package
@@ -78,7 +79,6 @@ As an example for performing IBD calculations for a multi-parent population we u
 
 Before doing QTL detection we compute IBD probabilities on a grid of positions along the genome. This can be done using the `calcIBDmpp` function in the `statgenMPP` package. To perform IBD calculations a cross file is required for each of the populations. These files should be a tab-delimited file with first column ID identifying the genotype. The following columns should contain marker information. The first rows should contain the parents used in the cross. As an example, the file for the first cross starts like this:
 
-
 | ID | PZE.101000088 | PZE.101000344 | PZE.101000449 | ... |
 |---|---|---|---|---|
 | F353 | 2 | 1 | 1 | ... |
@@ -88,7 +88,18 @@ Before doing QTL detection we compute IBD probabilities on a grid of positions a
 
 A map file is also required. This should also be a tab-delimited file with three columns, "marker name", "chromosome" and "position". The map file has to be identical for all crosses.
 
-Phenotypic data can be added as a `data.frame` when computing IBD probabilities. Such a `data.frame` should have a first column "genotype" and all other columns have to be numerical.
+Phenotypic data can be added as a `data.frame` when computing IBD probabilities. Such a `data.frame` should have a first column "genotype" and all other columns have to be numerical. For the maize NAM population the `data.frame` with phenotypic data starts like this:
+
+| genotype | INR_DMY | KWS_DMY | Syngenta_DMY | TUM_DMY | ... | 
+|---|---|---|---|---|---|
+| CFD02-003 | 182.34 | NA | 173.37 | NA | ... | 
+| CFD02-006 | 171.95 | 200.56 | 159.29 | 243.29 | ... | 
+| CFD02-010 | 207.56 | 236.54 | 159.38 | 228.14 | ... | 
+| CFD02-024 | 185.10 | 218.94 | 160.72 | 214.44 | ... | 
+| CFD02-027 | 206.46 | 226.25 | 185.24 | 221.02 | ... | 
+| CFD02-036 | 180.28 | 223.24 | 162.68 | 215.86 | ... | 
+
+In total there are 30 columns with different traits. When performing IBD calculations and specifying phenotypic data, the phenotypic data will be combined with computed IBD probabilities based. For this the genotype specified in the ID column in the cross file(s) will be matched with the genotype in the genotype column in the `data.frame` with phenotypic information. Phenotypic data for all crosses can either be added from a single `data.frame` containing phenotypic data for all crosses, or a `list` of `data.frames` each containing phenotypic data for a single cross.
 
 ```{r maizeIBD}
 ## Define names of crosses.
@@ -110,7 +121,7 @@ mapFile <- unzip(system.file("extdata/maize/maize.zip", package = "statgenMPP"),
 phenoFile <- unzip(system.file("extdata/maize/maize.zip", package = "statgenMPP"),
                    files = "EUmaizePheno.txt", exdir = tempDir)
 phenoDat <- read.delim(phenoFile)
-head(phenoDat[, 1:4])
+head(phenoDat[, 1:5])
 
 ## Perform IBD calculations. 
 maizeMPP <- calcIBDmpp(crossNames = crosses, 
@@ -121,9 +132,16 @@ maizeMPP <- calcIBDmpp(crossNames = crosses,
                        evalDist = 5)
 ```
 
-With `calcIBDmpp` IBD probabilities are computed on a grid for each of the crosses separately and the combined into a single output object. The value of `evalDist` can be used to specify the maximum distance between two evaluation points on the grid. The exact distance depends on the length of the chromosomes.  
+With `calcIBDmpp` IBD probabilities are computed on a grid for each of the crosses separately and the combined into a single output object. The value of `evalDist` can be used to specify the maximum distance between two evaluation points on the grid. The exact distance depends on the length of the chromosomes. The output is stored in an object of class `gData` (genomic Data) in which information about map, markers, and phenotypic data is combined. With the `summary` function we can get some insight in this information.
 
-To get some idea about the population and the computed IBD probabilities we can visualize the results. First we have a look at structure of the pedigree of the population using `plotType = "pedigree"` to get a genereal idea of what the design looks like.
+```{r sumMaizeIBD}
+## Print summary
+summary(maizeMPP, traits = c("INR_DMY", "KWS_DMY", "Syngenta_DMY", 
+                             "TUM_DMY", "mean_DMY"))
+
+```
+
+To get a further idea about the population and the computed IBD probabilities we can visualize the results. First we have a look at structure of the pedigree of the population using `plotType = "pedigree"` to get a genereal idea of what the design looks like.
 
 ```{r plotPmaizeIBD}
 ## Plot structure of the pedigree.
@@ -186,8 +204,8 @@ plot(barleyMPP, plotType = "genMap")
 ```
 
 ```{r plotAGbarleyIBD}
-## Plot IBD probabilities across the genome.
-plot(barleyMPP, plotType = "allGeno")
+## Plot IBD probabilities for genotype AB-13-1-1-2
+plot(barleyMPP, plotType = "singleGeno", genotype = "AB-13-1-1-2")
 ```
 
 ## QTL Mapping
@@ -266,6 +284,21 @@ Finally a combined plot of the QTL profile and the parental can be made. In this
 ```{r plotQPEmaizeCIM}
 ##Plot QTL Profile for maize CIM.
 plot(maizeCIM, plotType = "QTLProfileExt")
+```
+
+From the output of `selQTLmpp` the p-Values and effects for all markers can be extracted. They are stored in a `data.table` within the output object. The example below shows how to extract them. The output will contain columns snp, chr and pos with name, chromosome number and position of the marker and columns pValue and eff_par1, eff_par2, eff_par.. with the effects of all parents for that marker.
+
+```{r extractRes}
+## Extract results of QTL mapping.
+maizeCIMres <- maizeCIM$GWAResult$pheno
+head(maizeCIMres[, 1:8])
+```
+It is also possible to only extract the markers that are either QTLs or within the window of one of the selected QTLs, as specified when calling the `selQTLmpp` function. As for the full results, this information in stored in the output as a `data.table` that can be extracted as shown below. The columns in this `data.table` are identical to those in the full results except for an additional column at the end, snpStatus, that shows whether a marker is a QTL or within the window of a QTL.
+
+```{r extractQTL}
+## Extract QTLs and markers within QTL windows.
+maizeCIMQTL <- maizeCIM$signSnp$pheno
+head(maizeCIMQTL[, c(1:8, 18)])
 ```
 
 ```{r winddown, include = FALSE}
