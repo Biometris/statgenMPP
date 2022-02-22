@@ -393,6 +393,7 @@ plot.gData <- function(x,
                      title = title)
   } else if (plotType == "singleGeno") {
     dimnames(markers)[[3]] <- paste0("p",  parents)
+    markers <- markers[, genotype, , drop = FALSE]
     p <- singleGenoPlot(markers = markers, map = map, parents = parents,
                         genotype = genotype, title = title)
   } else if (plotType == "pedigree") {
