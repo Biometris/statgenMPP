@@ -138,11 +138,11 @@ Next we look at the genetic map using `plotType = "genMap"`. This will display t
 plot(maizeMPP, plotType = "genMap", highlight = "EXT_3_121.61")
 ```
 
-Finally we visualize all the computed IBD probabilities across the genome for all genotypes using `plotType = "allGeno"`. This plot will show for all combinations of genotypes and positions on the genome the parent the has the highest probability.
+Finally we visualize the computed IBD probabilities across the genome for a selected genotype using `plotType = "singleGeno"`. This plot will show the IBD probabilities for all parents for all positions on the genome for the selected genotype.
 
-```{r plotAGmaizeIBD, fig.height=10}
-## Plot IBD probabilities across the genome.
-plot(maizeMPP, plotType = "allGeno", genotype="FD02-003")
+```{r plotSGmaizeIBD, fig.height=10}
+## Plot IBD probabilities for genotype CFD02-003.
+plot(maizeMPP, plotType = "singleGeno", genotype = "CFD02-003")
 ```
 
 ### Example RABBIT
