@@ -24,7 +24,7 @@ ABC <- calcIBDmpp(crossNames = c("AxB", "AxC"),
 ## Check inputs.
 
 expect_error(selQTLmpp(MPPobj = 1),
-             "MPPobj should be an object of class gData")
+             "MPPobj should be an object of class gDataMpp")
 expect_error(selQTLmpp(MPPobj = ABC, trait = 1),
              "trait should be a character string of length one present in")
 expect_error(selQTLmpp(MPPobj = ABC, trait = "tst"),

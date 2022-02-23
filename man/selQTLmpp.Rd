@@ -14,7 +14,7 @@ selQTLmpp(
 )
 }
 \arguments{
-\item{MPPobj}{An object of class gData, typically the output of either
+\item{MPPobj}{An object of class gDataMpp, typically the output of either
 \code{\link{calcIBDmpp}} or \code{\link{readRABBIT}}.}
 
 \item{trait}{A character string indicating the trait QTL mapping is done for.}

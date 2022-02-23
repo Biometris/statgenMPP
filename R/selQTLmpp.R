@@ -8,7 +8,7 @@
 #' no new markers with a \eqn{-10log(p)} value above the threshold or until
 #' the maximum number of cofactors is reached.
 #'
-#' @param MPPobj An object of class gData, typically the output of either
+#' @param MPPobj An object of class gDataMpp, typically the output of either
 #' \code{\link{calcIBDmpp}} or \code{\link{readRABBIT}}.
 #' @param trait A character string indicating the trait QTL mapping is done for.
 #' @param QTLwindow A numerical value indicating the window around a QTL that
@@ -57,8 +57,8 @@ selQTLmpp <- function(MPPobj,
                       threshold = 3,
                       maxCofactors = NULL,
                       verbose = FALSE) {
-  if (!inherits(MPPobj, "gData")) {
-    stop("MPPobj should be an object of class gData.\n")
+  if (!inherits(MPPobj, "gDataMpp")) {
+    stop("MPPobj should be an object of class gDataMpp.\n")
   }
   map <- MPPobj$map
   markers <- MPPobj$markers

@@ -47,7 +47,7 @@ marker existing marker positions (\code{FALSE}).}
 \item{verbose}{Should progress be printed?}
 }
 \value{
-An object of class \code{gData} with the following components:
+An object of class \code{gDataMpp} with the following components:
 \item{\code{map}}{a data.frame containing map data. Map is sorted by
 chromosome and position.}
 \item{\code{markers}}{a 3D matrix containing IBD probabilities.}
@@ -61,7 +61,7 @@ name of the cross).}
 IBD calculation for multi parental populations. Per cross IBD probabilities
 are calculated using \code{calcIBD} in the statgenIBD package. These
 probabilities are combined with optional phenotypic data and stored in a
-single object of class \code{gData}.
+single object of class \code{gDataMpp}.
 }
 \details{
 IBD probabilities can be calculated for many different types of populations.

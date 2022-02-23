@@ -132,13 +132,11 @@ maizeMPP <- calcIBDmpp(crossNames = crosses,
                        evalDist = 5)
 ```
 
-With `calcIBDmpp` IBD probabilities are computed on a grid for each of the crosses separately and the combined into a single output object. The value of `evalDist` can be used to specify the maximum distance between two evaluation points on the grid. The exact distance depends on the length of the chromosomes. The output is stored in an object of class `gData` (genomic Data) in which information about map, markers, and phenotypic data is combined. With the `summary` function we can get some insight in this information.
+With `calcIBDmpp` IBD probabilities are computed on a grid for each of the crosses separately and the combined into a single output object. The value of `evalDist` can be used to specify the maximum distance between two evaluation points on the grid. The exact distance depends on the length of the chromosomes. The output is stored in an object of class `gDataMpp` (genomic Data for Multi parental populations) in which information about map, markers, and phenotypic data is combined. With the `summary` function we can get some insight in this information.
 
 ```{r sumMaizeIBD}
 ## Print summary
-summary(maizeMPP, traits = c("INR_DMY", "KWS_DMY", "Syngenta_DMY", 
-                             "TUM_DMY", "mean_DMY"))
-
+summary(maizeMPP)
 ```
 
 To get a further idea about the population and the computed IBD probabilities we can visualize the results. First we have a look at structure of the pedigree of the population using `plotType = "pedigree"` to get a genereal idea of what the design looks like.

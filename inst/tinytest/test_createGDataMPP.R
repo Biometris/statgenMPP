@@ -23,7 +23,7 @@ expect_silent(ABC <- calcIBDmpp(crossNames = c("AxB", "AxC"),
 
 sumABC <- summary(ABC)
 
-expect_inherits(sumABC, "summary.gData")
+expect_inherits(sumABC, "summary.gDataMpp")
 expect_equal(names(sumABC), c("mapSum", "markerSum", "phenoSum", "covarSum"))
 
 # Function is a copy of function from statgenGWAS except for markerSum bit.

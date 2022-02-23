@@ -3,7 +3,7 @@
 #' IBD calculation for multi parental populations. Per cross IBD probabilities
 #' are calculated using \code{calcIBD} in the statgenIBD package. These
 #' probabilities are combined with optional phenotypic data and stored in a
-#' single object of class \code{gData}.
+#' single object of class \code{gDataMpp}.
 #'
 #' IBD probabilities can be calculated for many different types of populations.
 #' In the following table all supported populations are listed. Note that the
@@ -51,7 +51,7 @@
 #' marker existing marker positions (\code{FALSE}).
 #' @param verbose Should progress be printed?
 #'
-#' @return An object of class \code{gData} with the following components:
+#' @return An object of class \code{gDataMpp} with the following components:
 #' \item{\code{map}}{a data.frame containing map data. Map is sorted by
 #' chromosome and position.}
 #' \item{\code{markers}}{a 3D matrix containing IBD probabilities.}

@@ -50,7 +50,7 @@ expect_silent(ABC <- calcIBDmpp(crossNames = c("AxB", "AxC"),
 
 
 ## General structure.
-expect_inherits(ABC, "gData")
+expect_inherits(ABC, "gDataMpp")
 
 expect_inherits(ABC$map, "data.frame")
 expect_equal(dim(ABC$map), c(95, 2))
