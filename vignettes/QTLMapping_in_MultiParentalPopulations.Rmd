@@ -31,51 +31,33 @@ The `statgenMPP` package is developed as an easy-to-use package for QTL mapping 
 
 This vignette describes in detail how to perform the IBD calculations and how to do QTL mapping using the IBD probabilities in a mixed model framework, using the [LMMsolver](https://biometris.github.io/LMMsolver) R package. This will be done using two example data sets. The first data set is a barley data set for awn length described in @Liller2017-jz. The second data set is a maize data set, the dent panel of the EU-NAM maize project (@Giraud2014) 
 
-## IBD Calculations
+## Theoretical background
 
-The calculations of the IBDs are based on Hidden Markov Models (HMM) and inheritance vectors and are performed using the [statgenIBD](https://biometris.github.io/statgenIBD) R package. For details of the theory see @Lander1987 and @Huang2011. It is also possible to import IBD probabilities computed using the [RABBIT](https://github.com/chaozhi/RABBIT) software [@Zheng2014; @Zheng2015; @Zheng2018].
+### IBD Calculations
 
-### Population types
+The calculations of the IBDs are based on Hidden Markov Models (HMM) and inheritance vectors and are performed using the [statgenIBD](https://biometris.github.io/statgenIBD) R package. For details of the theory see @Lander1987 and @Huang2011. It is also possible to import IBD probabilities computed using the [RABBIT](https://github.com/chaozhi/RABBIT) software [@Zheng2014; @Zheng2015; @Zheng2018]. Using the `statgenIBD` package, IBD probabilities can be calculated for many different types of populations. See [the statgenIBD vignette](https://biometris.github.io/statgenIBD/articles/IBDCalculations.html) for an overview of these populations. Using RABBIT more complex populations such as MAGIC can also be analyzed.
 
-In the `statgenIBD` package, IBD probabilities can be calculated for many different types of populations. In the following table all supported populations are listed. Note that the value of x in the population types is variable, with its maximum value depicted in the last column. Using RABBIT more complex populations such as MAGIC can also be analyzed.
+### QTL Mapping
 
-+---------------------+------------+------------------------------------------------------------+------------+
-| **Population type** | **Cross**  | **Description**                                            | **max. x** |
-+=====================+============+============================================================+============+
-| DH                  | biparental | doubled haploid population                                 |            |
-+---------------------+------------+------------------------------------------------------------+------------+
-| Fx                  | biparental | Fx population (F1, followed by x-1 generations of selfing) | 8          |
-+---------------------+------------+------------------------------------------------------------+------------+
-| FxDH                | biparental | Fx, followed by DH generation                              | 8          |
-+---------------------+------------+------------------------------------------------------------+------------+
-| BCx                 | biparental | backcross, second parent is recurrent parent               | 9          |
-+---------------------+------------+------------------------------------------------------------+------------+
-| BCxDH               | biparental | BCx, followed by DH generation                             | 9          |
-+---------------------+------------+------------------------------------------------------------+------------+
-| BC1Sx               | biparental | BC1, followed by x generations of selfing                  | 7          |
-+---------------------+------------+------------------------------------------------------------+------------+
-| BC1SxDH             | biparental | BC1, followed by x generations of selfing and DH           | 6          |
-+---------------------+------------+------------------------------------------------------------+------------+
-| C3                  | three-way  | three way cross: (AxB) x C                                 |            |
-+---------------------+------------+------------------------------------------------------------+------------+
-| C3DH                | three-way  | C3, followed by DH generation                              |            |
-+---------------------+------------+------------------------------------------------------------+------------+
-| C3Sx                | three-way  | C3, followed by x generations of selfing                   | 7          |
-+---------------------+------------+------------------------------------------------------------+------------+
-| C3SxDH              | three-way  | C3, followed by x generations of selfing and DH generation | 6          |
-+---------------------+------------+------------------------------------------------------------+------------+
-| C4                  | four-way   | four-way cross: (AxB) x (CxD)                              |            |
-+---------------------+------------+------------------------------------------------------------+------------+
-| C4DH                | four-way   | C4, followed by DH generation                              |            |
-+---------------------+------------+------------------------------------------------------------+------------+
-| C4Sx                | four-way   | C4, followed by x generations of selfing                   | 6          |
-+---------------------+------------+------------------------------------------------------------+------------+
-| C4SxDH              | four-way   | C4, followed by x generations of selfing and DH generation | 6          |
-+---------------------+------------+------------------------------------------------------------+------------+
+The actual QTL mapping can be done in two steps. First we can do a Simple Interval Mapping (SIM) to get a global idea of the QTL profile. After that Composite Interval Mapping (CIM) can be done.     
 
-### Example IBD Calculations
+We follow the methods described in @Li2021 for QTL mapping. In the first step a model without markers is fitted:
 
-As an example for performing IBD calculations for a multi-parent population we use data from a maize NAM population described in @Giraud2014. The NAM population consists of 10 bi-parental doubled haploid (DH) crosses with central parent F353. The total population consists of 841 individuals. Several traits were measured in four locations across Europe. In each location an incomplete block design was used. We calculated the best linear unbiased estimations (BLUEs) of those traits using the R package [statgenSTA](https://biometris.github.io/statgenSTA). As an example, we perform QTL mapping for only the mean value of the number of days to silking ("mean_DtSILK") across all locations. The data for this population is available from the package in zipped format.
+$$y = X\beta + \varepsilon, \quad \varepsilon \sim { }N\left( {0, \oplus_{k = 1}^{F} I_{{n_{k} }} \sigma_{{\varepsilon_{k} }}^{2} } \right),$$
+where $y$ is a vector with phenotypes, $X$ the design matrix for the cross structure, $\beta$ a vector of fixed cross intercepts, and the residual term $\varepsilon$ has a cross-specific variance covariance structure  $\oplus_{k = 1}^{F} I_{{n_{k} }}$ in which $\sigma_{\varepsilon_{k}}^{2}$ is the residual variance of the $k^{th}$ cross with family size $n_{k}$. For an n-way cross where $k = 1$, e.g. MAGIC designs, the variance covariance structure of residual term is homogeneous.
+
+Then for each of the evaluation points $q$ in the map a second model is fitted:
+
+$$y = X\beta + M_{q} a_{q} + \varepsilon, a_{q} \sim { }N\left( {0,I_{P} \sigma_{q}^{2} } \right), \varepsilon \sim { }N\left( {0, \oplus_{k = 1}^{F} I_{{n_{k} }} \sigma_{{\varepsilon_{k} }}^{2} } \right),$$
+where $M_{q}$ is the design matrix containing the expected number of parental alleles as a function of IBD probabilities, $a_{q}$ is the vector of random parental effects with variance covariance structure $I_{P} \sigma_{q}^{2}$, where $\sigma_{q}^{2}$ is the genetic variance of the QTL effects at P parents.
+
+Variance components of a putative QTL from the two models are evaluated to perform the likelihood ratio test (LRT). The p-value is calculated using a $\chi^2$ mixture approximation for the Likelihood Ratio Test. 
+
+For CIM the first steps are the same. However after the first round of scanning the QTL with the highest $-10log(p)$ value is added as a cofactor in the model and a new round of scanning is done. This is repeated until no new QTLs are found with a $-10log(p)$ value above a predefined threshold, or until the predefined maximum number of cofactors is added to the model. In a region of specified width around a cofactor no new cofactors can be detected.
+
+## Example maize
+
+As a first example for performing IBD calculations and QTL mapping for a multi-parent population we use data from a maize NAM population described in @Giraud2014. The NAM population consists of 10 bi-parental doubled haploid (DH) crosses with central parent F353. The total population consists of 841 individuals. Several traits were measured in four locations across Europe. In each location an incomplete block design was used. We calculated the best linear unbiased estimations (BLUEs) of those traits using the R package [statgenSTA](https://biometris.github.io/statgenSTA). As an example, we perform QTL mapping for only the mean value of the number of days to silking ("mean_DtSILK") across all locations. The data for this population is available from the package in zipped format.
 
 Before doing QTL detection we compute IBD probabilities on a grid of positions along the genome. This can be done using the `calcIBDmpp` function in the `statgenMPP` package. To perform IBD calculations a cross file is required for each of the populations. These files should be a tab-delimited file with first column ID identifying the genotype. The following columns should contain marker information. The first rows should contain the parents used in the cross. As an example, the file for the first cross starts like this:
 
@@ -86,7 +68,7 @@ Before doing QTL detection we compute IBD probabilities on a grid of positions a
 | CFD02-003 | 2 | 2 | 1 | ... |
 | CFD02-006 | 2 | 2 | 1 | ... |
 
-A map file is also required. This should also be a tab-delimited file with three columns, "marker name", "chromosome" and "position". The map file has to be identical for all crosses.
+A map file is also required. This should also be a tab-delimited file with three columns, "marker name", "chromosome" and "position". The map file cannot contain a header and has to be identical for all crosses.
 
 Phenotypic data can be added as a `data.frame` when computing IBD probabilities. Such a `data.frame` should have a first column "genotype" and all other columns have to be numerical. For the maize NAM population the `data.frame` with phenotypic data starts like this:
 
@@ -139,7 +121,7 @@ With `calcIBDmpp` IBD probabilities are computed on a grid for each of the cross
 summary(maizeMPP)
 ```
 
-To get a further idea about the population and the computed IBD probabilities we can visualize the results. First we have a look at structure of the pedigree of the population using `plotType = "pedigree"` to get a genereal idea of what the design looks like.
+To get a further idea about the population and the computed IBD probabilities we can visualize the results. First we have a look at structure of the pedigree of the population using `plotType = "pedigree"` to get a general idea of what the design looks like.
 
 ```{r plotPmaizeIBD}
 ## Plot structure of the pedigree.
@@ -161,72 +143,7 @@ Finally we visualize the computed IBD probabilities across the genome for a sele
 plot(maizeMPP, plotType = "singleGeno", genotype = "CFD02-003")
 ```
 
-### Example RABBIT
-
-Instead of performing IBD calculations directly with the package, it is also possible to import IBD probabilities computed using RABBIT. The main advantage of using RABBIT for IBD calculations is that it can handle complex pedigree populations and therefore can also be used in cases where the population structure is more complex than those described in the table above, e.g. in the NAM population described before.
-
-As an example we use a barley population described in @Liller2017-jz. This MPP design consists of 5 parents. Four wild parents were crossed with the cultivar Morex and then backcrossed with Morex once. Individuals from the four families from the backcrosses were then crossed with each other as in a full diallel design, which generated six F6 families through five generations of selfing. The trait of interest for this population is awn length ("Awn_length"). As for the NAM population, the data for this population is available in zipped format in the package.
-
-RABBIT output can be read using the `readRABBIT` function in `statgenMPP`. This has as input the standard RABBIT output summary file and the pedigree file that needs to be provided to RABBIT as well. This pedigree file is an optional input and is only used for plotting the pedigree structure of the population. Without it QTL mapping can still be performed. As for `calcIBDmpp` the phenotypic data has to be provided as a `data.frame`. This `data.frame` has been included in the package. 
-
-```{r barleyIBD}
-## Specify files containing RABBIT output.
-## Extract in a temporary directory.
-tempDir <- tempdir()
-inFile <- unzip(system.file("extdata/barley/barley_magicReconstruct.zip", 
-                            package = "statgenMPP"), exdir = tempDir)
-
-## Specify pedigree file.
-pedFile <- system.file("extdata/barley/barley_pedInfo.csv",
-                       package = "statgenMPP")
-
-## Read phenotypic data.
-data("barleyPheno")
-
-## read RABBIT output. 
-barleyMPP <- readRABBIT(infile = inFile,
-                        pedFile = pedFile,
-                        pheno = barleyPheno)
-```
-
-As for the maize example we can plot the imported data to get a first idea of its content.
-
-```{r plotPbarleyIBD}
-## Plot structure of the pedigree.
-plot(barleyMPP, plotType = "pedigree")
-```
-
-```{r plotGMbarleyIBD}
-## Plot genetic map.
-plot(barleyMPP, plotType = "genMap")
-```
-
-```{r plotAGbarleyIBD}
-## Plot IBD probabilities for genotype AB-13-1-1-2
-plot(barleyMPP, plotType = "singleGeno", genotype = "AB-13-1-1-2")
-```
-
-## QTL Mapping
-
-The actual QTL mapping can be done in two steps. First we can do a Simple Interval Mapping (SIM) to get a global idea of the QTL profile. After that Composite Interval Mapping (CIM) can be done.     
-
-We follow the methods described in @Li2021 for QTL mapping. In the first step a model without markers is fitted:
-
-$$y = X\beta + \varepsilon, \quad \varepsilon \sim { }N\left( {0, \oplus_{k = 1}^{F} I_{{n_{k} }} \sigma_{{\varepsilon_{k} }}^{2} } \right),$$
-where $y$ is a vector with phenotypes, $X$ the design matrix for the cross structure, $\beta$ a vector of fixed cross intercepts, and the residual term $\varepsilon$ has a cross-specific variance covariance structure  $\oplus_{k = 1}^{F} I_{{n_{k} }}$ in which $\sigma_{{\varepsilon_{k} }}^{2} $ is the residual variance of the $k^{th}$ cross with family size $n_{k}$. For an n-way cross where $k = 1$, e.g. MAGIC designs, the variance covariance structure of residual term is homogeneous.
-
-Then for each of the evaluation points $q$ in the map a second model is fitted:
-
-$$y = X\beta + M_{q} a_{q} + \varepsilon, a_{q} \sim { }N\left( {0,I_{P} \sigma_{q}^{2} } \right), \varepsilon \sim { }N\left( {0, \oplus_{k = 1}^{F} I_{{n_{k} }} \sigma_{{\varepsilon_{k} }}^{2} } \right),$$
-where $M_{q}$ is the design matrix containing the expected number of parental alleles as a function of IBD probabilities, $a_{q}$ is the vector of random parental effects with variance covariance structure $I_{P} \sigma_{q}^{2}$, where $\sigma_{q}^{2}$ is the genetic variance of the QTL effects at P parents.
-
-Variance components of a putative QTL from the two models are evaluated to perform the likelihood ratio test (LRT). The p-value is calculated using a $\chi^2$ mixture approximation for the Likelihood Ratio Test. 
-
-For CIM the first steps are the same. However after the first round of scanning the QTL with the highest $-10log(p)$ value is added as a cofactor in the model and a new round of scanning is done. This is repeated until no new QTLs are found with a $-10log(p)$ value above the predefined `threshold`, or until the predefined maximum number of cofactors (`maxCofactors`) is added to the model. In a region of width `QTLwindow` around a cofactor no new cofactors can be detected.
-
-#### Example maize
-
-Going back to our maize example we can first perform SIM.
+Using the computed IBD probabilities we can now do the actual QTL Mapping using the `selQTLmpp` function. First we perform a SIM by setting `maxCofactors = 0`. Our trait of interest, mean_DtSILK, is specified in the `trait` argument of the function. 
 
 ```{r saveMaize, include=FALSE}
 ## Use saved data to speed up vignette building.
@@ -240,14 +157,14 @@ maizeSIM <- selQTLmpp(MPPobj = maizeMPP,
                       maxCofactors = 0)
 ```
 
-The results of the SIM can be plotted using `plot` function with `plotType = "QTLProfile"`. 
+The results of the SIM can be plotted using  the `plot` function with `plotType = "QTLProfile"`. 
 
 ```{r QPmaizeSIM}
 ## Plot QTL Profile for maize SIM.
 plot(maizeSIM, plotType = "QTLProfile")
 ```
 
-Now we can do CIM. Based on the profile plot for the SIM the threshold is set to 5 to restrict a bit the number of QTLs that will be detected.
+Now we can do CIM, again using the `selQTLmpp` function. We don't specify the `maxCofactors` to let the algorithm determine the number of cofactors based on the threshold and QTLwindow. Based on the profile plot for the SIM the `threshold` is set to 5 to restrict a bit the number of QTLs that will be detected. The `QTLwindow` is not specified and therefore left at its default value of 10.
 
 ```{r maizeCIM, eval=FALSE}
 ## Perform composite interval mapping.
@@ -298,6 +215,61 @@ It is also possible to only extract the markers that are either QTLs or within t
 maizeCIMQTL <- maizeCIM$signSnp$pheno
 head(maizeCIMQTL[, c(1:8, 18)])
 ```
+
+## Example barley
+
+Instead of performing IBD calculations directly with the package, it is also possible to import IBD probabilities computed using RABBIT. The main advantage of using RABBIT for IBD calculations is that it can handle complex pedigree populations and therefore can also be used in cases where the population structure is more complex than those that can be computed using `statgenIBD`, e.g. in the maize NAM population described before.
+
+As an example we use a barley population described in @Liller2017-jz. This MPP design consists of 5 parents. Four wild parents were crossed with the cultivar Morex and then backcrossed with Morex once. Individuals from the four families from the backcrosses were then crossed with each other as in a full diallel design, which generated six F6 families through five generations of selfing. The trait of interest for this population is awn length ("Awn_length"). As for the maize NAM population, the data for this population is available in zipped format in the package.
+
+RABBIT output can be read using the `readRABBIT` function in `statgenMPP`. This has as input the standard RABBIT output summary file and the pedigree file that needs to be provided to RABBIT as well. This pedigree file is an optional input and is only used for plotting the pedigree structure of the population. Without it QTL mapping can still be performed. As for `calcIBDmpp` the phenotypic data has to be provided as a `data.frame`. This `data.frame` has been included in the package. 
+
+```{r barleyIBD}
+## Specify files containing RABBIT output.
+## Extract in a temporary directory.
+tempDir <- tempdir()
+inFile <- unzip(system.file("extdata/barley/barley_magicReconstruct.zip", 
+                            package = "statgenMPP"), exdir = tempDir)
+
+## Specify pedigree file.
+pedFile <- system.file("extdata/barley/barley_pedInfo.csv",
+                       package = "statgenMPP")
+
+## Read phenotypic data.
+data("barleyPheno")
+
+## read RABBIT output. 
+barleyMPP <- readRABBIT(infile = inFile,
+                        pedFile = pedFile,
+                        pheno = barleyPheno)
+```
+
+As for the maize example we can summarize and plot the imported data to get a first idea of its content.
+
+```{r sumPbarleyIBD}
+## Summary
+summary(barleyMPP)
+```
+
+```{r plotPbarleyIBD}
+## Plot structure of the pedigree.
+plot(barleyMPP, plotType = "pedigree")
+```
+
+Performing SIM and CIM for imported RABBIT output works in the same way as for IBD probabilities computed directly in the package. 
+
+```{r barleySIM, warning=FALSE}
+## Perform simple interval mapping.
+barleySIM <- selQTLmpp(MPPobj = barleyMPP,
+                       trait = "Awn_length",
+                       maxCofactors = 0)
+```
+```{r QPbarleySIM}
+## Plot QTL Profile for barley SIM.
+plot(barleySIM, plotType = "QTLProfile")
+```
+
+The plot shows a clear QTL at the end of chromosome 7 as also described in @Liller2017-jz.
 
 ```{r winddown, include = FALSE}
 options(op)
