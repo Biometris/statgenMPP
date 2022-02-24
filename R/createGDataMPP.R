@@ -345,7 +345,6 @@ print.summary.gDataMpp <- function(x,
 #' \item{\code{pedigree}}{ A plot showing the structure of the pedigree of
 #' the population.}
 #' }
-#' \cr
 #' See the respective sections for more details on the plots.
 #'
 #' @section genMap:
