@@ -271,6 +271,8 @@ plot(barleySIM, plotType = "QTLProfile")
 
 The plot shows a clear QTL at the end of chromosome 7 as also described in @Liller2017-jz.
 
+The properties of using statgenMPP for QTL mapping in MPPs have been shown with several examples we demonstrated here. This easy-to-use R package, integrating the HMM method for IBD calculation and the mixed-model approach for QTL mapping, provides us with a general framework to estimate multi-allelic QTL effects in terms of parent origins. 
+
 ```{r winddown, include = FALSE}
 options(op)
 ```
