@@ -52,8 +52,10 @@ reference:
 - contents:
   - calcIBDmpp
   - readRABBIT
-  - plot.gData
-  - summary.gData
+  - plot.gDataMpp
+  - summary.gDataMpp
   - selQTLmpp
   - plot.QTLmpp
   - barleyPheno
+  - maizeSIM
+  - maizeCIM

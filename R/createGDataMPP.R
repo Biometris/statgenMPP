@@ -292,6 +292,8 @@ summary.gDataMpp <- function(object,
 #' @param x An object of class \code{summary.gData}.
 #' @param ... Not used.
 #'
+#' @importFrom utils tail
+#'
 #' @noRd
 #' @export
 print.summary.gDataMpp <- function(x,
