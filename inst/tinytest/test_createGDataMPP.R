@@ -14,10 +14,10 @@ pheno <- read.delim(system.file("extdata/multipop", "AxBxCpheno.txt",
 colnames(pheno)[1] <- "genotype"
 
 ## Compute IBD probabilities.
-expect_silent(ABC <- calcIBDmpp(crossNames = c("AxB", "AxC"),
-                                markerFiles = markerFiles,
-                                pheno = pheno, popType = "F4DH",
-                                mapFile = mapFile, evalDist = 5))
+ABC <- calcIBDmpp(crossNames = c("AxB", "AxC"),
+                  markerFiles = markerFiles,
+                  pheno = pheno, popType = "F4DH",
+                  mapFile = mapFile, evalDist = 5)
 
 ## Check summary.
 
@@ -25,6 +25,13 @@ sumABC <- summary(ABC)
 
 expect_inherits(sumABC, "summary.gDataMpp")
 expect_equal(names(sumABC), c("mapSum", "markerSum", "phenoSum", "covarSum"))
+
+## Check printed output.
+sumABCprnt <- capture.output(summary(ABC))
+expect_true("\tNumber of traits: 3 " %in% sumABCprnt)
+expect_true("\tTraitnames: pheno, geno, error " %in% sumABCprnt)
+expect_true(" AxB:100  " %in% sumABCprnt)
+expect_true(" AxC: 80  " %in% sumABCprnt)
 
 # Function is a copy of function from statgenGWAS except for markerSum bit.
 # Only check that.
@@ -45,6 +52,7 @@ p1a <- plot(ABC, highlight = "EXT_3_30")
 expect_equal(length(p1a$layers), length(p1$layers) + 2)
 
 
-expect_silent(p2 <- plot(ABC, plotType = "allGeno"))
-expect_silent(p3 <- plot(ABC, plotType = "pedigree"))
+expect_silent(p2 <- plot(ABC, plotType = "singleGeno", genotype = "AxB0001"))
+expect_silent(p3 <- plot(ABC, plotType = "allGeno"))
+expect_silent(p4 <- plot(ABC, plotType = "pedigree"))
 

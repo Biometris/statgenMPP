@@ -13,27 +13,51 @@ pheno <- read.delim(system.file("extdata/multipop", "AxBxCpheno.txt",
                                 package = "statgenMPP"))
 colnames(pheno)[1] <- "genotype"
 
+phenoLst <- list(pheno[1:100, ], pheno[101:180, ])
+
 ## Checks for correct input.
+# crossNames.
 expect_error(calcIBDmpp(crossNames = 1),
              "crossNames should be a character vector")
-expect_error(calcIBDmpp(crossNames = "AxB", markerFiles = 1),
-             "markerFiles should be a character vector")
 expect_error(calcIBDmpp(crossNames = "AxB", markerFiles = markerFiles),
              "crossNames and markerFiles should have the same length")
+
+# markerFiles.
+expect_error(calcIBDmpp(crossNames = "AxB", markerFiles = 1),
+             "markerFiles should be a character vector")
 expect_error(calcIBDmpp(crossNames = "AxB", markerFiles = "tst"),
              "The following files don't exist")
+
+# pheno
 expect_error(calcIBDmpp(crossNames = c("AxB", "AxC"), markerFiles = markerFiles,
                         pheno = 1),
-             "pheno should be a data.frame")
+             "pheno should be a data.frame or a list of data.frames")
 expect_error(calcIBDmpp(crossNames = c("AxB", "AxC"), markerFiles = markerFiles,
                         pheno = pheno[, 2:4]),
              "pheno should have a column genotype")
+
+# pheno list.
+expect_error(calcIBDmpp(crossNames = c("AxB", "AxC"), markerFiles = markerFiles,
+                        pheno = list(1, 2)),
+             "pheno should be a data.frame or a list of data.frames")
+expect_error(calcIBDmpp(crossNames = c("AxB", "AxC"), markerFiles = markerFiles,
+                        pheno = list(pheno[1:100, 2:4], pheno[101:180, ])),
+             "All data.frames in pheno should have a column genotype")
+
+# popType
 expect_error(calcIBDmpp(crossNames = c("AxB", "AxC"), markerFiles = markerFiles,
                         pheno = pheno, popType = 1),
              "popType should be a character string of length 1")
+
+# mapFile
 expect_error(calcIBDmpp(crossNames = c("AxB", "AxC"), markerFiles = markerFiles,
                         pheno = pheno, popType = "F4DH", mapFile = 1),
              "mapFile should be a character string of length 1")
+expect_error(calcIBDmpp(crossNames = c("AxB", "AxC"), markerFiles = markerFiles,
+                        pheno = pheno, popType = "F4DH", mapFile = "tst.txt"),
+             "mapFile doesn't exist")
+
+# evalDist
 expect_error(calcIBDmpp(crossNames = c("AxB", "AxC"), markerFiles = markerFiles,
                         pheno = pheno, popType = "F4DH", mapFile = mapFile,
                         evalDist = "a"),
@@ -43,20 +67,24 @@ expect_error(calcIBDmpp(crossNames = c("AxB", "AxC"), markerFiles = markerFiles,
                         evalDist = c(1, 2)),
              "evalDist should be a positive numerical value")
 
+## Large evalDist for faster computations.
 expect_silent(ABC <- calcIBDmpp(crossNames = c("AxB", "AxC"),
                                 markerFiles = markerFiles,
                                 pheno = pheno, popType = "F4DH",
-                                mapFile = mapFile, evalDist = 5))
-
+                                mapFile = mapFile, evalDist = 25))
+expect_silent(ABCPhenoLst <- calcIBDmpp(crossNames = c("AxB", "AxC"),
+                                        markerFiles = markerFiles,
+                                        pheno = phenoLst, popType = "F4DH",
+                                        mapFile = mapFile, evalDist = 25))
 
 ## General structure.
 expect_inherits(ABC, "gDataMpp")
 
 expect_inherits(ABC$map, "data.frame")
-expect_equal(dim(ABC$map), c(95, 2))
+expect_equal(dim(ABC$map), c(15, 2))
 
 expect_inherits(ABC$markers, "array")
-expect_equal(dim(ABC$markers), c(180, 95, 3))
+expect_equal(dim(ABC$markers), c(180, 15, 3))
 
 expect_inherits(ABC$pheno$pheno, "data.frame")
 
@@ -65,3 +93,22 @@ expect_inherits(ABC$covar, "data.frame")
 expect_inherits(attr(ABC, "genoCross"), "data.frame")
 expect_inherits(attr(ABC, "pedigree"), "data.frame")
 
+expect_equal(ABC, ABCPhenoLst)
+
+## Verbose = TRUE
+printOut <- capture.output(
+  ABCVerb <- calcIBDmpp(crossNames = c("AxB", "AxC"),
+                        markerFiles = markerFiles,
+                        pheno = pheno, popType = "F4DH",
+                        mapFile = mapFile, evalDist = 25,
+                        verbose = TRUE))
+expect_true("calculating IBD in cross: AxB." %in% printOut)
+expect_true("reading data .............." %in% printOut)
+expect_true("analysis of family ........" %in% printOut)
+
+## Single cross.
+ABCOne <- calcIBDmpp(crossNames = "AxB",
+                     markerFiles = markerFiles[1],
+                     pheno = pheno, popType = "F4DH",
+                     mapFile = mapFile, evalDist = 25)
+expect_true(all(ABCOne$covar$cross == "AxB"))

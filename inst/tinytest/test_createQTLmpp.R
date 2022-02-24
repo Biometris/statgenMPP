@@ -24,6 +24,12 @@ ABC <- calcIBDmpp(crossNames = c("AxB", "AxC"),
 ## QTL Detection.
 ABC_CIM <- selQTLmpp(MPPobj = ABC, trait = "geno")
 
+## Summary.
+sumABC <- capture.output(summary(ABC_CIM))
+expect_true("\t\tNumber of QTLs: 3 " %in% sumABC)
+expect_true("\t\tSmallest p-value among the QTLs: 1.575304e-31 " %in% sumABC)
+expect_true("\t\tLargest p-value among the QTLs: 4.724905e-17 (-10log(p) value: 16.32561)" %in% sumABC)
+
 ## QTLProfile is a call to manhattan plot in statgenGWAS. Not much to test.
 p1 <- plot(ABC_CIM, plotType = "QTLProfile")
 expect_inherits(p1, "ggplot")
