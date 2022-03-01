@@ -39,6 +39,6 @@ randomQTLmodel <- function(modDat,
                                 group = if (length(Lgrp) > 0) Lgrp,
                                 residual = ~cross,
                                 data = modDat,
-                                tolerance = 1.0e-6)
+                                tolerance = 1.0e-3)
   return(fitMod)
 }
