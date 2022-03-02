@@ -59,7 +59,7 @@ effectPlot <- function(effectDat,
     p <- p +
       ggplot2::geom_tile(ggplot2::aes_string(x = "cumPos", y = "trait",
                                              fill = "effect"),
-                         height = 1, width = 2, data = parEffData) +
+                         height = 1, width = 5, data = parEffData) +
       ggplot2::scale_fill_gradientn(colors = c("blue", "cyan", "white",
                                                "yellow","red"),
                                     values = scales::rescale(c(-1,
@@ -76,5 +76,4 @@ effectPlot <- function(effectDat,
   }
   invisible(p)
 }
-
 
