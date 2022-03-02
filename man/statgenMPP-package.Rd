@@ -13,7 +13,7 @@ For Multi Parent Populations (MPP) Identity By Descend (IBD) probabilities are c
 
 Authors:
 \itemize{
-  \item Wenhao Li \email{wenhao.li@wur.nl} (\href{https://orcid.org/0000-0000-0000-0000}{ORCID})
+  \item Wenhao Li \email{wenhao.li@wur.nl} (\href{https://orcid.org/0000-0001-5719-5775}{ORCID})
   \item Martin Boer \email{martin.boer@wur.nl} (\href{https://orcid.org/0000-0002-1879-4588}{ORCID})
 }
 
