@@ -117,6 +117,9 @@ summary.GWAS <- function(object,
 #' \code{"Chromosomes"}}
 #' \item{\code{yLab}}{A character string, the y-axis label. Default =
 #' \code{"Parents"}}
+#' #' \item{\code{chr}}{A vector of chromosomes to be plotted. By default, all
+#' chromosomes are plotted. Using this option allows restricting the plot to a
+#' subset of chromosomes.}
 #' }
 #'
 #' @section QTL Region Plot:
@@ -128,7 +131,12 @@ summary.GWAS <- function(object,
 #' An extended version of the QTL Profile Plot, in which the QLT profile plot is
 #' combined with the parental effect plot to make it easier to assess the
 #' effects for each specific QTL found.\cr
-#' No extra parameter options.
+#' Extra parameter options:
+#' \describe{
+#' \item{\code{chr}}{A vector of chromosomes to be plotted. By default, all
+#' chromosomes are plotted. Using this option allows restricting the plot to a
+#' subset of chromosomes.}
+#' }
 #'
 #' @param x An object of class \code{QTLmpp}.
 #' @param ... further arguments to be passed on to the actual plotting
@@ -193,7 +201,13 @@ plot.QTLmpp <- function(x,
     GWAResult <- x$GWAResult[[1]]
     ## Get peaks.
     signSnp <- x$signSnp[[1]]
-    signSnp <- signSnp[signSnp[["snpStatus"]] == "significant SNP", ]
+    if (plotType != "QTLRegion" && !is.null(dotArgs$chr)) {
+      GWAResult <- droplevels(GWAResult[GWAResult$chr %in% dotArgs$chr, ])
+      if (nrow(GWAResult) == 0) {
+        stop("Select at least one valid chromosome for plotting.\n")
+      }
+      signSnp <- droplevels(signSnp[signSnp$chr %in% dotArgs$chr, ])
+    }
     ## Compute chromosome boundaries and map.
     GWAResComp <- GWAResult[GWAResult[["trait"]] == GWAResult[["trait"]][1], ]
     GWAResComp[["chr"]] <- factor(GWAResComp[["chr"]],
@@ -232,15 +246,6 @@ plot.QTLmpp <- function(x,
       } else {
         signSnpLong <- NULL
       }
-      ## Compute chromosome boundaries.
-      GWAResult <- GWAResult[!is.na(GWAResult$pos), ]
-      ## Select specific chromosome(s) for plotting.
-      if (!is.null(dotArgs$chr)) {
-        GWAResult <- GWAResult[GWAResult$chr %in% dotArgs$chr, ]
-        if (nrow(GWAResult) == 0) {
-          stop("Select at least one valid chromosome for plotting.\n")
-        }
-      }
       p <- do.call(effectPlot,
                    args = c(list(effectDat = effectDat,
                                  signSnp = signSnpLong,
@@ -253,6 +258,8 @@ plot.QTLmpp <- function(x,
                                                             "map", "chrBoundaries"))]))
 
     } else if (plotType == "QTLRegion") {
+      ## Restrict signSnp to QTLs.
+      signSnp <- signSnp[signSnp[["snpStatus"]] == "significant SNP", ]
       p <- do.call(geneticMapPlot,
                    args = c(list(map = map,
                                  highlight = if (nrow(signSnp) > 0) signSnp,
@@ -268,11 +275,11 @@ plot.QTLmpp <- function(x,
       ## Construct data for vertical lines in QTL profile.
       ## Center line in empty space between chromosomes.
       vertDat <- addPos
-      minPos <-  aggregate(x = GWAResComp$pos, by = list(GWAResComp$chr),
-                           FUN = min)
+      minPos <- aggregate(x = GWAResComp$pos, by = list(GWAResComp$chr),
+                          FUN = min)
       vertDat[["x"]] <- vertDat[["add"]] + c(0, minPos[-1, "x"]) / 2
       ## Add title here to assure font is the same as for other plots.
-      p1 <- plot(x, plotType = "QTLProfile", title = title,
+      p1 <- plot(x, chr = dotArgs$chr, plotType = "QTLProfile", title = title,
                  output = FALSE) +
         ggplot2::geom_vline(ggplot2::aes_string(xintercept = "x"),
                             linetype = "dashed", data = vertDat[-1, ]) +
@@ -285,7 +292,8 @@ plot.QTLmpp <- function(x,
                                                             color = "black",
                                                             size = 0.5,
                                                             linetype = "solid"))
-      p2 <- plot(x, plotType = "parEffs", title = "", output = FALSE) +
+      p2 <- plot(x, chr = dotArgs$chr, plotType = "parEffs", title = "",
+                 output = FALSE) +
         ggplot2::theme(plot.margin = ggplot2::unit(c(0, 0, 0, 0), "cm"))
       ## Get widths.
       g1 <- ggplot2::ggplotGrob(p1)

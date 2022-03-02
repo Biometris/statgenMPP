@@ -76,6 +76,9 @@ Extra parameter options:
 \code{"Chromosomes"}}
 \item{\code{yLab}}{A character string, the y-axis label. Default =
 \code{"Parents"}}
+#' \item{\code{chr}}{A vector of chromosomes to be plotted. By default, all
+chromosomes are plotted. Using this option allows restricting the plot to a
+subset of chromosomes.}
 }
 }
 
@@ -91,7 +94,12 @@ No extra parameter options.
 An extended version of the QTL Profile Plot, in which the QLT profile plot is
 combined with the parental effect plot to make it easier to assess the
 effects for each specific QTL found.\cr
-No extra parameter options.
+Extra parameter options:
+\describe{
+\item{\code{chr}}{A vector of chromosomes to be plotted. By default, all
+chromosomes are plotted. Using this option allows restricting the plot to a
+subset of chromosomes.}
+}
 }
 
 \examples{
