@@ -1,14 +1,14 @@
-#' S3 Class gDataMpp
+#' S3 Class gDataMPP
 #'
-#' \code{createGDataMPP} creates an object of S3 class gDataMpp with genotypic and
+#' \code{createGDataMPP} creates an object of S3 class gDataMPP with genotypic and
 #' phenotypic data for usage in further analysis. All input to the function is
 #' optional, however at least one input should be provided. It is possible to
-#' provide an existing \code{gDataMpp} object as additional input in which case
+#' provide an existing \code{gDataMPP} object as additional input in which case
 #' data is added to this object. Existing data will be overwritten with a
 #' warning.
 #'
-#' @param gDataMpp An optional gDataMpp object to be modified. If \code{NULL}, a new
-#' gDataMpp object is created.
+#' @param gDataMPP An optional gDataMPP object to be modified. If \code{NULL}, a new
+#' gDataMPP object is created.
 #' @param geno A matrix or data.frame with genotypes in the rows and markers in
 #' the columns. A matrix from the \code{matrix} in the base package may be
 #' provided as well as as matrix from the Matrix package.\cr
@@ -54,7 +54,7 @@
 #'  Matrix package.}
 #' \item{\code{covar}}{a data.frame with extra covariates.}
 #'
-#' @seealso \code{\link{summary.gDataMpp}}
+#' @seealso \code{\link{summary.gDataMPP}}
 #'
 #' @examples
 #' set.seed(1234)
@@ -72,27 +72,27 @@
 #'                     stringsAsFactors = FALSE)
 #' dimnames(pheno) = list(paste0("G", 1:3), c("genotype", paste0("T", 1:4)))
 #'
-#' ## Combine all data in gDataMpp object.
+#' ## Combine all data in gDataMPP object.
 #' gDataMPP <- createGDataMPP(geno = geno, map = map, pheno = pheno)
 #' summary(gDataMPP)
 #'
 #' ## Construct covariate.
 #' covar <- data.frame(C1 = c("a", "a", "b"), row.names = paste0("G", 1:3))
 #'
-#' ## Add covariates to previously created gDataMpp object.
-#' gData2 <- createGDataMPP(gDataMpp = gDataMPP, covar = covar)
+#' ## Add covariates to previously created gDataMPP object.
+#' gData2 <- createGDataMPP(gDataMPP = gDataMPP, covar = covar)
 #'
 #' @noRd
 #' @keywords internal
-createGDataMPP <- function(gDataMpp = NULL,
+createGDataMPP <- function(gDataMPP = NULL,
                            geno = NULL,
                            map = NULL,
                            kin = NULL,
                            pheno = NULL,
                            covar = NULL) {
-  ## Check gDataMpp
-  if (!is.null(gDataMpp) && !inherits(gDataMpp, "gDataMpp")) {
-    stop("Provided gDataMpp object should be of class gDataMpp.\n")
+  ## Check gDataMPP
+  if (!is.null(gDataMPP) && !inherits(gDataMPP, "gDataMPP")) {
+    stop("Provided gDataMPP object should be of class gDataMPP.\n")
   }
   ## Check that at least one input argument, other than gData, is provided.
   if (is.null(geno) && is.null(map) && is.null(kin) && is.null(pheno) &&
@@ -101,18 +101,18 @@ createGDataMPP <- function(gDataMpp = NULL,
          "provided.\n")
   }
   if (is.null(geno) || length(dim(geno)) == 2) {
-    gDataNw <- statgenGWAS::createGData(gData = gDataMpp, geno = geno, map = map,
+    gDataNw <- statgenGWAS::createGData(gData = gDataMPP, geno = geno, map = map,
                                         kin = kin, pheno = pheno, covar = covar)
   } else {
     if (!is.null(map) || !is.null(pheno)) {
-      gDataNw <- statgenGWAS::createGData(gData = gDataMpp, map = map,
+      gDataNw <- statgenGWAS::createGData(gData = gDataMPP, map = map,
                                           pheno = pheno)
       map <- gDataNw$map
       pheno <- gDataNw$pheno
     } else {
       gDataNw <- structure(list(map = NULL, markers = NULL, pheno = NULL,
                                 kinship = NULL, covar = NULL),
-                           class = "gDataMpp")
+                           class = "gDataMPP")
     }
     ## Modify geno.
     if (!is.null(geno)) {
@@ -196,8 +196,8 @@ createGDataMPP <- function(gDataMpp = NULL,
                   paste(genoMrk$genoMarker, collapse = "\n"), call. = FALSE)
         }
       }
-      if (!is.null(gDataMpp$markers)) {
-        ## gDataMpp already contained a markers object. Overwrite with a warning.
+      if (!is.null(gDataMPP$markers)) {
+        ## gDataMPP already contained a markers object. Overwrite with a warning.
         warning("existing geno will be overwritten.\n", call. = FALSE)
       }
       gDataNw$markers <- markers
@@ -208,16 +208,16 @@ createGDataMPP <- function(gDataMpp = NULL,
                                                            covar = covar))
     }
   }
-  class(gDataNw) <- c("gDataMpp", class(gDataNw))
+  class(gDataNw) <- c("gDataMPP", class(gDataNw))
   return(gDataNw)
 }
 
 
-#' Summary function for the class \code{gDataMpp}
+#' Summary function for the class \code{gDataMPP}
 #'
-#' Gives a summary for an object of S3 class \code{gDataMpp}.
+#' Gives a summary for an object of S3 class \code{gDataMPP}.
 #'
-#' @param object An object of class \code{gDataMpp}.
+#' @param object An object of class \code{gDataMPP}.
 #' @param ... Not used.
 #' @param trials A vector of trials to include in the summary. These can
 #' be either numeric indices or character names of list items in \code{pheno}.
@@ -235,10 +235,10 @@ createGDataMPP <- function(gDataMpp = NULL,
 #' covariates within the trial.}
 #' }
 #' All components are only present in the output if the corresponding content is
-#' present in the \code{gDataMpp} object.
+#' present in the \code{gDataMPP} object.
 #'
 #' @export
-summary.gDataMpp <- function(object,
+summary.gDataMPP <- function(object,
                              ...,
                              trials = NULL) {
   if (length(dim(object$markers)) == 2) {
@@ -280,7 +280,7 @@ summary.gDataMpp <- function(object,
       totSum$covarSum <- covarSum
     }
     return(structure(totSum,
-                     class = "summary.gDataMpp"))
+                     class = "summary.gDataMPP"))
   }
 }
 
@@ -296,7 +296,7 @@ summary.gDataMpp <- function(object,
 #'
 #' @noRd
 #' @export
-print.summary.gDataMpp <- function(x,
+print.summary.gDataMPP <- function(x,
                                    ...) {
   if (!is.null(x$mapSum)) {
     cat("map\n")
@@ -332,9 +332,9 @@ print.summary.gDataMpp <- function(x,
   }
 }
 
-#' Plot function for the class \code{gDataMpp}
+#' Plot function for the class \code{gDataMPP}
 #'
-#' Creates a plot of an object of S3 class \code{gDataMpp}. The following types
+#' Creates a plot of an object of S3 class \code{gDataMPP}. The following types
 #' of plot can be made:
 #' \itemize{
 #' \item{\code{genMap}}{ A plot of the genetic map.}
@@ -364,9 +364,9 @@ print.summary.gDataMpp <- function(x,
 #'
 #' @section pedigree:
 #' A plot is made showing the structure of the pedigree for the population in
-#' the \code{gDataMpp} object.
+#' the \code{gDataMPP} object.
 #'
-#' @param x An object of class \code{gDataMpp}.
+#' @param x An object of class \code{gDataMPP}.
 #' @param ... Further arguments to be passed on to the actual plotting
 #' functions.
 #' @param plotType A character string indicating the type of plot to be made.
@@ -386,7 +386,7 @@ print.summary.gDataMpp <- function(x,
 #'
 #'
 #' ## Compute IBD probabilities for simulated population - AxB, AxC.
-#' ABC <- calcIBDmpp(crossNames = c("AxB", "AxC"),
+#' ABC <- calcIBDMPP(crossNames = c("AxB", "AxC"),
 #'                   markerFiles = c(system.file("extdata/multipop", "AxB.txt",
 #'                                               package = "statgenMPP"),
 #'                                   system.file("extdata/multipop", "AxC.txt",
@@ -415,7 +415,7 @@ print.summary.gDataMpp <- function(x,
 #' @return A ggplot object is invisibly returned.
 #'
 #' @export
-plot.gDataMpp <- function(x,
+plot.gDataMPP <- function(x,
                           ...,
                           plotType = c("genMap", "allGeno", "singleGeno",
                                        "pedigree"),

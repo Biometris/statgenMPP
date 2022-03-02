@@ -5,7 +5,7 @@
 \alias{maizeSIM}
 \title{Pre-computed SIM output}
 \format{
-An object of class \code{QTLmpp} (inherits from \code{GWAS}) of length 5.
+An object of class \code{QTLMPP} (inherits from \code{GWAS}) of length 5.
 }
 \usage{
 maizeSIM

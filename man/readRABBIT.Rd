@@ -19,7 +19,7 @@ information. if \code{pedFile} is not specified also a column "cross"
 indicating the cross the genotype comes from is required.}
 }
 \value{
-A \code{gDataMpp} object with map and markers corresponding to the
+A \code{gDataMPP} object with map and markers corresponding to the
 imported information in the imported .csv file.
 }
 \description{

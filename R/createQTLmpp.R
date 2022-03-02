@@ -1,8 +1,8 @@
-#' Summary function for the class \code{QTLmpp}
+#' Summary function for the class \code{QTLMPP}
 #'
-#' Gives a summary for an object of S3 class \code{QTLmpp}.
+#' Gives a summary for an object of S3 class \code{QTLMPP}.
 #'
-#' @param object An object of class \code{QTLmpp}.
+#' @param object An object of class \code{QTLMPP}.
 #' @param ... Not used.
 #'
 #' @examples
@@ -14,7 +14,7 @@
 #' colnames(pheno)[1] <- "genotype"
 #'
 #' ## Compute IBD probabilities for simulated population - AxB, AxC.
-#' ABC <- calcIBDmpp(crossNames = c("AxB", "AxC"),
+#' ABC <- calcIBDMPP(crossNames = c("AxB", "AxC"),
 #'                   markerFiles = c(system.file("extdata/multipop", "AxB.txt",
 #'                                               package = "statgenMPP"),
 #'                                   system.file("extdata/multipop", "AxC.txt",
@@ -26,7 +26,7 @@
 #'                   evalDist = 5)
 #'
 #' ## Composite Interval Mapping.
-#' ABC_CIM <- selQTLmpp(ABC, trait = "pheno")
+#' ABC_CIM <- selQTLMPP(ABC, trait = "pheno")
 #'
 #' ## Print summary.
 #' summary(ABC_CIM)
@@ -69,9 +69,9 @@ summary.GWAS <- function(object,
   }
 }
 
-#' Plot function for the class \code{QTLmpp}
+#' Plot function for the class \code{QTLMPP}
 #'
-#' Creates a plot of an object of S3 class \code{QTLmpp}. The following types of
+#' Creates a plot of an object of S3 class \code{QTLMPP}. The following types of
 #' plot can be made:
 #' \itemize{
 #' \item{QTLProfile}{ A QTL profile plot, i.e. a plot of \eqn{-10log(p)} values
@@ -138,7 +138,7 @@ summary.GWAS <- function(object,
 #' subset of chromosomes.}
 #' }
 #'
-#' @param x An object of class \code{QTLmpp}.
+#' @param x An object of class \code{QTLMPP}.
 #' @param ... further arguments to be passed on to the actual plotting
 #' functions.
 #' @param plotType A character string indicating the type of plot to be made.
@@ -157,7 +157,7 @@ summary.GWAS <- function(object,
 #'
 #'
 #' ## Compute IBD probabilities for simulated population - AxB, AxC.
-#' ABC <- calcIBDmpp(crossNames = c("AxB", "AxC"),
+#' ABC <- calcIBDMPP(crossNames = c("AxB", "AxC"),
 #'                   markerFiles = c(system.file("extdata/multipop", "AxB.txt",
 #'                                               package = "statgenMPP"),
 #'                                   system.file("extdata/multipop", "AxC.txt",
@@ -169,7 +169,7 @@ summary.GWAS <- function(object,
 #'                   evalDist = 5)
 #'
 #' ## Composite Interval Mapping.
-#' ABC_CIM <- selQTLmpp(ABC, trait = "pheno")
+#' ABC_CIM <- selQTLMPP(ABC, trait = "pheno")
 #'
 #' ## QTL Profile plot.
 #' plot(ABC_CIM, plotType = "QTLProfile")
@@ -185,7 +185,7 @@ summary.GWAS <- function(object,
 #' }
 #'
 #' @export
-plot.QTLmpp <- function(x,
+plot.QTLMPP <- function(x,
                         ...,
                         plotType = c("QTLProfile", "parEffs", "QTLRegion",
                                      "QTLProfileExt"),

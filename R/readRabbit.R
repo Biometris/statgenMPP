@@ -14,7 +14,7 @@
 #' information. if \code{pedFile} is not specified also a column "cross"
 #' indicating the cross the genotype comes from is required.
 #'
-#' @return A \code{gDataMpp} object with map and markers corresponding to the
+#' @return A \code{gDataMPP} object with map and markers corresponding to the
 #' imported information in the imported .csv file.
 #'
 #' @examples
@@ -163,7 +163,7 @@ readRABBIT <- function(infile,
     genoCross[["geno"]] <- rownames(covar)
     popType <- "RABBIT"
   }
-  ## Create gDataMpp object.
+  ## Create gDataMPP object.
   res <- createGDataMPP(geno = markArr, map = map, pheno = pheno, covar = covar)
   attr(x = res, which = "popType") <- popType
   attr(x = res, which = "genoCross") <- genoCross

@@ -1,4 +1,4 @@
-### Test selQTLmpp
+### Test selQTLMPP
 
 ## Define input files.
 
@@ -16,13 +16,13 @@ colnames(pheno)[1] <- "genotype"
 ## Compute IBD probabilities.
 
 # High evaldist for faster computations.
-ABC <- calcIBDmpp(crossNames = c("AxB", "AxC"),
+ABC <- calcIBDMPP(crossNames = c("AxB", "AxC"),
                   markerFiles = markerFiles,
                   pheno = pheno, popType = "F4DH",
                   mapFile = mapFile, evalDist = 25)
 
 ## QTL Detection.
-ABC_CIM <- selQTLmpp(MPPobj = ABC, trait = "geno")
+ABC_CIM <- selQTLMPP(MPPobj = ABC, trait = "geno")
 
 ## Summary.
 sumABC <- capture.output(summary(ABC_CIM))

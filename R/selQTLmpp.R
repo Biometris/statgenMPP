@@ -8,8 +8,8 @@
 #' no new markers with a \eqn{-10log(p)} value above the threshold or until
 #' the maximum number of cofactors is reached.
 #'
-#' @param MPPobj An object of class gDataMpp, typically the output of either
-#' \code{\link{calcIBDmpp}} or \code{\link{readRABBIT}}.
+#' @param MPPobj An object of class gDataMPP, typically the output of either
+#' \code{\link{calcIBDMPP}} or \code{\link{readRABBIT}}.
 #' @param trait A character string indicating the trait QTL mapping is done for.
 #' @param QTLwindow A numerical value indicating the window around a QTL that
 #' is considered as part of that QTL.
@@ -20,7 +20,7 @@
 #' cofactors are found.
 #' @param verbose Should progress and intermediate plots be output?
 #'
-#' @return An object of class \code{QTLmpp}
+#' @return An object of class \code{QTLMPP}
 #'
 #' @examples
 #' ## Read phenotypic data.
@@ -31,7 +31,7 @@
 #'
 #'
 #' ## Compute IBD probabilities for simulated population - AxB, AxC.
-#' ABC <- calcIBDmpp(crossNames = c("AxB", "AxC"),
+#' ABC <- calcIBDMPP(crossNames = c("AxB", "AxC"),
 #'                   markerFiles = c(system.file("extdata/multipop", "AxB.txt",
 #'                                               package = "statgenMPP"),
 #'                                   system.file("extdata/multipop", "AxC.txt",
@@ -43,22 +43,22 @@
 #'                   evalDist = 5)
 #'
 #' ## Simple Interval Mapping.
-#' ABC_SIM <- selQTLmpp(ABC, trait = "pheno", maxCofactors = 0)
+#' ABC_SIM <- selQTLMPP(ABC, trait = "pheno", maxCofactors = 0)
 #'
 #' ## Composite Interval Mapping
 #' \dontrun{
-#' ABC_CIM <- selQTLmpp(ABC, trait = "pheno")
+#' ABC_CIM <- selQTLMPP(ABC, trait = "pheno")
 #' }
 #'
 #' @export
-selQTLmpp <- function(MPPobj,
+selQTLMPP <- function(MPPobj,
                       trait = NULL,
                       QTLwindow = 10,
                       threshold = 3,
                       maxCofactors = NULL,
                       verbose = FALSE) {
-  if (!inherits(MPPobj, "gDataMpp")) {
-    stop("MPPobj should be an object of class gDataMpp.\n")
+  if (!inherits(MPPobj, "gDataMPP")) {
+    stop("MPPobj should be an object of class gDataMPP.\n")
   }
   map <- MPPobj$map
   markers <- MPPobj$markers
@@ -166,7 +166,7 @@ selQTLmpp <- function(MPPobj,
                     signSnp = list(pheno = signSnp),
                     thr = list(pheno = setNames(threshold, trait)),
                     GWASInfo = GWASInfo)
-  ## Add QTLmpp class to simplify providing generic functions.
-  class(res) <- c("QTLmpp", class(res))
+  ## Add QTLMPP class to simplify providing generic functions.
+  class(res) <- c("QTLMPP", class(res))
   return(res)
 }

@@ -51,7 +51,7 @@ expect_silent(barleyMPP4 <-
                            pedFile = pedFile, pheno = barleyPheno))
 
 ## General structure.
-expect_inherits(barleyMPP4, "gDataMpp")
+expect_inherits(barleyMPP4, "gDataMPP")
 
 expect_inherits(barleyMPP4$map, "data.frame")
 expect_equal(dim(barleyMPP4$map), c(355, 2))

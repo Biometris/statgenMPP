@@ -7,7 +7,7 @@
 #' @param CIM ...
 #'
 #' @export
-selQTLmppOrig <- function(MPPobj,
+selQTLMPPOrig <- function(MPPobj,
                           QTLwindow = 10,
                           threshold = 3,
                           trait.name = "pheno",

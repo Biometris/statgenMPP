@@ -10,7 +10,7 @@
 #'
 #' @importFrom utils read.table
 #' @export
-calcIBDmppOrig <- function(par.names,
+calcIBDMPPOrig <- function(par.names,
                            cross.names,
                            loc.names,
                            qua.names,

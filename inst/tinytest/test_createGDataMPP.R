@@ -1,4 +1,4 @@
-### Test calcIBDmpp
+### Test calcIBDMPP
 
 ## Define input files.
 
@@ -14,7 +14,7 @@ pheno <- read.delim(system.file("extdata/multipop", "AxBxCpheno.txt",
 colnames(pheno)[1] <- "genotype"
 
 ## Compute IBD probabilities.
-ABC <- calcIBDmpp(crossNames = c("AxB", "AxC"),
+ABC <- calcIBDMPP(crossNames = c("AxB", "AxC"),
                   markerFiles = markerFiles,
                   pheno = pheno, popType = "F4DH",
                   mapFile = mapFile, evalDist = 5)
@@ -23,7 +23,7 @@ ABC <- calcIBDmpp(crossNames = c("AxB", "AxC"),
 
 sumABC <- summary(ABC)
 
-expect_inherits(sumABC, "summary.gDataMpp")
+expect_inherits(sumABC, "summary.gDataMPP")
 expect_equal(names(sumABC), c("mapSum", "markerSum", "phenoSum", "covarSum"))
 
 ## Check printed output.

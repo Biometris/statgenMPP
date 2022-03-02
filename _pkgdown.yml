@@ -50,12 +50,12 @@ articles:
 reference:
 - title: Index
 - contents:
-  - calcIBDmpp
+  - calcIBDMPP
   - readRABBIT
-  - plot.gDataMpp
-  - summary.gDataMpp
-  - selQTLmpp
-  - plot.QTLmpp
+  - plot.gDataMPP
+  - summary.gDataMPP
+  - selQTLMPP
+  - plot.QTLMPP
   - barleyPheno
   - maizeSIM
   - maizeCIM
