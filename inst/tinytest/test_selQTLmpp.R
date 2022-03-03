@@ -29,21 +29,21 @@ expect_error(selQTLMPP(MPPobj = ABC, trait = 1),
              "trait should be a character string of length one present in")
 expect_error(selQTLMPP(MPPobj = ABC, trait = "tst"),
              "trait should be a character string of length one present in")
-expect_error(selQTLMPP(MPPobj = ABC, trait = "geno", QTLwindow = "1"),
+expect_error(selQTLMPP(MPPobj = ABC, trait = "pheno", QTLwindow = "1"),
              "QTLwindow should be a positive numerical value")
-expect_error(selQTLMPP(MPPobj = ABC, trait = "geno", QTLwindow = c(1, 2)),
+expect_error(selQTLMPP(MPPobj = ABC, trait = "pheno", QTLwindow = c(1, 2)),
              "QTLwindow should be a positive numerical value")
-expect_error(selQTLMPP(MPPobj = ABC, trait = "geno", threshold = "1"),
+expect_error(selQTLMPP(MPPobj = ABC, trait = "pheno", threshold = "1"),
              "threshold should be a positive numerical value")
-expect_error(selQTLMPP(MPPobj = ABC, trait = "geno", threshold = c(1, 2)),
+expect_error(selQTLMPP(MPPobj = ABC, trait = "pheno", threshold = c(1, 2)),
              "threshold should be a positive numerical value")
-expect_error(selQTLMPP(MPPobj = ABC, trait = "geno", maxCofactors = "1"),
+expect_error(selQTLMPP(MPPobj = ABC, trait = "pheno", maxCofactors = "1"),
              "maxCofactors should be a positive numerical value")
-expect_error(selQTLMPP(MPPobj = ABC, trait = "geno", maxCofactors = c(1, 2)),
+expect_error(selQTLMPP(MPPobj = ABC, trait = "pheno", maxCofactors = c(1, 2)),
              "maxCofactors should be a positive numerical value")
 
-ABC_SIM <- selQTLMPP(MPPobj = ABC, trait = "geno", maxCofactors = 0)
-ABC_CIM_max <- selQTLMPP(MPPobj = ABC, trait = "geno")
+ABC_SIM <- selQTLMPP(MPPobj = ABC, trait = "pheno", maxCofactors = 0)
+ABC_CIM_max <- selQTLMPP(MPPobj = ABC, trait = "pheno")
 
 ## General structure.
 expect_inherits(ABC_CIM_max, "QTLMPP")
@@ -54,7 +54,7 @@ expect_equal(names(ABC_CIM_max),
 expect_equal_to_reference(ABC_CIM_max, "ABC_CIM_max", tolerance = 1e-6)
 
 ## Option verbose.
-expect_stdout(selQTLMPP(MPPobj = ABC, trait = "geno", maxCofactors = 1,
+expect_stdout(selQTLMPP(MPPobj = ABC, trait = "pheno", maxCofactors = 1,
                         verbose = TRUE),
-              "QTL scan for trait geno, 0 cofactors")
+              "QTL scan for trait pheno, 0 cofactors")
 

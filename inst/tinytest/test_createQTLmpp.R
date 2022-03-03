@@ -11,7 +11,6 @@ mapFile <- system.file("extdata/multipop", "mapfile.txt",
 
 pheno <- read.delim(system.file("extdata/multipop", "AxBxCpheno.txt",
                                 package = "statgenMPP"))
-colnames(pheno)[1] <- "genotype"
 
 ## Compute IBD probabilities.
 
@@ -22,13 +21,13 @@ ABC <- calcIBDMPP(crossNames = c("AxB", "AxC"),
                   mapFile = mapFile, evalDist = 25)
 
 ## QTL Detection.
-ABC_CIM <- selQTLMPP(MPPobj = ABC, trait = "geno")
+ABC_CIM <- selQTLMPP(MPPobj = ABC, trait = "pheno")
 
 ## Summary.
 sumABC <- capture.output(summary(ABC_CIM))
 expect_true("\t\tNumber of QTLs: 3 " %in% sumABC)
-expect_true("\t\tSmallest p-value among the QTLs: 1.575304e-31 " %in% sumABC)
-expect_true("\t\tLargest p-value among the QTLs: 4.724901e-17 (-10log(p) value: 16.32561)" %in% sumABC)
+expect_true("\t\tSmallest p-value among the QTLs: 1.3e-16 " %in% sumABC)
+expect_true("\t\tLargest p-value among the QTLs: 2.57e-09 (-10log(p) value: 8.59)" %in% sumABC)
 
 ## QTLProfile is a call to manhattan plot in statgenGWAS. Not much to test.
 p1 <- plot(ABC_CIM, plotType = "QTLProfile")
