@@ -370,7 +370,7 @@ print.summary.gDataMPP <- function(x,
 #' @param ... Further arguments to be passed on to the actual plotting
 #' functions.
 #' @param plotType A character string indicating the type of plot to be made.
-#' One of "genMap", "allGeno" or "pedigree".
+#' One of "genMap", "singleGeno", "allGeno" or "pedigree".
 #' @param genotype A character string indicating the genotype for which the
 #' plot should be made. Only for \code{plotType = "singleGeno"}.
 #' @param title A character string, the title of the plot.
@@ -432,6 +432,11 @@ plot.gDataMPP <- function(x,
   popType <- attr(x = x, which = "popType")
   if (plotType == "genMap") {
     highlight <- dotArgs$highlight
+    missHighlight <- highlight[!highlight %in% rownames(markers)]
+    if (length(missHighlight) > 0) {
+      stop("The following highlight genotypes are not in markers:\n",
+           paste(missHighlight, collapse = ", "))
+    }
     if (length(highlight) > 0) {
       highlightDat <- map[highlight, ]
     } else {

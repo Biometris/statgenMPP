@@ -20,7 +20,7 @@
 functions.}
 
 \item{plotType}{A character string indicating the type of plot to be made.
-One of "genMap", "allGeno" or "pedigree".}
+One of "genMap", "singleGeno", "allGeno" or "pedigree".}
 
 \item{genotype}{A character string indicating the genotype for which the
 plot should be made. Only for \code{plotType = "singleGeno"}.}

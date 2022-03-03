@@ -123,8 +123,8 @@ Next we look at the genetic map using `plotType = "genMap"`. This will display t
 
 ```{r plotGABCMPP}
 ## Plot genetic map.
-# Highlight marker on chromosome 3 at position 121.61.
-plot(ABCMPP, plotType = "genMap", highlight = "EXT_3_121.61")
+# Highlight marker on chromosome 3 at position 40.
+plot(ABCMPP, plotType = "genMap", highlight = "EXT_3_40")
 ```
 
 Finally we visualize the computed IBD probabilities across the genome for a selected genotype using `plotType = "singleGeno"`. This plot will show the IBD probabilities for all parents for all positions on the genome for the selected genotype.
