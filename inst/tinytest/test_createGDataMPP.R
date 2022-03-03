@@ -11,7 +11,6 @@ mapFile <- system.file("extdata/multipop", "mapfile.txt",
 
 pheno <- read.delim(system.file("extdata/multipop", "AxBxCpheno.txt",
                                 package = "statgenMPP"))
-colnames(pheno)[1] <- "genotype"
 
 ## Compute IBD probabilities.
 ABC <- calcIBDMPP(crossNames = c("AxB", "AxC"),
@@ -28,8 +27,8 @@ expect_equal(names(sumABC), c("mapSum", "markerSum", "phenoSum", "covarSum"))
 
 ## Check printed output.
 sumABCprnt <- capture.output(summary(ABC))
-expect_true("\tNumber of traits: 3 " %in% sumABCprnt)
-expect_true("\tTraitnames: pheno, geno, error " %in% sumABCprnt)
+expect_true("\tNumber of traits: 1 " %in% sumABCprnt)
+expect_true("\tTraitnames: pheno " %in% sumABCprnt)
 expect_true(" AxB:100  " %in% sumABCprnt)
 expect_true(" AxC: 80  " %in% sumABCprnt)
 

@@ -11,7 +11,6 @@ mapFile <- system.file("extdata/multipop", "mapfile.txt",
 
 pheno <- read.delim(system.file("extdata/multipop", "AxBxCpheno.txt",
                                 package = "statgenMPP"))
-colnames(pheno)[1] <- "genotype"
 
 phenoLst <- list(pheno[1:100, ], pheno[101:180, ])
 
@@ -33,7 +32,7 @@ expect_error(calcIBDMPP(crossNames = c("AxB", "AxC"), markerFiles = markerFiles,
                         pheno = 1),
              "pheno should be a data.frame or a list of data.frames")
 expect_error(calcIBDMPP(crossNames = c("AxB", "AxC"), markerFiles = markerFiles,
-                        pheno = pheno[, 2:4]),
+                        pheno = pheno[, 2, drop = FALSE]),
              "pheno should have a column genotype")
 
 # pheno list.
@@ -41,7 +40,8 @@ expect_error(calcIBDMPP(crossNames = c("AxB", "AxC"), markerFiles = markerFiles,
                         pheno = list(1, 2)),
              "pheno should be a data.frame or a list of data.frames")
 expect_error(calcIBDMPP(crossNames = c("AxB", "AxC"), markerFiles = markerFiles,
-                        pheno = list(pheno[1:100, 2:4], pheno[101:180, ])),
+                        pheno = list(pheno[1:100, 2, drop = FALSE],
+                                     pheno[101:180, ])),
              "All data.frames in pheno should have a column genotype")
 
 # popType
