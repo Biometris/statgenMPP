@@ -204,31 +204,9 @@ head(ABCCIMQTL[, c(2:8, 10)])
 
 ## Example maize
 
-As a second example we use data from a maize NAM population described in @Giraud2014. The NAM population consists of 10 bi-parental doubled haploid (DH) crosses with central parent F353. The total population consists of 841 individuals. Several traits were measured in four locations across Europe. In each location an incomplete block design was used. We calculated the best linear unbiased estimations (BLUEs) of those traits using the R package [statgenSTA](https://biometris.github.io/statgenSTA). As an example, we perform QTL mapping for only the mean value of the number of days to silking ("mean_DtSILK") across all locations. The data for this population is available from the package in zipped format.
+As a second example we use data from a maize NAM population described in @Giraud2014. The NAM population consists of 10 bi-parental doubled haploid (DH) crosses with central parent F353. The total population consists of 841 individuals. Several traits were measured in four locations across Europe. We calculated the best linear unbiased estimations (BLUEs) of those traits using the R package [statgenSTA](https://biometris.github.io/statgenSTA). As an example, we perform QTL mapping for only the mean value of the number of days to silking ("mean_DtSILK") across all locations. The data for this population is available from the package in zipped format.
 
-Before doing QTL detection we compute IBD probabilities on a grid of positions along the genome. This can be done using the `calcIBDMPP` function in the `statgenMPP` package. To perform IBD calculations a cross file is required for each of the populations. These files should be a tab-delimited file with first column ID identifying the genotype. The following columns should contain marker information. The first rows should contain the parents used in the cross. As an example, the file for the first cross starts like this:
-
-| ID | PZE.101000088 | PZE.101000344 | PZE.101000449 | ... |
-|---|---|---|---|---|
-| F353 | 2 | 1 | 1 | ... |
-| B73 | 2 | 2 | 1 | ... |
-| CFD02-003 | 2 | 2 | 1 | ... |
-| CFD02-006 | 2 | 2 | 1 | ... |
-
-A map file is also required. This should also be a tab-delimited file with three columns, "marker name", "chromosome" and "position". The map file cannot contain a header and has to be identical for all crosses.
-
-Phenotypic data can be added as a `data.frame` when computing IBD probabilities. Such a `data.frame` should have a first column "genotype" and all other columns have to be numerical. For the maize NAM population the `data.frame` with phenotypic data starts like this:
-
-| genotype | INR_DMY | KWS_DMY | Syngenta_DMY | TUM_DMY | ... | 
-|---|---|---|---|---|---|
-| CFD02-003 | 182.34 | NA | 173.37 | NA | ... | 
-| CFD02-006 | 171.95 | 200.56 | 159.29 | 243.29 | ... | 
-| CFD02-010 | 207.56 | 236.54 | 159.38 | 228.14 | ... | 
-| CFD02-024 | 185.10 | 218.94 | 160.72 | 214.44 | ... | 
-| CFD02-027 | 206.46 | 226.25 | 185.24 | 221.02 | ... | 
-| CFD02-036 | 180.28 | 223.24 | 162.68 | 215.86 | ... | 
-
-In total there are 30 columns with different traits. When performing IBD calculations and specifying phenotypic data, the phenotypic data will be combined with computed IBD probabilities based. For this the genotype specified in the ID column in the cross file(s) will be matched with the genotype in the genotype column in the `data.frame` with phenotypic information. Phenotypic data for all crosses can either be added from a single `data.frame` containing phenotypic data for all crosses, or a `list` of `data.frames` each containing phenotypic data for a single cross.
+As for the simulated data, before doing QTL detection we first compute IBD probabilities on a grid of positions along the genome. 
 
 ```{r maizeIBD}
 ## Define names of crosses.
@@ -261,41 +239,20 @@ maizeMPP <- calcIBDMPP(crossNames = crosses,
                        evalDist = 5)
 ```
 
-With `calcIBDMPP` IBD probabilities are computed on a grid for each of the crosses separately and the combined into a single output object. The value of `evalDist` can be used to specify the maximum distance between two evaluation points on the grid. The exact distance depends on the length of the chromosomes. The output is stored in an object of class `gDataMPP` (genomic Data for Multi Parent Populations) in which information about map, markers, and phenotypic data is combined. With the `summary` function we can get some insight in this information.
+We then have a look at the summary and some of the plots to get an overview of the pedigree and the computed probabilities.
 
 ```{r sumMaizeIBD}
 ## Print summary
 summary(maizeMPP)
 ```
 
-To get a further idea about the population and the computed IBD probabilities we can visualize the results. First we have a look at structure of the pedigree of the population using `plotType = "pedigree"` to get a general idea of what the design looks like.
-
 ```{r plotPmaizeIBD}
 ## Plot structure of the pedigree.
 plot(maizeMPP, plotType = "pedigree")
 ```
 
-Next we look at the genetic map using `plotType = "genMap"`. This will display the genetic map of the population showing the length of each of the chromosomes and indicating the positions where the IBD probabilities were calculated. Optionally it is possible to highlight one or more markers using `highlight` argument.
+Now we can used the computed IBD probabilities to perform SIM.
 
-```{r plotGMmaizeIBD}
-## Plot genetic map.
-# Highlight marker on chromosome 3 at position 121.61.
-plot(maizeMPP, plotType = "genMap", highlight = "EXT_3_121.61")
-```
-
-Finally we visualize the computed IBD probabilities across the genome for a selected genotype using `plotType = "singleGeno"`. This plot will show the IBD probabilities for all parents for all positions on the genome for the selected genotype.
-
-```{r plotSGmaizeIBD, fig.height=10}
-## Plot IBD probabilities for genotype CFD02-003.
-plot(maizeMPP, plotType = "singleGeno", genotype = "CFD02-003")
-```
-
-Using the computed IBD probabilities we can now do the actual QTL Mapping using the `selQTLMPP` function. First we perform a SIM by setting `maxCofactors = 0`. Our trait of interest, mean_DtSILK, is specified in the `trait` argument of the function. 
-
-```{r saveMaize, include=FALSE}
-## Use saved data to speed up vignette building.
-#usethis::use_data(maizeSIM, maizeCIM, internal = FALSE, overwrite = TRUE)
-```
 
 ```{r maizeSIM, eval=FALSE}
 ## Perform simple interval mapping.
@@ -304,14 +261,14 @@ maizeSIM <- selQTLMPP(MPPobj = maizeMPP,
                       maxCofactors = 0)
 ```
 
-The results of the SIM can be plotted using  the `plot` function with `plotType = "QTLProfile"`. 
+We plot the QTL profile for the SIM to get an idea of reasonable values to use for the `threshold` and `QTLwindow` in the CIM that we do next.
 
 ```{r QPmaizeSIM}
 ## Plot QTL Profile for maize SIM.
 plot(maizeSIM, plotType = "QTLProfile")
 ```
 
-Now we can do CIM, again using the `selQTLMPP` function. We don't specify the `maxCofactors` to let the algorithm determine the number of cofactors based on the threshold and QTLwindow. Based on the profile plot for the SIM the `threshold` is set to 5 to restrict a bit the number of QTLs that will be detected. The `QTLwindow` is not specified and therefore left at its default value of 10cM.
+Based on the plot for the SIM the `threshold` is set to 5 to restrict a bit the number of QTLs that will be detected in the CIM. The `QTLwindow` is not specified and therefore left at its default value of 10cM.
 
 ```{r maizeCIM, eval=FALSE}
 ## Perform composite interval mapping.
@@ -320,47 +277,11 @@ maizeCIM <- selQTLMPP(MPPobj = maizeMPP,
                       threshold = 5)
 ```
 
-Now we can plot the positions of the QTLs found on the genetic map. This will produce a plot similar the the genetic map plot we have seen before, but now the QTLs will be highlighted. This plot can be made by specifying `plotType = "QTLRegion"`
-
-```{r plotQRmaizeCIM}
-##Plot QTL Profile for maize CIM.
-plot(maizeCIM, plotType = "QTLRegion")
-```
-
-As for the SIM we can also plot the QTL profile. The QTLs found will be highlighted in the profile in red.
-
-```{r plotQPmaizeCIM}
-##Plot QTL Profile for maize CIM.
-plot(maizeCIM, plotType = "QTLProfile")
-```
-
-It is also possible to plot the size of the parental effects for each of the QTLs found. Positive effects of a parent on the trait will be indicated by shades of red, negative effects by shades of blue. The stronger the color, the larger the effect for the specific parent is. This plot can be made using `plotType = "parEffs"`.
-
-```{r plotPEmaizeCIM}
-##Plot QTL Profile for maize CIM.
-plot(maizeCIM, plotType = "parEffs")
-```
-
-Finally a combined plot of the QTL profile and the parental can be made. In this plot the two previous plots are plotted above each other with the chromosomes and positions aligned to allow for easily getting an overview of which effect belongs to which QTL in the QTL profile. This plot can be made using `plotType = "QTLProfileExt"`.
+We only look at the combined plot of the QTL Profile and the parental effects. This should give us the most direct inside in the QTLs found and the effects the different parents in the crosses have.
 
 ```{r plotQPEmaizeCIM}
 ##Plot QTL Profile for maize CIM.
 plot(maizeCIM, plotType = "QTLProfileExt")
-```
-
-From the output of `selQTLMPP` the p-Values and effects for all markers can be extracted. They are stored in a `data.table` within the output object. The example below shows how to extract them. The output will contain columns snp, chr and pos with name, chromosome number and position of the marker and columns pValue and eff_par1, eff_par2, eff_par.. with the effects of all parents for that marker.
-
-```{r extractRes}
-## Extract results of QTL mapping.
-maizeCIMres <- maizeCIM$GWAResult$pheno
-head(maizeCIMres[, 1:8])
-```
-It is also possible to only extract the markers that are either QTLs or within the window of one of the selected QTLs, as specified when calling the `selQTLMPP` function. As for the full results, this information in stored in the output as a `data.table` that can be extracted as shown below. The columns in this `data.table` are identical to those in the full results except for an additional column at the end, snpStatus, that shows whether a marker is a QTL or within the window of a QTL.
-
-```{r extractQTL}
-## Extract QTLs and markers within QTL windows.
-maizeCIMQTL <- maizeCIM$signSnp$pheno
-head(maizeCIMQTL[, c(1:8, 18)])
 ```
 
 ## Example barley
@@ -403,17 +324,17 @@ summary(barleyMPP)
 plot(barleyMPP, plotType = "pedigree")
 ```
 
-Performing SIM and CIM for imported RABBIT output works in the same way as for IBD probabilities computed directly in the package. 
+Performing SIM and CIM for imported RABBIT output works in the same way as for IBD probabilities computed directly in the package. Since a full scan would take quite long we restrict the maximum number of cofactors to one to only detect the most significant QTL.
 
-```{r barleySIM, warning=FALSE}
+```{r barleyCIM, warning=FALSE}
 ## Perform QTL-scan with maximum one cofactor.
-barleySIM <- selQTLMPP(MPPobj = barleyMPP,
+barleyCIM <- selQTLMPP(MPPobj = barleyMPP,
                        trait = "Awn_length",
                        maxCofactors = 1)
 ```
 ```{r QPbarleySIM}
 ## Plot QTL Profile for barley SIM.
-plot(barleySIM, plotType = "QTLProfileExt")
+plot(barleyCIM, plotType = "QTLProfileExt")
 ```
 
 The plot shows a clear QTL at the end of chromosome 7 as also described in @Liller2017-jz.
