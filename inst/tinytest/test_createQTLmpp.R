@@ -26,8 +26,8 @@ ABC_CIM <- selQTLMPP(MPPobj = ABC, trait = "pheno")
 ## Summary.
 sumABC <- capture.output(summary(ABC_CIM))
 expect_true("\t\tNumber of QTLs: 3 " %in% sumABC)
-expect_true("\t\tSmallest p-value among the QTLs: 1.3e-16 " %in% sumABC)
-expect_true("\t\tLargest p-value among the QTLs: 2.57e-09 (-10log(p) value: 8.59)" %in% sumABC)
+expect_true("\t\tSmallest p-value among the QTLs: 1.297282e-16 " %in% sumABC)
+expect_true("\t\tLargest p-value among the QTLs: 2.565217e-09 (-10log(p) value: 8.590876)" %in% sumABC)
 
 ## QTLProfile is a call to manhattan plot in statgenGWAS. Not much to test.
 p1 <- plot(ABC_CIM, plotType = "QTLProfile")
