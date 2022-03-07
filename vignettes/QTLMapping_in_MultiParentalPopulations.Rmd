@@ -159,7 +159,14 @@ ABCCIM <- selQTLMPP(MPPobj = ABCMPP,
                     threshold = 3)
 ```
 
-Now we can plot the positions of the QTLs found on the genetic map. This will produce a plot similar the the genetic map plot we have seen before, but now the QTLs will be highlighted. This plot can be made by specifying `plotType = "QTLRegion"`
+We can first have a look at the summary of the CIM. This will give a short overview containing the total number of markers and the number of QTLs found. Also for all QTL their position on the chromosome is shown as well as the nearest marker on the original map, the explained variance and the effects of all parents.
+
+```{r sumABCCIM}
+## Print summary
+summary(ABCCIM)
+```
+
+Next we can plot the positions of the QTLs found on the genetic map. This will produce a plot similar the the genetic map plot we have seen before, but now the QTLs will be highlighted. This plot can be made by specifying `plotType = "QTLRegion"`
 
 ```{r plotQRABCCIM}
 ## Plot QTL Profile for ABC CIM.
