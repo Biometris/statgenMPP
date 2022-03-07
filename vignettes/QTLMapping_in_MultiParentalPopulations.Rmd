@@ -53,7 +53,7 @@ where $M_{q}$ is the design matrix containing the expected number of parental al
 
 Variance components of a putative QTL from the two models are evaluated to perform the likelihood ratio test (LRT). The p-value is calculated using a $\chi^2$ mixture approximation for the Likelihood Ratio Test. 
 
-For CIM the first steps are the same. However after the first round of scanning the QTL with the highest $-10log(p)$ value is added as a cofactor in the model and a new round of scanning is done. This is repeated until no new QTLs are found with a $-10log(p)$ value above a predefined threshold, or until the predefined maximum number of cofactors is added to the model. In a region of specified width around a cofactor no new cofactors can be detected.
+For CIM the first steps are the same. However after the first round of scanning the QTL with the highest $-log10(p)$ value is added as a cofactor in the model and a new round of scanning is done. This is repeated until no new QTLs are found with a $-log10(p)$ value above a predefined threshold, or until the predefined maximum number of cofactors is added to the model. In a region of specified width around a cofactor no new cofactors can be detected.
 
 ## Example simulated data
 
@@ -150,7 +150,7 @@ The results of the SIM can be plotted using  the `plot` function with `plotType 
 plot(ABCSIM, plotType = "QTLProfile")
 ```
 
-Already from the SIM the position of the three simulated QTLs is quite clear. We can get an even better result using CIM.For that, again we use the `selQTLMPP` function. We don't specify the `maxCofactors` to let the algorithm determine the number of cofactors based on the threshold and QTLwindow. As long as new markers are found with a $-10log(p)$ value above `threshold` and the maximum number of cofactors is not reached, a new round of scanning is done. In the new round of scanning the marker with the highest $-10log(p)$ value from the previous round is added to the cofactors. Based on the profile plot for the SIM the `threshold` is set to 3. The `QTLwindow` is not specified and therefore left at its default value of 10cM.
+Already from the SIM the position of the three simulated QTLs is quite clear. We can get an even better result using CIM.For that, again we use the `selQTLMPP` function. We don't specify the `maxCofactors` to let the algorithm determine the number of cofactors based on the threshold and QTLwindow. As long as new markers are found with a $-log10(p)$ value above `threshold` and the maximum number of cofactors is not reached, a new round of scanning is done. In the new round of scanning the marker with the highest $-log10(p)$ value from the previous round is added to the cofactors. Based on the profile plot for the SIM the `threshold` is set to 3. The `QTLwindow` is not specified and therefore left at its default value of 10cM.
 
 ```{r ABCCIM}
 ## Perform composite interval mapping.
