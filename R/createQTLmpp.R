@@ -39,33 +39,25 @@ summary.GWAS <- function(object,
   signSnp <- object$signSnp[[1]]
   GWASInfo <- object$GWASInfo
   trait <- unique(GWAResult$trait)
+  parents <- GWASInfo$parents
   ## Print traits.
-  cat("\tTraits analysed:", paste(unique(GWAResult$trait),
-                                  collapse = ", "), "\n\n")
+  cat("Trait analysed:", unique(GWAResult$trait), "\n\n")
   ## Print SNP numbers.
-  cat("\tData are available for", length(unique(GWAResult$snp)),
-      "SNPs.\n")
+  cat("Data are available for", length(unique(GWAResult$snp)), "markers.\n")
   ## Print significant SNP info.
-  cat("\t\tthreshold:", object$thr[[1]][trait], "\n")
-  ## Work around the problem that subsetting a data.table on a variable
-  ## by the same name as a column in the data is difficult.
-  snpTrait <- signSnp[["trait"]] == trait
-  signSnpTrait <- signSnp[signSnp[["snpStatus"]] == "significant SNP" &
-                            snpTrait, ]
-  if (!is.null(signSnpTrait)) {
-    nSignSnp <- nrow(signSnpTrait)
-    cat("\t\tNumber of QTLs:" , nSignSnp, "\n")
-    if (nSignSnp > 0) {
-      cat("\t\tSmallest p-value among the QTLs:",
-          min(signSnpTrait[["pValue"]]), "\n")
-      cat("\t\tLargest p-value among the QTLs: ",
-          max(signSnpTrait[["pValue"]]),
-          " (-10log(p) value: ", min(signSnpTrait[["LOD"]]), ")\n\n", sep = "")
-    } else {
-      cat("\n")
-    }
+  cat("Threshold:", object$thr[[1]][trait], "\n\n")
+  ## Restrict signSnp to QTLs found.
+  signSnp <- signSnp[signSnp[["snpStatus"]] == "significant SNP", ]
+  signSnp[["minlog10p"]] <- signSnp[["LOD"]]
+  if (!is.null(signSnp)) {
+    nSignSnp <- nrow(signSnp)
+    cat("Number of QTLs:" , nSignSnp, "\n\n")
+    print(signSnp[, c("snp", "chr", "pos", "minlog10p", "varExpl",
+                      paste0("eff_", parents)), with = FALSE],
+          row.names = FALSE)
+    cat("\n")
   } else {
-    cat("\t\tNo QTLs found.","\n\n")
+    cat("No QTLs found.","\n\n")
   }
 }
 
