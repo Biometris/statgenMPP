@@ -190,6 +190,12 @@ calcIBDMPP <- function(crossNames,
                                      parents = parents,
                                      markerSel = markerNames[i])
   }
+  ## Read original map.
+  mapOrig <- read.delim(mapFile, header = FALSE)
+  rownames(mapOrig) <- mapOrig[[1]]
+  mapOrig <- mapOrig[, -1]
+  colnames(mapOrig) <- c("chr", "pos")
+  ## Create gDataMPP object.
   MPPobj <- createGDataMPP(geno = markers,
                            map = crossIBD$map,
                            pheno = phenoTot,
@@ -197,5 +203,6 @@ calcIBDMPP <- function(crossNames,
   attr(x = MPPobj, which = "popType") <- crossIBD$popType
   attr(x = MPPobj, which = "pedigree") <- crossIBD$pedigree
   attr(x = MPPobj, which = "genoCross") <- attr(x = crossIBD, which = "genoCross")
+  attr(x = MPPobj, which = "mapOrig") <- mapOrig
   return(MPPobj)
 }

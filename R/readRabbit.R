@@ -167,6 +167,7 @@ readRABBIT <- function(infile,
   res <- createGDataMPP(geno = markArr, map = map, pheno = pheno, covar = covar)
   attr(x = res, which = "popType") <- popType
   attr(x = res, which = "genoCross") <- genoCross
+  attr(x = res, which = "mapOrig") <- map
   if (!is.null(pedFile)) {
     attr(x = res, which = "pedigree") <- pedDat
   }

@@ -65,6 +65,7 @@ selQTLMPP <- function(MPPobj,
   markers <- MPPobj$markers
   pheno <- MPPobj$pheno[[1]]
   covar <- MPPobj$covar
+  mapOrig <- attr(x = MPPobj, which = "mapOrig")
   if (is.null(map)) {
     stop("MPP object should contain a map.\n")
   }
@@ -173,6 +174,14 @@ selQTLMPP <- function(MPPobj,
   ## Add explained variance.
   signSnp <- merge(signSnp, varQTL, by.x = "snp", by.y = "VarComp",
                    all.x = TRUE, sort = FALSE)
+  ## Add nearest real marker.
+  signSnp[["mrkNear"]] <- sapply(X = seq_len(nrow(signSnp)), FUN = function(i) {
+    mrkChr <- signSnp[i, "chr"]
+    mrkPos <- signSnp[i, "pos"]
+    mapOrigChr <- mapOrig[mapOrig[["chr"]] == mrkChr, ]
+    mrkNear <- mapOrigChr[which.min(abs(mapOrigChr[["pos"]] - mrkPos)), ]
+    return(rownames(mrkNear))
+  })
   signSnp[["snpStatus"]] <-
     as.factor(ifelse(signSnp[["snp"]] %in% cofactors,
                      "significant SNP",

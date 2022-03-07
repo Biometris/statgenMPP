@@ -49,10 +49,10 @@ summary.GWAS <- function(object,
   ## Restrict signSnp to QTLs found.
   signSnp <- signSnp[signSnp[["snpStatus"]] == "significant SNP", ]
   signSnp[["minlog10p"]] <- signSnp[["LOD"]]
-  if (!is.null(signSnp)) {
+  if (nrow(signSnp) > 0) {
     nSignSnp <- nrow(signSnp)
     cat("Number of QTLs:" , nSignSnp, "\n\n")
-    print(signSnp[, c("snp", "chr", "pos", "minlog10p", "varExpl",
+    print(signSnp[, c("snp", "chr", "pos", "mrkNear", "minlog10p", "varExpl",
                       paste0("eff_", parents)), with = FALSE],
           row.names = FALSE, digits = 3)
     cat("\n")

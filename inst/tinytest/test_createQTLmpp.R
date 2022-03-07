@@ -27,8 +27,8 @@ ABC_CIM <- selQTLMPP(MPPobj = ABC, trait = "pheno")
 sumABC <- capture.output(summary(ABC_CIM))
 expect_true("Number of QTLs: 3 " %in% sumABC)
 expect_true("Threshold: 3 " %in% sumABC)
-expect_true(" EXT_1_25   1  25     15.89   0.225 -1.402  0.809  0.593" %in% sumABC)
-expect_true(" EXT_3_75   3  75     11.00   0.318  1.056  0.607 -1.662" %in% sumABC)
+expect_true(" EXT_1_25   1  25    M1_3     15.89   0.225 -1.402  0.809  0.593" %in% sumABC)
+expect_true(" EXT_3_75   3  75    M3_8     11.00   0.318  1.056  0.607 -1.662" %in% sumABC)
 
 ## QTLProfile is a call to manhattan plot in statgenGWAS. Not much to test.
 p1 <- plot(ABC_CIM, plotType = "QTLProfile")
