@@ -50,6 +50,7 @@
 #' ABC_CIM <- selQTLMPP(ABC, trait = "pheno")
 #' }
 #'
+#' @importFrom utils head tail
 #' @export
 selQTLMPP <- function(MPPobj,
                       trait = NULL,
@@ -152,10 +153,26 @@ selQTLMPP <- function(MPPobj,
                      QTLwindow = QTLwindow,
                      cof = cofactors,
                      verbose = verbose)
+  ## Fit model with all cofactors for computation of variance explained.
+  finMod <- randomQTLmodel(modDat = modDat, map = map, parents = parents,
+                           trait = trait, scanMrk = NULL, cofMrk = cofactors,
+                           NULLmodel = TRUE)
+  ## Get weighted residual error.
+  crossN <- table(modDat[["cross"]])
+  crossResErr <- tail(finMod$VarDf, length(crossN))
+  resErr <- sum((crossN * crossResErr[["Variance"]])) / sum(crossN)
+  ## Construct data.frame with explained variances.
+  varQTL <- head(finMod$VarDf, length(cofactors))
+  varAllQTLs <- sum(varQTL[["Variance"]])
+  varQTL[["varExpl"]] <- varQTL[["Variance"]] / (varAllQTLs + resErr)
+  varQTL <- varQTL[c("VarComp", "varExpl")]
   ## Construct GWAResult and signSnp
   colnames(scanRes)[colnames(scanRes) == "minlog10p"] <- "LOD"
   GWARes <- scanRes[ , colnames(scanRes) != "QTLRegion"]
   signSnp <- scanRes[scanRes[["QTLRegion"]], colnames(scanRes) != "QTLRegion"]
+  ## Add explained variance.
+  signSnp <- merge(signSnp, varQTL, by.x = "snp", by.y = "VarComp",
+                   all.x = TRUE, sort = FALSE)
   signSnp[["snpStatus"]] <-
     as.factor(ifelse(signSnp[["snp"]] %in% cofactors,
                      "significant SNP",
