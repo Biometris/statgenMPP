@@ -54,10 +54,10 @@ summary.GWAS <- function(object,
     cat("Number of QTLs:" , nSignSnp, "\n\n")
     print(signSnp[, c("snp", "chr", "pos", "minlog10p", "varExpl",
                       paste0("eff_", parents)), with = FALSE],
-          row.names = FALSE)
+          row.names = FALSE, digits = 3)
     cat("\n")
   } else {
-    cat("No QTLs found.","\n\n")
+    cat("No QTLs found.", "\n\n")
   }
 }
 
