@@ -15,7 +15,11 @@ Authors@R: c(person(given = "Wenhao",
                     family = "van Rossum", 
                     email = "bart-jan.vanrossum@wur.nl", 
                     role = c("aut", "cre"),
-                    comment = c(ORCID = "0000-0002-8673-2514")))
+                    comment = c(ORCID = "0000-0002-8673-2514")),
+             person(given = "Fred", 
+                    family = "van Eeuwijk",
+                    role = "ctb",
+                    comment = c(ORCID = "0000-0003-3672-2921")))        
 Description: For Multi Parent Populations (MPP) Identity By Descend (IBD) 
     probabilities are computed using Hidden Markov Models. These probabilities 
     are then used in a mixed model approach for QTL Mapping as described in 
