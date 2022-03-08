@@ -39,8 +39,6 @@ The calculations of the IBDs are based on Hidden Markov Models (HMM) and inherit
 
 ### QTL Mapping
 
-The actual QTL mapping can be done in two steps. First we can do a Simple Interval Mapping (SIM) to get a global idea of the QTL profile. After that Composite Interval Mapping (CIM) can be done.     
-
 We follow the methods described in @Li2021 for QTL mapping. In the first step a model without markers is fitted:
 
 $$y = X\beta + \varepsilon, \quad \varepsilon \sim { }N\left( {0, \oplus_{k = 1}^{F} I_{{n_{k} }} \sigma_{{\varepsilon_{k} }}^{2} } \right),$$
@@ -63,12 +61,13 @@ Before doing QTL detection we compute IBD probabilities on a grid of positions a
 
 ```{r simMarkerDat, results='asis', echo=FALSE}
 simMrkDat <- read.delim(system.file("extdata/multipop", "AxB.txt", package = "statgenMPP"))
-knitr::kable(simMrkDat[1:4, 1:4])
+knitr::kable(simMrkDat[1:4, 1:5])
 ```
 
+In this example markers M1_1 and M1_4 are segregating in the AxB cross, M1_2 and M_1_3 not.  
 A map file is also required. This should also be a tab-delimited file with three columns, "marker name", "chromosome" and "position". The map file cannot contain a header and has to be identical for all crosses.
 
-Phenotypic data can be added as a `data.frame` when computing IBD probabilities. Such a `data.frame` should have a first column "genotype" and all other columns have to be numerical. For the maize NAM population the `data.frame` with phenotypic data starts like this:
+Phenotypic data can be added as a `data.frame` when computing IBD probabilities. Such a `data.frame` should have a first column "genotype" and all other columns have to be numerical. For the simulated NAM population the `data.frame` with phenotypic data starts like this:
 
 ```{r simPhenoDat, results='asis', echo=FALSE}
 simPhenoDat <- read.delim(system.file("extdata/multipop", "AxBxCpheno.txt", package = "statgenMPP"))
@@ -159,14 +158,7 @@ ABCCIM <- selQTLMPP(MPPobj = ABCMPP,
                     threshold = 3)
 ```
 
-We can first have a look at the summary of the CIM. This will give a short overview containing the total number of markers and the number of QTLs found. Also for all QTL their position on the chromosome is shown as well as the nearest marker on the original map, the explained variance and the effects of all parents.
-
-```{r sumABCCIM}
-## Print summary
-summary(ABCCIM)
-```
-
-Next we can plot the positions of the QTLs found on the genetic map. This will produce a plot similar the the genetic map plot we have seen before, but now the QTLs will be highlighted. This plot can be made by specifying `plotType = "QTLRegion"`
+First we plot the positions of the QTLs found on the genetic map. This will produce a plot similar the the genetic map plot we have seen before, but now the QTLs will be highlighted. This plot can be made by specifying `plotType = "QTLRegion"`
 
 ```{r plotQRABCCIM}
 ## Plot QTL Profile for ABC CIM.
@@ -192,6 +184,13 @@ Finally a combined plot of the QTL profile and the parental can be made. In this
 ```{r plotQPEABCCIM}
 ##Plot QTL Profile for maize CIM.
 plot(ABCCIM, plotType = "QTLProfileExt")
+```
+
+A summary of the QTL-analyis gives a short overview containing the total number of markers and the number of QTLs found. Also for all QTL their position on the chromosome is shown as well as the nearest marker on the original map, the explained variance and the effects of all parents.
+
+```{r sumABCCIM}
+## Print summary
+summary(ABCCIM)
 ```
 
 From the output of `selQTLMPP` the p-Values and effects for all markers can be extracted. They are stored in a `data.table` within the output object. The example below shows how to extract them. The output will contain columns snp, chr and pos with name, chromosome number and position of the marker and columns pValue and eff_par1, eff_par2, eff_par.. with the effects of all parents for that marker.
@@ -293,7 +292,7 @@ plot(maizeCIM, plotType = "QTLProfileExt")
 
 ## Example barley
 
-Instead of performing IBD calculations directly with the package, it is also possible to import IBD probabilities computed using RABBIT. The main advantage of using RABBIT for IBD calculations is that it can handle complex pedigree populations and therefore can also be used in cases where the population structure is more complex than those that can be computed using `statgenIBD`, e.g. in the maize NAM population described before.
+Instead of performing IBD calculations directly with the package, it is also possible to import IBD probabilities computed using RABBIT software [@Zheng2014; @Zheng2015; @Zheng2018]. The main advantage of using RABBIT for IBD calculations is that it can handle complex pedigree populations and therefore can also be used in cases where the population structure is more complex than those that can be computed using `statgenIBD`, e.g. in the maize NAM population described before.
 
 As an example we use a barley population described in @Liller2017-jz. This MPP design consists of 5 parents. Four wild parents were crossed with the cultivar Morex and then backcrossed with Morex once. Individuals from the four families from the backcrosses were then crossed with each other as in a full diallel design, which generated six F6 families through five generations of selfing. The trait of interest for this population is awn length ("Awn_length"). As for the maize NAM population, the data for this population is available in zipped format in the package.
 
@@ -331,7 +330,7 @@ summary(barleyMPP)
 plot(barleyMPP, plotType = "pedigree")
 ```
 
-Performing SIM and CIM for imported RABBIT output works in the same way as for IBD probabilities computed directly in the package. Since a full scan would take quite long we restrict the maximum number of cofactors to one to only detect the most significant QTL.
+Performing SIM and CIM for imported RABBIT output works in the same way as for IBD probabilities computed directly in the package. Since a full scan would take long we restrict the maximum number of cofactors to one to only detect the most significant QTL.
 
 ```{r barleyCIM, warning=FALSE}
 ## Perform QTL-scan with maximum one cofactor.
