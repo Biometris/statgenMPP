@@ -330,20 +330,32 @@ summary(barleyMPP)
 plot(barleyMPP, plotType = "pedigree")
 ```
 
-Performing SIM and CIM for imported RABBIT output works in the same way as for IBD probabilities computed directly in the package. Since a full scan would take long we restrict the maximum number of cofactors to one to only detect the most significant QTL.
+Performing SIM and CIM for imported RABBIT output works in the same way as for IBD probabilities computed directly in the package. Since a full scan would take long we precomputed the results and included them in the package.  
 
-```{r barleyCIM, warning=FALSE}
-## Perform QTL-scan with maximum one cofactor.
+```{r barleyCIM, eval=FALSE}
+## Perform QTL-scan with threshold 4.
 barleyCIM <- selQTLMPP(MPPobj = barleyMPP,
                        trait = "Awn_length",
-                       maxCofactors = 1)
-```
-```{r QPbarleySIM}
-## Plot QTL Profile for barley SIM.
-plot(barleyCIM, plotType = "QTLProfileExt")
+                       threshold = 4)
 ```
 
-The plot shows a clear QTL at the end of chromosome 7 as also described in @Liller2017-jz.
+There is a very large QTL on chromosome 7. To be able to more clearly distinguish the differences between the other QTLs they are plotted separately.
+```{r QPbarleyCIM16}
+## Plot QTL Profile for barley CIM - chromosome 1-6.
+plot(barleyCIM, plotType = "QTLProfileExt", chr = 1:6)
+```
+
+```{r QPbarleyCIM7}
+## Plot QTL Profile for barley CIM - chromosome 7.
+plot(barleyCIM, plotType = "QTLProfileExt", chr = 7)
+```
+
+The QTLs found are very similar in both position, size and effects as described in @Liller2017-jz. This can also be clearly seen by comparing the summary of the CIM with the table of effects in this paper.
+
+```{r sumBarleyCIM}
+## Plot QTL Profile for barley CIM - chromosome 7.
+summary(barleyCIM)
+```
 
 The properties of using statgenMPP for QTL mapping in MPPs have been shown with several examples we demonstrated here. This easy-to-use R package, integrating the HMM method for IBD calculation and the mixed-model approach for QTL mapping, provides us with a general framework to estimate multi-allelic QTL effects in terms of parent origins. 
 

@@ -3,7 +3,7 @@
 \docType{data}
 \name{maizeCIM}
 \alias{maizeCIM}
-\title{Pre-computed CIM output}
+\title{Pre-computed CIM output maize}
 \format{
 An object of class \code{QTLMPP} (inherits from \code{GWAS}) of length 5.
 }
