@@ -38,7 +38,7 @@ Imports:
     gridExtra,
     LMMsolver,
     scales,
-    statgenIBD (>= 1.0.3)
+    statgenIBD (>= 1.0.4)
 Suggests: 
     rmarkdown,
     knitr,
