@@ -48,7 +48,7 @@ readRABBIT <- function(infile,
     missCols <- minCols[!sapply(X = minCols, FUN = function(minCol) {
       hasName(x = pheno, name = minCol)
     })]
-    if (!is.null(pedFile)) {
+    if (!is.null(pedFile) && hasName(x = pheno, name = "cross")) {
       pheno <- pheno[-which(colnames(pheno) == "cross")]
     }
     if (length(missCols) > 0) {
