@@ -143,11 +143,13 @@ selQTLMPP <- function(MPPobj,
     }
     ## Add new cofactor to list of cofactors for next round of scanning.
     cofactors <- c(cofactors, scanSel[which.max(scanSel[["minlog10p"]]), "snp"])
-    lowPScan <- scanRes[(!is.na(scanRes[["pValue"]]) &
-                           scanRes[["minlog10p"]] > 0.31) |
-                          (scanRes[["QTLRegion"]] &
-                             !scanRes[["snp"]] %in% cofactors), "snp"]
-    mapScan <- mapScan[rownames(mapScan) %in% lowPScan, ]
+    qtlWinScan <- scanRes[scanRes[["QTLRegion"]] &
+                             !scanRes[["snp"]] %in% cofactors, "snp"]
+    if (length(cofactors) == 1) {
+      lowPScan <- scanRes[!is.na(scanRes[["minlog10p"]]) &
+                            scanRes[["minlog10p"]] < 0.31, "snp"]
+    }
+    mapScan <- mapScan[!rownames(mapScan) %in% c(lowPScan, qtlWinScan), ]
   }
   ## Final run with all markers and all cofactors.
   scanRes <- scanQTL(modDat = modDat,
