@@ -83,7 +83,7 @@
 #'
 #' summary(ABC)
 #'
-#' @importFrom utils read.table
+#' @importFrom utils read.delim
 #' @importFrom stats setNames
 #' @export
 calcIBDMPP <- function(crossNames,

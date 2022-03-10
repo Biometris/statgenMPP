@@ -58,6 +58,7 @@ summary.QTLMPP <- function(object,
 #' Print summary of object of class \code{summary.QTLMPP}
 #'
 #' @param x An object of class \code{summary.QTLMPP}.
+#' @param ... Not used.
 #'
 #' @export
 print.summary.QTLMPP <- function(x,

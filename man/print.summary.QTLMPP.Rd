@@ -8,6 +8,8 @@
 }
 \arguments{
 \item{x}{An object of class \code{summary.QTLMPP}.}
+
+\item{...}{Not used.}
 }
 \description{
 Print summary of object of class \code{summary.QTLMPP}
