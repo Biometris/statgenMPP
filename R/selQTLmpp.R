@@ -103,6 +103,9 @@ selQTLMPP <- function(MPPobj,
   ## Construct model data by merging phenotypic and genotypic data.
   ## Merge phenotypic data and covar (cross).
   modDat <- merge(pheno, covar, by.x = "genotype", by.y = "row.names")
+  ## Remove missing values for trait from modDat.
+  ## Not strictly necessary, but it prevents warnings from LMMsolve later on.
+  modDat <- droplevels(modDat[!is.na(modDat[[trait]]), ])
   ## Flatten markers to 2D structure.
   markers <- do.call(cbind, apply(X = markers, MARGIN = 2,
                                   FUN = I, simplify = FALSE))
