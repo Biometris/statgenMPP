@@ -33,28 +33,45 @@
 #' }
 #'
 #' @export
-summary.GWAS <- function(object,
-                         ...) {
+summary.QTLMPP <- function(object,
+                           ...) {
   GWAResult <- object$GWAResult[[1]]
   signSnp <- object$signSnp[[1]]
   GWASInfo <- object$GWASInfo
   trait <- unique(GWAResult$trait)
   parents <- GWASInfo$parents
-  ## Print traits.
-  cat("Trait analysed:", unique(GWAResult$trait), "\n\n")
-  ## Print SNP numbers.
-  cat("Data are available for", length(unique(GWAResult$snp)), "markers.\n")
-  ## Print significant SNP info.
-  cat("Threshold:", object$thr[[1]][trait], "\n\n")
   ## Restrict signSnp to QTLs found.
   signSnp <- signSnp[signSnp[["snpStatus"]] == "significant SNP", ]
   signSnp[["minlog10p"]] <- signSnp[["LOD"]]
-  if (nrow(signSnp) > 0) {
-    nSignSnp <- nrow(signSnp)
-    cat("Number of QTLs:" , nSignSnp, "\n\n")
-    print(signSnp[, c("snp", "chr", "pos", "mrkNear", "minlog10p", "varExpl",
-                      paste0("eff_", parents)), with = FALSE],
-          row.names = FALSE, digits = 3)
+  ## Restrict columns for nicer output.
+  signSnp <- signSnp[, c("snp", "chr", "pos", "mrkNear", "minlog10p",
+                         "varExpl", paste0("eff_", parents)), with = FALSE]
+  ## Add attributes used for printing.
+  res <- structure(signSnp,
+                   class = c("summary.QTLMPP", "data.frame"),
+                   trait = unique(GWAResult$trait),
+                   nMrk = length(unique(GWAResult$snp)),
+                   thr = object$thr[[1]][trait])
+  return(res)
+}
+
+#' Print summary of object of class \code{summary.QTLMPP}
+#'
+#' @param x An object of class \code{summary.QTLMPP}.
+#'
+#' @export
+print.summary.QTLMPP <- function(x,
+                                 ...) {
+  ## Print traits.
+  cat("Trait analysed:", attr(x, which = "trait"), "\n\n")
+  ## Print SNP numbers.
+  cat("Data are available for", attr(x, which = "nMrk"), "markers.\n")
+  ## Print significant SNP info.
+  cat("Threshold:", attr(x, which = "thr"), "\n\n")
+  if (nrow(x) > 0) {
+    nSignSnp <- nrow(x)
+    cat("Number of QTLs:", nSignSnp, "\n\n")
+    print(data.table::data.table(x), row.names = FALSE, digits = 3)
     cat("\n")
   } else {
     cat("No QTLs found.", "\n\n")

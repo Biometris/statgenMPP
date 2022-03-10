@@ -2,8 +2,9 @@
 
 S3method(plot,QTLMPP)
 S3method(plot,gDataMPP)
+S3method(print,summary.QTLMPP)
 S3method(print,summary.gDataMPP)
-S3method(summary,GWAS)
+S3method(summary,QTLMPP)
 S3method(summary,gDataMPP)
 export(calcIBDMPP)
 export(readRABBIT)
