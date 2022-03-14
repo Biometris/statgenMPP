@@ -168,21 +168,21 @@ plot(ABCCIM, plotType = "QTLRegion")
 As for the SIM we can also plot the QTL profile. The QTLs found will be highlighted in the profile in red.
 
 ```{r plotQPABCCIM}
-##Plot QTL Profile for ABC CIM.
+## Plot QTL Profile for ABC CIM.
 plot(ABCCIM, plotType = "QTLProfile")
 ```
 
 It is also possible to plot the size of the parental effects for each of the QTLs found. Positive effects of a parent on the trait will be indicated by shades of red, negative effects by shades of blue. The stronger the color, the larger the effect for the specific parent is. This plot can be made using `plotType = "parEffs"`.
 
 ```{r plotPEABCCIM}
-##Plot QTL Profile for ABC CIM.
+## Plot QTL Profile for ABC CIM.
 plot(ABCCIM, plotType = "parEffs")
 ```
 
 Finally a combined plot of the QTL profile and the parental can be made. In this plot the two previous plots are plotted above each other with the chromosomes and positions aligned to allow for easily getting an overview of which effect belongs to which QTL in the QTL profile. This plot can be made using `plotType = "QTLProfileExt"`.
 
 ```{r plotQPEABCCIM}
-##Plot QTL Profile for maize CIM.
+## Plot QTL Profile for maize CIM.
 plot(ABCCIM, plotType = "QTLProfileExt")
 ```
 
