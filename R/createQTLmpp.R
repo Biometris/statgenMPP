@@ -42,9 +42,11 @@ summary.QTLMPP <- function(object,
   parents <- GWASInfo$parents
   ## Restrict signSnp to QTLs found.
   signSnp <- signSnp[signSnp[["snpStatus"]] == "significant SNP", ]
+  ## Rename columns.
   signSnp[["minlog10p"]] <- signSnp[["LOD"]]
+  signSnp[["evalPos"]] <- signSnp[["snp"]]
   ## Restrict columns for nicer output.
-  signSnp <- signSnp[, c("snp", "chr", "pos", "mrkNear", "minlog10p",
+  signSnp <- signSnp[, c("evalPos", "chr", "pos", "mrkNear", "minlog10p",
                          "varExpl", paste0("eff_", parents)), with = FALSE]
   ## Add attributes used for printing.
   res <- structure(signSnp,

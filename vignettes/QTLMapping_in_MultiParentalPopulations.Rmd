@@ -321,7 +321,7 @@ barleyMPP <- readRABBIT(infile = inFile,
 As for the maize example we can summarize and plot the imported data to get a first idea of its content.
 
 ```{r sumPbarleyIBD}
-## Summary
+## Summary.
 summary(barleyMPP)
 ```
 
@@ -353,7 +353,7 @@ plot(barleyCIM, plotType = "QTLProfileExt", chr = 7)
 The QTLs found are very similar in both position, size and effects as described in @Liller2017-jz. This can also be clearly seen by comparing the summary of the CIM with the table of effects in this paper.
 
 ```{r sumBarleyCIM}
-## Plot QTL Profile for barley CIM - chromosome 7.
+## Summary.
 summary(barleyCIM)
 ```
 
