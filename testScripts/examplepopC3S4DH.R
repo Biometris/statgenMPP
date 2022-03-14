@@ -18,7 +18,7 @@ head(MPPobj$calcIBDres$IBDdata)[1:6,1:10] # pheno + design matrix for LMMsolve l
 head(MPPobj$calcIBDres$IBDmatrix)[1:6,1:6]
 
 # 3. genome scan for multi-QTLs
-MPPobj <- selQTLmpp(MPPobj, QTLwindow = 10, threshold = 3,
+MPPobj <- selQTLMPP(MPPobj, QTLwindow = 10, threshold = 3,
                     trait.name = "pheno", CIM = TRUE)
 MPPobj$Result$QTLcandidates
 

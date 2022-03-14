@@ -337,7 +337,7 @@ plotQTLscan = function(data, threshold, cofactors, trait.name) {
   box()
 }
 
-selQTLmpp<-function(MPPobj,
+selQTLMPP<-function(MPPobj,
                  QTLwindow=10,
                  threshold=3,
                  use=c('LMMsolver','asreml'),
@@ -381,12 +381,12 @@ selQTLmpp<-function(MPPobj,
 
 # MPPobj<-calcIBDmpp(par.names,cross.names,loc.names,qua.names,pop.types,mapfile,evaldist)
 a=Sys.time()
-MPPobj.LMM<-selQTLmpp(MPPobj,QTLwindow=10,threshold=3,use=c('LMMsolver','asreml')[1],trait.name='pheno',CIM=TRUE)
+MPPobj.LMM<-selQTLMPP(MPPobj,QTLwindow=10,threshold=3,use=c('LMMsolver','asreml')[1],trait.name='pheno',CIM=TRUE)
 b=Sys.time()
 b-a
 
 a=Sys.time()
-MPPobj.asr<-selQTLmpp(MPPobj,QTLwindow=10,threshold=3,use=c('LMMsolver','asreml')[2],trait.name='pheno',CIM=TRUE)
+MPPobj.asr<-selQTLMPP(MPPobj,QTLwindow=10,threshold=3,use=c('LMMsolver','asreml')[2],trait.name='pheno',CIM=TRUE)
 b=Sys.time()
 b-a
 
