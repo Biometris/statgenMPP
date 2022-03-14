@@ -2,7 +2,3 @@
 .Rhistory
 .RData
 .Ruserdata
-inst/doc
-testScripts
-docs
-public
