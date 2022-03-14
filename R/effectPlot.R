@@ -23,11 +23,20 @@ effectPlot <- function(effectDat,
   } else {
     chrs <- levels(as.factor(map$chr))
   }
+  ## Recompute cumulative positions.
+  addPos <- data.frame(chr = chrBoundaries[, 1],
+                       add = c(0, cumsum(chrBoundaries[, 2] + 5))[1:nrow(chrBoundaries)],
+                       stringsAsFactors = FALSE)
+  map <- merge(map[, !colnames(map) %in% c("add", "cumPos")],
+               addPos, by = "chr")
+  map[["cumPos"]] <- map[["pos"]] + map[["add"]]
+  ## Compute postions of labels for chromosomes.
   xMarks <- aggregate(x = map$cumPos, by = list(map$chr), FUN = function(x) {
     min(x) + (max(x) - min(x)) / 2
   })[, 2]
   ## Compute chromosome boundaries.
-  chrBnd <- c(0, cumsum(chrBoundaries[, 2]))
+  chrBnd <- c(0, aggregate(x = map$cumPos,
+                           by = list(map$chr), FUN = max)[[2]] + 2.5)
   ## Add cumulative position from map to effects.
   parEffData <- merge(effectDat, map[, c("snp", "cumPos")],
                       by = "snp", sort = FALSE)
@@ -44,8 +53,6 @@ effectPlot <- function(effectDat,
   p <- ggplot2::ggplot() +
     ggplot2::scale_x_continuous(breaks = xMarks, labels = chrs,
                                 expand = c(0, 0)) +
-    ggplot2::geom_vline(xintercept = chrBnd, color = "grey20",
-                        lty = 2, size = 0.3) +
     ggplot2::labs(title = title, x = xLab, y = yLab) +
     ggplot2::theme(panel.background = ggplot2::element_blank(),
                    plot.background = ggplot2::element_blank(),
@@ -59,7 +66,8 @@ effectPlot <- function(effectDat,
     p <- p +
       ggplot2::geom_tile(ggplot2::aes_string(x = "cumPos", y = "trait",
                                              fill = "effect"),
-                         height = 1, width = 5, data = parEffData) +
+                           height = 1, width = 5,
+                           data = parEffData) +
       ggplot2::scale_fill_gradientn(colors = c("blue", "cyan", "white",
                                                "yellow","red"),
                                     values = scales::rescale(c(-1,
@@ -71,6 +79,8 @@ effectPlot <- function(effectDat,
                                     na.value = "white") +
       ggplot2::scale_y_discrete(expand = c(0, 0), limits = rev)
   }
+  p <- p + ggplot2::geom_vline(xintercept = chrBnd, color = "grey20",
+                               lty = 2, size = 0.3)
   if (output) {
     plot(p)
   }
