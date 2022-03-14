@@ -2,59 +2,74 @@
 #'
 #' @importFrom stats coef pchisq
 #' @keywords internal
-scanQTL <- function(MPPobj,
+scanQTL <- function(modDat,
+                    map,
+                    parents,
                     QTLwindow = 10,
                     cof = NULL,
-                    trait = "pheno",
+                    trait = NULL,
+                    maxIter = 100,
                     verbose = FALSE) {
   ## Get info from MPP object.
-  map <- MPPobj$calcIBDres$map
-  parents <- MPPobj$MPPinfo$parents
   nMarkers <- nrow(map)
   ## Fit NULL model without cofactors.
-  fitNULLmod <- randomQTLmodel(MPPobj,
-                               trait,
-                               cofPos = NULL,
+  fitNULLmod <- randomQTLmodel(modDat = modDat,
+                               map = map,
+                               parents = parents,
+                               trait = trait,
+                               cofMrk = NULL,
                                NULLmodel = TRUE)
   ## Initialize output.
   minlog10p <- numeric(length = nMarkers)
   QTLRegion <- rep(FALSE, nMarkers)
   effects <- matrix(nrow = nMarkers, ncol = length(parents),
-                    dimnames = list(rownames(map), parents))
+                    dimnames = list(rownames(map), paste0("eff_", parents)))
   for (i in seq_len(nMarkers)) {
-    mrkCof <- selectCofactors(map = map,
+    scanMrk <- rownames(map)[i]
+    cofMrk <- selectCofactors(map = map,
                               marker = i,
                               cofactors = cof,
                               QTLwindow = QTLwindow)
-    if (length(mrkCof) != length(cof)) {
+    if (length(cofMrk) != length(cof)) {
       QTLRegion[i] <- TRUE
     }
     ## Fit model for current marker.
-    fitModMrk <- randomQTLmodel(MPPobj,
-                                trait,
-                                scanPos = i,
-                                cofPos = mrkCof,
+    fitModMrk <- randomQTLmodel(modDat = modDat,
+                                map = map,
+                                parents = parents,
+                                trait = trait,
+                                scanMrk = scanMrk,
+                                cofMrk = cofMrk,
                                 NULLmodel = FALSE)
     dev <- 2.0 * fitModMrk$logL - 2.0 * fitNULLmod$logL
     ## Refit NULL model only if cofactors are present for current marker.
-    if (!is.null(mrkCof)) {
-      fitModCof <- randomQTLmodel(MPPobj,
-                                  trait,
-                                  cofPos = mrkCof,
+    if (!is.null(cofMrk)) {
+      fitModCof <- randomQTLmodel(modDat = modDat,
+                                  map = map,
+                                  parents = parents,
+                                  trait = trait,
+                                  cofMrk = cofMrk,
                                   NULLmodel = TRUE)
       dev <- 2.0 * fitModMrk$logL - 2.0 * fitModCof$logL
     }
-    minlog10p[i] <- -log10(0.5 * pchisq(dev, 1, lower.tail = FALSE))
     effects[i, ] <- coef(fitModMrk)[[rownames(map)[i]]]
+    minlog10p[i] <- -log10(0.5 * pchisq(dev, 1, lower.tail = FALSE))
     if (verbose && i %% 25 == 0) {
       cat(paste(i, "\n"))
     }
   }
-  res <- data.frame(ndx = seq_len(nMarkers),
-                    map,
-                    minlog10p = minlog10p,
-                    eff = effects,
-                    QTLRegion = QTLRegion,
-                    trait = trait)
-  return(res)
+  scanRes <- data.table::data.table(trait = trait,
+                                    snp = rownames(map),
+                                    map,
+                                    pValue = 10 ^ -minlog10p,
+                                    effects,
+                                    minlog10p = minlog10p,
+                                    QTLRegion = QTLRegion)
+  return(scanRes)
 }
+
+
+
+
+
+

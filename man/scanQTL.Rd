@@ -4,7 +4,16 @@
 \alias{scanQTL}
 \title{one-round genome scan with specified cofactor(s)}
 \usage{
-scanQTL(MPPobj, QTLwindow = 10, cof = NULL, trait = "pheno", verbose = FALSE)
+scanQTL(
+  modDat,
+  map,
+  parents,
+  QTLwindow = 10,
+  cof = NULL,
+  trait = NULL,
+  maxIter = 100,
+  verbose = FALSE
+)
 }
 \description{
 one-round genome scan with specified cofactor(s)

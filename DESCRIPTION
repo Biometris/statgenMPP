@@ -1,28 +1,46 @@
 Package: statgenMPP
-Title: QTL mapping for Multi Parental Populations
+Title: QTL Mapping for Multi Parent Populations
 Version: 0.0.0.9000
 Authors@R: c(person(given = "Wenhao", 
                     family = "Li", 
                     email = "wenhao.li@wur.nl", 
                     role = "aut",
-                    comment = c(ORCID = "0000-0000-0000-0000")),
+                    comment = c(ORCID = "0000-0001-5719-5775")),
              person(given = "Martin", 
                     family = "Boer", 
                     email = "martin.boer@wur.nl", 
-                    role = "ctb"),
+                    role = "aut",
+                    comment = c(ORCID = "0000-0002-1879-4588")),
              person(given = "Bart-Jan", 
                     family = "van Rossum", 
                     email = "bart-jan.vanrossum@wur.nl", 
                     role = c("aut", "cre"),
-                    comment = c(ORCID = "0000-0002-8673-2514")))
-Description: QTL mapping for Multi Parental Populations.
+                    comment = c(ORCID = "0000-0002-8673-2514")),
+             person(given = "Fred", 
+                    family = "van Eeuwijk",
+                    role = "ctb",
+                    comment = c(ORCID = "0000-0003-3672-2921")))        
+Description: For Multi Parent Populations (MPP) Identity By Descend (IBD) 
+    probabilities are computed using Hidden Markov Models. These probabilities 
+    are then used in a mixed model approach for QTL Mapping as described in 
+    Li et al. \doi{10.1007/s00122-021-03919-7}.
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
+Depends:
+    R (>= 3.6),
+    statgenGWAS (>= 1.0.8)
 Imports: 
+    data.table,
     ggplot2,
+    gridExtra,
     LMMsolver,
-    statgenIBD,
-    statgenGWAS
+    scales,
+    statgenIBD (>= 1.0.4)
+Suggests: 
+    rmarkdown,
+    knitr,
+    tinytest
+VignetteBuilder: knitr

@@ -2,36 +2,43 @@
 #'
 #' @importFrom stats as.formula
 #' @keywords internal
-randomQTLmodel <- function(MPPobj,
+randomQTLmodel <- function(modDat,
+                           map,
+                           parents,
                            trait = "pheno",
-                           scanPos = 1,
-                           cofPos = NULL,
+                           scanMrk = NULL,
+                           cofMrk = NULL,
                            NULLmodel = FALSE) {
-  modDat <- MPPobj$calcIBDres$IBDdata
-  map <- MPPobj$calcIBDres$map
-  parents <- MPPobj$MPPinfo$parents
   nCross <- length(unique(modDat[["cross"]]))
-  nCof <- length(cofPos)
+  nCof <- length(cofMrk)
   if (nCross == 1) { # for MAGIC-type pop with one cross.
     fixed <- as.formula(paste(trait, "~1"))
   } else { # for NAM or diallel-type pops with > 1 cross
     fixed <- as.formula(paste(trait, "~cross"))
   }
-  modDat[["cross"]] <- as.factor(modDat[["cross"]])
-  selPos <- c(cofPos, if (!NULLmodel) scanPos)
+  selMrk <- c(cofMrk, if (!NULLmodel) scanMrk)
   Lgrp <- list()
-  if (length(selPos) > 0) {
-    for (i in seq_along(selPos)) {
-      selName <- rownames(map)[selPos[i]]
+  ## MB: add grp() terms to random part of model
+  ranTerm <- NULL
+  if (length(selMrk) > 0) {
+    for (selName in selMrk) {
       selIBDNames <- paste0(selName, "_", parents)
       Lgrp[[selName]] <- which(colnames(modDat) %in% selIBDNames)
+      if (is.null(ranTerm)) {
+        ranTerm <- paste0(ranTerm, "~grp(`", selName, "`)")
+      } else {
+        ranTerm <- paste0(ranTerm, "+grp(`", selName, "`)")
+      }
     }
   }
+  if (!is.null(ranTerm)) {
+    ranTerm = as.formula(ranTerm)
+  }
   fitMod <- LMMsolver::LMMsolve(fixed = fixed,
-                                randomMatrices = if (length(Lgrp) > 0) Lgrp,
-                                residualterm = "cross",
+                                random = ranTerm,
+                                group = if (length(Lgrp) > 0) Lgrp,
+                                residual = ~cross,
                                 data = modDat,
-                                eps = 1.0e-8,
-                                monitor = FALSE)
+                                tolerance = 1.0e-3)
   return(fitMod)
 }
