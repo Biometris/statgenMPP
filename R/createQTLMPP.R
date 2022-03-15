@@ -86,7 +86,7 @@ print.summary.QTLMPP <- function(x,
 #' Creates a plot of an object of S3 class \code{QTLMPP}. The following types of
 #' plot can be made:
 #' \itemize{
-#' \item{QTLProfile}{ A QTL profile plot, i.e. a plot of \eqn{-10log(p)} values
+#' \item{QTLProfile}{ A QTL profile plot, i.e. a plot of \eqn{-log10(p)} values
 #' per marker.}
 #' \item{parEffs} { A plot of effect sizes and directions per parent.}
 #' \item{QTLRegion}{ A plot highlighting the QTLs found on the genetic map.}
@@ -97,7 +97,7 @@ print.summary.QTLMPP <- function(x,
 #' specific to the different plots.
 #'
 #' @section QTL Profile plot:
-#' A profile of all marker positions and corresponding \eqn{-10log(p)} values is
+#' A profile of all marker positions and corresponding \eqn{-log10(p)} values is
 #' plotted. QTLs found are highlighted with red dots. The threshold is plotted
 #' as a horizontal line. If there are previously known marker effects, false
 #' positives and true negatives can also be marked.\cr

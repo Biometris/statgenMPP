@@ -23,7 +23,7 @@ selQTLMPP(
 is considered as part of that QTL.}
 
 \item{threshold}{A numerical value indicating the threshold for the
-\eqn{-10logp} value of a marker to be considered a QTL.}
+\eqn{-log10p} value of a marker to be considered a QTL.}
 
 \item{maxCofactors}{A numerical value, the maximum number of cofactors to
 include in the model. If \code{NULL} cofactors are added until no new
@@ -37,10 +37,10 @@ An object of class \code{QTLMPP}
 \description{
 Multi round genome scans for QTL detection.\cr\cr
 Several rounds of QTL detection are performed. First a model is fitted
-without cofactors. If for at least one marker the \eqn{-10log(p)} value is
+without cofactors. If for at least one marker the \eqn{-log10(p)} value is
 above the threshold the marker with the lowest p-Value is added as cofactor
 in the next round of QTL detection. This process continues until there are
-no new markers with a \eqn{-10log(p)} value above the threshold or until
+no new markers with a \eqn{-log10(p)} value above the threshold or until
 the maximum number of cofactors is reached.
 }
 \examples{

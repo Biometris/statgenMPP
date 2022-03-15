@@ -38,11 +38,11 @@ These are spelled correctly.
 
 Found the following (possibly) invalid URLs:
   URL: https://doi.org/10.1073/pnas.1100465108
-    From: inst/doc/QTLMapping_in_MultiParentalPopulations.html
+    From: inst/doc/QTLMapping_in_MultiParentPopulations.html
     Status: 503
     Message: Service Unavailable
   URL: https://www.jstor.org/stable/29713
-    From: inst/doc/QTLMapping_in_MultiParentalPopulations.html
+    From: inst/doc/QTLMapping_in_MultiParentPopulations.html
     Status: 403
     Message: Forbidden
   
