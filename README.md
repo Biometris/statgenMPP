@@ -11,9 +11,8 @@ mapping in multi-parent populations. The package has many ways of
 visualizing inputs and results. First Identity By Descent (IBD)
 probabilities are computed using Hidden Markov Models. These
 probabilities are then used in a mixed model approach for QTL Mapping as
-described in Li et al. .
-
-## Installation
+described in [Li et
+al. 2021](https://link.springer.com/article/10.1007/s00122-021-03919-7).
 
 -   Install from CRAN:
 
