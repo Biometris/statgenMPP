@@ -3,7 +3,7 @@ template:
   bootstrap: 5
 
 home:
-  title: An R package for QTL mapping in multi parental populations
+  title: An R package for QTL mapping in multi parent populations
 
 navbar:
   title: "statgenMPP"
@@ -45,17 +45,24 @@ articles:
       This vignette provides a description of the statgenMPP package including
       some fully worked examples.
     contents:
-      - QTLMapping_in_MultiParentalPopulations
+      - QTLMapping_in_MultiParentPopulations
 
 reference:
-- title: Index
+- title: IBD calculations
 - contents:
   - calcIBDMPP
   - readRABBIT
   - plot.gDataMPP
   - summary.gDataMPP
+- title: QTL Mapping
+- contents:
   - selQTLMPP
+  - summary.QTLMPP
+  - print.summary.QTLMPP
   - plot.QTLMPP
+- title: Data
+- contents:
   - barleyPheno
   - maizeSIM
   - maizeCIM
+  - barleyCIM
