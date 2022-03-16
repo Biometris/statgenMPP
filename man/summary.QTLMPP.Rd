@@ -34,11 +34,11 @@ ABC <- calcIBDMPP(crossNames = c("AxB", "AxC"),
                                         package = "statgenMPP"),
                   evalDist = 5)
 
-## Composite Interval Mapping.
-ABC_CIM <- selQTLMPP(ABC, trait = "pheno")
+## Multi-QTL Mapping.
+ABC_MQM <- selQTLMPP(ABC, trait = "pheno")
 
 ## Print summary.
-summary(ABC_CIM)
+summary(ABC_MQM)
 }
 
 }

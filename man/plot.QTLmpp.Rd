@@ -123,20 +123,20 @@ ABC <- calcIBDMPP(crossNames = c("AxB", "AxC"),
                                         package = "statgenMPP"),
                   evalDist = 5)
 
-## Composite Interval Mapping.
-ABC_CIM <- selQTLMPP(ABC, trait = "pheno")
+## Multi-QTL Mapping.
+ABC_MQM <- selQTLMPP(ABC, trait = "pheno")
 
 ## QTL Profile plot.
-plot(ABC_CIM, plotType = "QTLProfile")
+plot(ABC_MQM, plotType = "QTLProfile")
 
 ## Plot of parental effects for QTLs found.
-plot(ABC_CIM, plotType = "parEffs")
+plot(ABC_MQM, plotType = "parEffs")
 
 ## Plot of genetic map highlighting positions of QTLs found.
-plot(ABC_CIM, plotType = "QTLRegion")
+plot(ABC_MQM, plotType = "QTLRegion")
 
 ## Extended QTL Profile plot.
-plot(ABC_CIM, plotType = "QTLProfileExt")
+plot(ABC_MQM, plotType = "QTLProfileExt")
 }
 
 }

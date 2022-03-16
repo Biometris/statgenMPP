@@ -42,12 +42,12 @@
 #'                                         package = "statgenMPP"),
 #'                   evalDist = 5)
 #'
-#' ## Simple Interval Mapping.
-#' ABC_SIM <- selQTLMPP(ABC, trait = "pheno", maxCofactors = 0)
+#' ## Single-QTL Mapping.
+#' ABC_SQM <- selQTLMPP(ABC, trait = "pheno", maxCofactors = 0)
 #'
-#' ## Composite Interval Mapping
+#' ## Multi-QTL Mapping
 #' \dontrun{
-#' ABC_CIM <- selQTLMPP(ABC, trait = "pheno")
+#' ABC_MQM <- selQTLMPP(ABC, trait = "pheno")
 #' }
 #'
 #' @importFrom utils head tail

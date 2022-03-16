@@ -25,8 +25,9 @@ barleyMPP <- readRABBIT(infile = inFile,
                         pedFile = pedFile,
                         pheno = barleyPheno)
 
-barleyCIM <- selQTLMPP(MPPobj = barleyMPP,
+## Perform Multi-QTL Mapping.
+barleyMQM <- selQTLMPP(MPPobj = barleyMPP,
                        trait = "Awn_length",
                        threshold = 4)
 
-usethis::use_data(barleyPheno, barleyCIM, overwrite = TRUE)
+usethis::use_data(barleyPheno, barleyMQM, overwrite = TRUE)

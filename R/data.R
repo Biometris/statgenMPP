@@ -12,17 +12,17 @@
 #' Theor Appl Genet. 2017 Feb;130(2):269-281. \doi{10.1007/s00122-016-2807-y}.
 "barleyPheno"
 
-#' Pre-computed CIM output maize
+#' Pre-computed SQM output maize
 #'
-#' Pre-computed CIM output for maize data used in vignette.
-"maizeCIM"
+#' Pre-computed SQM output for maize data used in vignette.
+"maizeSQM"
 
-#' Pre-computed SIM output maize
+#' Pre-computed MQM output maize
 #'
-#' Pre-computed SIM output for maize data used in vignette.
-"maizeSIM"
+#' Pre-computed MQM output for maize data used in vignette.
+"maizeSQM"
 
-#' Pre-computed CIM output barley
+#' Pre-computed MQM output barley
 #'
-#' Pre-computed CIM output for barley data used in vignette.
-"barleyCIM"
+#' Pre-computed MQM output for barley data used in vignette.
+"barleyMQM"

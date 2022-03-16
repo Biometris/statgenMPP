@@ -29,13 +29,14 @@ maizeMPP <- calcIBDMPP(crossNames = crosses,
                        mapFile = mapFile,
                        evalDist = 5)
 
-## Perform simple interval mapping.
-maizeSIM <- selQTLMPP(MPPobj = maizeMPP,
+## Perform single-QTL mapping.
+maizeSQM <- selQTLMPP(MPPobj = maizeMPP,
                       trait = "mean_DtSILK",
                       maxCofactors = 0)
 
-maizeCIM <- selQTLMPP(MPPobj = maizeMPP,
+## Perform multi-QTL mapping.
+maizeMQM <- selQTLMPP(MPPobj = maizeMPP,
                       trait = "mean_DtSILK",
                       threshold = 5)
 
-usethis::use_data(maizeSIM, maizeCIM, internal = FALSE, overwrite = TRUE)
+usethis::use_data(maizeSQM, maizeMQM, internal = FALSE, overwrite = TRUE)

@@ -42,16 +42,16 @@ expect_error(selQTLMPP(MPPobj = ABC, trait = "pheno", maxCofactors = "1"),
 expect_error(selQTLMPP(MPPobj = ABC, trait = "pheno", maxCofactors = c(1, 2)),
              "maxCofactors should be a positive numerical value")
 
-ABC_SIM <- selQTLMPP(MPPobj = ABC, trait = "pheno", maxCofactors = 0)
-ABC_CIM_max <- selQTLMPP(MPPobj = ABC, trait = "pheno")
+ABC_SQM <- selQTLMPP(MPPobj = ABC, trait = "pheno", maxCofactors = 0)
+ABC_MQM_max <- selQTLMPP(MPPobj = ABC, trait = "pheno")
 
 ## General structure.
-expect_inherits(ABC_CIM_max, "QTLMPP")
-expect_inherits(ABC_CIM_max, "GWAS")
+expect_inherits(ABC_MQM_max, "QTLMPP")
+expect_inherits(ABC_MQM_max, "GWAS")
 
-expect_equal(names(ABC_CIM_max),
+expect_equal(names(ABC_MQM_max),
              c("GWAResult", "signSnp", "kinship", "thr", "GWASInfo"))
-expect_equal_to_reference(ABC_CIM_max, "ABC_CIM_max", tolerance = 1e-6)
+expect_equal_to_reference(ABC_MQM_max, "ABC_MQM_max", tolerance = 1e-6)
 
 ## Option verbose.
 expect_stdout(selQTLMPP(MPPobj = ABC, trait = "pheno", maxCofactors = 1,
