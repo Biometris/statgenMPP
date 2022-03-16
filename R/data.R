@@ -20,7 +20,7 @@
 #' Pre-computed MQM output maize
 #'
 #' Pre-computed MQM output for maize data used in vignette.
-"maizeSQM"
+"maizeMQM"
 
 #' Pre-computed MQM output barley
 #'
