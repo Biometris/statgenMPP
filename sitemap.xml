@@ -19,7 +19,7 @@
     <loc>/news/index.html</loc>
   </url>
   <url>
-    <loc>/reference/barleyCIM.html</loc>
+    <loc>/reference/barleyMQM.html</loc>
   </url>
   <url>
     <loc>/reference/barleyPheno.html</loc>
@@ -37,10 +37,7 @@
     <loc>/reference/index.html</loc>
   </url>
   <url>
-    <loc>/reference/maizeCIM.html</loc>
-  </url>
-  <url>
-    <loc>/reference/maizeSIM.html</loc>
+    <loc>/reference/maizeSQM.html</loc>
   </url>
   <url>
     <loc>/reference/plot.QTLmpp.html</loc>

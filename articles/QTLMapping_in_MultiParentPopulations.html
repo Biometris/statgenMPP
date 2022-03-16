@@ -100,7 +100,7 @@
       <img src="" class="logo" alt=""><h1>QTL Mapping in Multi-Parent Populations</h1>
                         <h4 data-toc-skip class="author">Wenhao Li, Martin Boer, and Bart-Jan van Rossum</h4>
             
-            <h4 data-toc-skip class="date">2022-03-15</h4>
+            <h4 data-toc-skip class="date">2022-03-16</h4>
       
       
       <div class="d-none name"><code>QTLMapping_in_MultiParentPopulations.Rmd</code></div>
@@ -130,7 +130,7 @@
 <p>Then for each of the evaluation points <span class="math inline">\(q\)</span> in the map a second model is fitted:</p>
 <p><span class="math display">\[y = X\beta + M_{q} a_{q} + \varepsilon, a_{q} \sim { }N\left( {0,I_{P} \sigma_{q}^{2} } \right), \varepsilon \sim { }N\left( {0, \oplus_{k = 1}^{F} I_{{n_{k} }} \sigma_{{\varepsilon_{k} }}^{2} } \right),\]</span> where <span class="math inline">\(M_{q}\)</span> is the design matrix containing the expected number of parental alleles as a function of IBD probabilities, <span class="math inline">\(a_{q}\)</span> is the vector of random parental effects with variance covariance structure <span class="math inline">\(I_{P} \sigma_{q}^{2}\)</span>, where <span class="math inline">\(\sigma_{q}^{2}\)</span> is the genetic variance of the QTL effects at P parents.</p>
 <p>Variance components of a putative QTL from the two models are evaluated to perform the likelihood ratio test (LRT). The p-value is calculated using a <span class="math inline">\(\chi^2\)</span> mixture approximation for the Likelihood Ratio Test.</p>
-<p>For CIM the first steps are the same. However after the first round of scanning the QTL with the highest <span class="math inline">\(-log10(p)\)</span> value is added as a cofactor in the model and a new round of scanning is done. This is repeated until no new QTLs are found with a <span class="math inline">\(-log10(p)\)</span> value above a predefined threshold, or until the predefined maximum number of cofactors is added to the model. In a region of specified width around a cofactor no new cofactors can be detected.</p>
+<p>For Multi-QTL Mapping (MQM) the first steps are the same. However after the first round of scanning the QTL with the highest <span class="math inline">\(-log10(p)\)</span> value is added as a cofactor in the model and a new round of scanning is done. This is repeated until no new QTLs are found with a <span class="math inline">\(-log10(p)\)</span> value above a predefined threshold, or until the predefined maximum number of cofactors is added to the model. In a region of specified width around a cofactor no new cofactors can be detected.</p>
 </div>
 </div>
 <div class="section level2">
@@ -282,47 +282,47 @@ A map file is also required. This should also be a tab-delimited file with three
 <code class="sourceCode R"><span class="co">## Plot IBD probabilities for genotype AxB0001.</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ABCMPP</span>, plotType <span class="op">=</span> <span class="st">"singleGeno"</span>, genotype <span class="op">=</span> <span class="st">"AxB0001"</span><span class="op">)</span></code></pre></div>
 <p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/plotSGABCMPP-1.png" width="672"></p>
-<p>Using the computed IBD probabilities we can now do the actual QTL Mapping using the <code>selQTLMPP</code> function. First we perform a SIM by setting <code>maxCofactors = 0</code>. Our trait of interest, pheno, is specified in the <code>trait</code> argument of the function.</p>
+<p>Using the computed IBD probabilities we can now do the actual QTL Mapping using the <code>selQTLMPP</code> function. First we perform a SQM by setting <code>maxCofactors = 0</code>. Our trait of interest, pheno, is specified in the <code>trait</code> argument of the function.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Perform simple interval mapping.</span>
-<span class="va">ABCSIM</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/selQTLmpp.html">selQTLMPP</a></span><span class="op">(</span>MPPobj <span class="op">=</span> <span class="va">ABCMPP</span>,
+<code class="sourceCode R"><span class="co">## Perform Single-QTL Mapping.</span>
+<span class="va">ABCSQM</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/selQTLmpp.html">selQTLMPP</a></span><span class="op">(</span>MPPobj <span class="op">=</span> <span class="va">ABCMPP</span>,
                     trait <span class="op">=</span> <span class="st">"pheno"</span>,
                     maxCofactors <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></code></pre></div>
-<p>The results of the SIM can be plotted using the <code>plot</code> function with <code>plotType = "QTLProfile"</code>.</p>
+<p>The results of the SQM can be plotted using the <code>plot</code> function with <code>plotType = "QTLProfile"</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Plot QTL Profile for ABC SIM.</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ABCSIM</span>, plotType <span class="op">=</span> <span class="st">"QTLProfile"</span><span class="op">)</span></code></pre></div>
-<p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/QPABCSIM-1.png" width="672"></p>
-<p>Already from the SIM the position of the three simulated QTLs is quite clear. We can get an even better result using CIM.For that, again we use the <code>selQTLMPP</code> function. We don’t specify the <code>maxCofactors</code> to let the algorithm determine the number of cofactors based on the threshold and QTLwindow. As long as new markers are found with a <span class="math inline">\(-log10(p)\)</span> value above <code>threshold</code> and the maximum number of cofactors is not reached, a new round of scanning is done. In the new round of scanning the marker with the highest <span class="math inline">\(-log10(p)\)</span> value from the previous round is added to the cofactors. Based on the profile plot for the SIM the <code>threshold</code> is set to 3. The <code>QTLwindow</code> is not specified and therefore left at its default value of 10cM.</p>
+<code class="sourceCode R"><span class="co">## Plot QTL Profile for ABC SQM.</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ABCSQM</span>, plotType <span class="op">=</span> <span class="st">"QTLProfile"</span><span class="op">)</span></code></pre></div>
+<p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/QPABCSQM-1.png" width="672"></p>
+<p>Already from the SQM the position of the three simulated QTLs is quite clear. We can get an even better result using MQM.For that, again we use the <code>selQTLMPP</code> function. We don’t specify the <code>maxCofactors</code> to let the algorithm determine the number of cofactors based on the threshold and QTLwindow. As long as new markers are found with a <span class="math inline">\(-log10(p)\)</span> value above <code>threshold</code> and the maximum number of cofactors is not reached, a new round of scanning is done. In the new round of scanning the marker with the highest <span class="math inline">\(-log10(p)\)</span> value from the previous round is added to the cofactors. Based on the profile plot for the SQM the <code>threshold</code> is set to 3. The <code>QTLwindow</code> is not specified and therefore left at its default value of 10cM.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Perform composite interval mapping.</span>
-<span class="va">ABCCIM</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/selQTLmpp.html">selQTLMPP</a></span><span class="op">(</span>MPPobj <span class="op">=</span> <span class="va">ABCMPP</span>,
+<code class="sourceCode R"><span class="co">## Perform Multi-QTL Mapping.</span>
+<span class="va">ABCMQM</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/selQTLmpp.html">selQTLMPP</a></span><span class="op">(</span>MPPobj <span class="op">=</span> <span class="va">ABCMPP</span>,
                     trait <span class="op">=</span> <span class="st">"pheno"</span>,
                     threshold <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
 <p>First we plot the positions of the QTLs found on the genetic map. This will produce a plot similar the the genetic map plot we have seen before, but now the QTLs will be highlighted. This plot can be made by specifying <code>plotType = "QTLRegion"</code></p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Plot QTL Profile for ABC CIM.</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ABCCIM</span>, plotType <span class="op">=</span> <span class="st">"QTLRegion"</span><span class="op">)</span></code></pre></div>
-<p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/plotQRABCCIM-1.png" width="672"></p>
-<p>As for the SIM we can also plot the QTL profile. The QTLs found will be highlighted in the profile in red.</p>
+<code class="sourceCode R"><span class="co">## Plot QTL Profile for ABC MQM.</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ABCMQM</span>, plotType <span class="op">=</span> <span class="st">"QTLRegion"</span><span class="op">)</span></code></pre></div>
+<p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/plotQRABCMQM-1.png" width="672"></p>
+<p>As for the SQM we can also plot the QTL profile. The QTLs found will be highlighted in the profile in red.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Plot QTL Profile for ABC CIM.</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ABCCIM</span>, plotType <span class="op">=</span> <span class="st">"QTLProfile"</span><span class="op">)</span></code></pre></div>
-<p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/plotQPABCCIM-1.png" width="672"></p>
+<code class="sourceCode R"><span class="co">## Plot QTL Profile for ABC MQM.</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ABCMQM</span>, plotType <span class="op">=</span> <span class="st">"QTLProfile"</span><span class="op">)</span></code></pre></div>
+<p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/plotQPABCMQM-1.png" width="672"></p>
 <p>It is also possible to plot the size of the parental effects for each of the QTLs found. Positive effects of a parent on the trait will be indicated by shades of red, negative effects by shades of blue. The stronger the color, the larger the effect for the specific parent is. This plot can be made using <code>plotType = "parEffs"</code>.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Plot QTL Profile for ABC CIM.</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ABCCIM</span>, plotType <span class="op">=</span> <span class="st">"parEffs"</span><span class="op">)</span></code></pre></div>
-<p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/plotPEABCCIM-1.png" width="672"></p>
+<code class="sourceCode R"><span class="co">## Plot QTL Profile for ABC MQM.</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ABCMQM</span>, plotType <span class="op">=</span> <span class="st">"parEffs"</span><span class="op">)</span></code></pre></div>
+<p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/plotPEABCMQM-1.png" width="672"></p>
 <p>Finally a combined plot of the QTL profile and the parental can be made. In this plot the two previous plots are plotted above each other with the chromosomes and positions aligned to allow for easily getting an overview of which effect belongs to which QTL in the QTL profile. This plot can be made using <code>plotType = "QTLProfileExt"</code>.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Plot QTL Profile for maize CIM.</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ABCCIM</span>, plotType <span class="op">=</span> <span class="st">"QTLProfileExt"</span><span class="op">)</span></code></pre></div>
-<p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/plotQPEABCCIM-1.png" width="672"></p>
+<code class="sourceCode R"><span class="co">## Plot QTL Profile for ABC MQM.</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ABCMQM</span>, plotType <span class="op">=</span> <span class="st">"QTLProfileExt"</span><span class="op">)</span></code></pre></div>
+<p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/plotQPEABCMQM-1.png" width="672"></p>
 <p>A summary of the QTL-analyis gives a short overview containing the total number of markers and the number of QTLs found. Also for all QTL their position on the chromosome is shown as well as the nearest marker on the original map, the explained variance and the effects of all parents.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Print summary</span>
-<span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">ABCCIM</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">ABCMQM</span><span class="op">)</span>
 <span class="co">#&gt; Trait analysed: pheno </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Data are available for 95 markers.</span>
@@ -334,11 +334,11 @@ A map file is also required. This should also be a tab-delimited file with three
 <span class="co">#&gt;  EXT_1_25   1  25    M1_3     16.45   0.242 -1.417  0.859  0.558</span>
 <span class="co">#&gt;  EXT_2_75   2  75    M2_8      8.59   0.217  0.833 -1.327  0.495</span>
 <span class="co">#&gt;  EXT_3_65   3  65    M3_7     11.69   0.287  0.984  0.560 -1.544</span></code></pre></div>
-<p>From the output of <code>selQTLMPP</code> the p-Values and effects for all markers can be extracted. They are stored in a <code>data.table</code> within the output object. The example below shows how to extract them. The output will contain columns snp, chr and pos with name, chromosome number and position of the marker and columns pValue and eff_par1, eff_par2, eff_par.. with the effects of all parents for that marker.</p>
+<p>From the output of <code>selQTLMPP</code> the p-Values and effects for all markers can be extracted. They are stored in a <code>data.table</code> within the output object. The example below shows how to extract them. The output will contain columns evalPos, chr and pos with name, chromosome number and evaluation position and columns pValue and eff_par1, eff_par2, eff_par.. with the effects of all parents for that marker.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Extract results of QTL mapping.</span>
-<span class="va">ABCCIMres</span> <span class="op">&lt;-</span> <span class="va">ABCCIM</span><span class="op">$</span><span class="va">GWAResult</span><span class="op">$</span><span class="va">pheno</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ABCCIMres</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">]</span><span class="op">)</span>
+<span class="va">ABCMQMres</span> <span class="op">&lt;-</span> <span class="va">ABCMQM</span><span class="op">$</span><span class="va">GWAResult</span><span class="op">$</span><span class="va">pheno</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ABCMQMres</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">]</span><span class="op">)</span>
 <span class="co">#&gt;    trait      snp chr pos   pValue     eff_A     eff_B    eff_C</span>
 <span class="co">#&gt; 1: pheno  EXT_1_5   1   5 5.00e-01  1.70e-07 -8.49e-06 8.31e-06</span>
 <span class="co">#&gt; 2: pheno EXT_1_10   1  10 5.00e-01 -4.57e-06 -4.90e-06 9.47e-06</span>
@@ -349,8 +349,8 @@ A map file is also required. This should also be a tab-delimited file with three
 <p>It is also possible to only extract the markers that are either QTLs or within the window of one of the selected QTLs, as specified when calling the <code>selQTLMPP</code> function. As for the full results, this information in stored in the output as a <code>data.table</code> that can be extracted as shown below. The columns in this <code>data.table</code> are identical to those in the full results except for an additional column at the end, snpStatus, that shows whether a marker is a QTL or within the window of a QTL.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Extract QTLs and markers within QTL windows.</span>
-<span class="va">ABCCIMQTL</span> <span class="op">&lt;-</span> <span class="va">ABCCIM</span><span class="op">$</span><span class="va">signSnp</span><span class="op">$</span><span class="va">pheno</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ABCCIMQTL</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">8</span>, <span class="fl">10</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>
+<span class="va">ABCMQMQTL</span> <span class="op">&lt;-</span> <span class="va">ABCMQM</span><span class="op">$</span><span class="va">signSnp</span><span class="op">$</span><span class="va">pheno</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ABCMQMQTL</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">8</span>, <span class="fl">10</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>
 <span class="co">#&gt;    trait chr pos   pValue  eff_A  eff_B eff_C varExpl</span>
 <span class="co">#&gt; 1: pheno   1  20 9.83e-17 -1.441  1.016 0.425      NA</span>
 <span class="co">#&gt; 2: pheno   1  25 3.55e-17 -1.417  0.859 0.558   0.242</span>
@@ -433,28 +433,28 @@ A map file is also required. This should also be a tab-delimited file with three
 <code class="sourceCode R"><span class="co">## Plot structure of the pedigree.</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">maizeMPP</span>, plotType <span class="op">=</span> <span class="st">"pedigree"</span><span class="op">)</span></code></pre></div>
 <p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/plotPmaizeIBD-1.png" width="672"></p>
-<p>Now we can used the computed IBD probabilities to perform SIM.</p>
+<p>Now we can used the computed IBD probabilities to perform SQM.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Perform simple interval mapping.</span>
-<span class="va">maizeSIM</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/selQTLmpp.html">selQTLMPP</a></span><span class="op">(</span>MPPobj <span class="op">=</span> <span class="va">maizeMPP</span>,
+<code class="sourceCode R"><span class="co">## Perform Single-QTL Mapping.</span>
+<span class="va">maizeSQM</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/selQTLmpp.html">selQTLMPP</a></span><span class="op">(</span>MPPobj <span class="op">=</span> <span class="va">maizeMPP</span>,
                       trait <span class="op">=</span> <span class="st">"mean_DtSILK"</span>,
                       maxCofactors <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></code></pre></div>
-<p>We plot the QTL profile for the SIM to get an idea of reasonable values to use for the <code>threshold</code> and <code>QTLwindow</code> in the CIM that we do next.</p>
+<p>We plot the QTL profile for the SQM to get an idea of reasonable values to use for the <code>threshold</code> and <code>QTLwindow</code> in the MQM that we do next.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Plot QTL Profile for maize SIM.</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">maizeSIM</span>, plotType <span class="op">=</span> <span class="st">"QTLProfile"</span><span class="op">)</span></code></pre></div>
-<p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/QPmaizeSIM-1.png" width="672"></p>
-<p>Based on the plot for the SIM the <code>threshold</code> is set to 5 to restrict a bit the number of QTLs that will be detected in the CIM. The <code>QTLwindow</code> is not specified and therefore left at its default value of 10cM.</p>
+<code class="sourceCode R"><span class="co">## Plot QTL Profile for maize SQM.</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">maizeSQM</span>, plotType <span class="op">=</span> <span class="st">"QTLProfile"</span><span class="op">)</span></code></pre></div>
+<p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/QPmaizeSQM-1.png" width="672"></p>
+<p>Based on the plot for the SQM the <code>threshold</code> is set to 5 to restrict a bit the number of QTLs that will be detected in the MQM. The <code>QTLwindow</code> is not specified and therefore left at its default value of 10cM.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Perform composite interval mapping.</span>
-<span class="va">maizeCIM</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/selQTLmpp.html">selQTLMPP</a></span><span class="op">(</span>MPPobj <span class="op">=</span> <span class="va">maizeMPP</span>,
+<code class="sourceCode R"><span class="co">## Perform Multi-QTL Mapping.</span>
+<span class="va">maizeMQM</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/selQTLmpp.html">selQTLMPP</a></span><span class="op">(</span>MPPobj <span class="op">=</span> <span class="va">maizeMPP</span>,
                       trait <span class="op">=</span> <span class="st">"mean_DtSILK"</span>,
                       threshold <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
 <p>We only look at the combined plot of the QTL Profile and the parental effects. This should give us the most direct inside in the QTLs found and the effects the different parents in the crosses have.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Plot QTL Profile for maize CIM.</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">maizeCIM</span>, plotType <span class="op">=</span> <span class="st">"QTLProfileExt"</span><span class="op">)</span></code></pre></div>
-<p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/plotQPEmaizeCIM-1.png" width="672"></p>
+<code class="sourceCode R"><span class="co">## Plot QTL Profile for maize MQM.</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">maizeMQM</span>, plotType <span class="op">=</span> <span class="st">"QTLProfileExt"</span><span class="op">)</span></code></pre></div>
+<p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/plotQPEmaizeMQM-1.png" width="672"></p>
 </div>
 <div class="section level2">
 <h2 id="example-barley">Example barley<a class="anchor" aria-label="anchor" href="#example-barley"></a>
@@ -508,25 +508,25 @@ A map file is also required. This should also be a tab-delimited file with three
 <code class="sourceCode R"><span class="co">## Plot structure of the pedigree.</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">barleyMPP</span>, plotType <span class="op">=</span> <span class="st">"pedigree"</span><span class="op">)</span></code></pre></div>
 <p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/plotPbarleyIBD-1.png" width="672"></p>
-<p>Performing SIM and CIM for imported RABBIT output works in the same way as for IBD probabilities computed directly in the package. Since a full scan would take long we precomputed the results and included them in the package.</p>
+<p>Performing SQM and MQM for imported RABBIT output works in the same way as for IBD probabilities computed directly in the package. Since a full scan would take long we precomputed the results and included them in the package.</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Perform QTL-scan with threshold 4.</span>
-<span class="va">barleyCIM</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/selQTLmpp.html">selQTLMPP</a></span><span class="op">(</span>MPPobj <span class="op">=</span> <span class="va">barleyMPP</span>,
+<code class="sourceCode R"><span class="co">## Perform Multi-QTL Mapping with threshold 4.</span>
+<span class="va">barleyMQM</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/selQTLmpp.html">selQTLMPP</a></span><span class="op">(</span>MPPobj <span class="op">=</span> <span class="va">barleyMPP</span>,
                        trait <span class="op">=</span> <span class="st">"Awn_length"</span>,
                        threshold <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></code></pre></div>
 <p>There is a very large QTL on chromosome 7. To be able to more clearly distinguish the differences between the other QTLs they are plotted separately.</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Plot QTL Profile for barley CIM - chromosome 1-6.</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">barleyCIM</span>, plotType <span class="op">=</span> <span class="st">"QTLProfileExt"</span>, chr <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span></code></pre></div>
-<p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/QPbarleyCIM16-1.png" width="672"></p>
+<code class="sourceCode R"><span class="co">## Plot QTL Profile for barley MQM - chromosome 1-6.</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">barleyMQM</span>, plotType <span class="op">=</span> <span class="st">"QTLProfileExt"</span>, chr <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span></code></pre></div>
+<p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/QPbarleyMQM16-1.png" width="672"></p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">## Plot QTL Profile for barley CIM - chromosome 7.</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">barleyCIM</span>, plotType <span class="op">=</span> <span class="st">"QTLProfileExt"</span>, chr <span class="op">=</span> <span class="fl">7</span><span class="op">)</span></code></pre></div>
-<p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/QPbarleyCIM7-1.png" width="672"></p>
-<p>The QTLs found are very similar in both position, size and effects as described in <span class="citation">Liller et al. (<a href="#ref-Liller2017-jz" role="doc-biblioref">2017</a>)</span>. This can also be clearly seen by comparing the summary of the CIM with the table of effects in this paper.</p>
+<code class="sourceCode R"><span class="co">## Plot QTL Profile for barley MQM - chromosome 7.</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">barleyMQM</span>, plotType <span class="op">=</span> <span class="st">"QTLProfileExt"</span>, chr <span class="op">=</span> <span class="fl">7</span><span class="op">)</span></code></pre></div>
+<p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/QPbarleyMQM7-1.png" width="672"></p>
+<p>The QTLs found are very similar in both position, size and effects as described in <span class="citation">Liller et al. (<a href="#ref-Liller2017-jz" role="doc-biblioref">2017</a>)</span>. This can also be clearly seen by comparing the summary of the MQM with the table of effects in this paper.</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Summary.</span>
-<span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">barleyCIM</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">barleyMQM</span><span class="op">)</span>
 <span class="co">#&gt; Trait analysed: Awn_length </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Data are available for 355 markers.</span>
