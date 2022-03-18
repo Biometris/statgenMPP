@@ -1,7 +1,7 @@
 Package: statgenMPP
 Title: QTL Mapping for Multi Parent Populations
 Version: 1.0.0
-Date: 2022-03-14
+Date: 2022-03-18
 Authors@R: c(person(given = "Wenhao", 
                     family = "Li", 
                     email = "wenhao.li@wur.nl", 
@@ -24,7 +24,7 @@ Authors@R: c(person(given = "Wenhao",
 Description: For Multi Parent Populations (MPP) Identity By Descend (IBD) 
     probabilities are computed using Hidden Markov Models. These probabilities 
     are then used in a mixed model approach for QTL Mapping as described in 
-    Li et al. \doi{10.1007/s00122-021-03919-7}.
+    Li et al. (<doi:10.1007/s00122-021-03919-7>).
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
