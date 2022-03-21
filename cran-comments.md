@@ -1,6 +1,7 @@
 ## New release
 
 - Initial CRAN release
+- After earlier release replaced doi in DESCRIPTION using correct notation
 
 ----
 
