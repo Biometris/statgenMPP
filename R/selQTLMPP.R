@@ -107,8 +107,10 @@ selQTLMPP <- function(MPPobj,
   ## Not strictly necessary, but it prevents warnings from LMMsolve later on.
   modDat <- droplevels(modDat[!is.na(modDat[[trait]]), ])
   ## Flatten markers to 2D structure.
-  markers <- do.call(cbind, apply(X = markers, MARGIN = 2,
-                                  FUN = I, simplify = FALSE))
+  markers <- do.call(cbind, lapply(X = seq_len(ncol(markers)),
+                                   FUN = function(i) {
+    markers[, i, ]
+  }))
   colnames(markers) <- paste0(rep(markerNames, each = nPar), "_", parents)
   ## Merge markers to modDat.
   modDat <- merge(modDat, markers, by.x = "genotype", by.y = "row.names")
