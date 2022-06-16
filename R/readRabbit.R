@@ -62,31 +62,20 @@ readRABBIT <- function(infile,
            paste(nonNumCols, collapse = ", "))
     }
   }
-  ## Read map and marker probabilities.
-  markMap <- data.table::fread(infile, skip = "haploprob", fill = TRUE,
-                               data.table = FALSE)
-  ## Extract map.
-  map <- data.frame(chr = as.numeric(markMap[3, -1]),
-                    pos = as.numeric(markMap[4, -1]),
-                    row.names = as.character(markMap[2, -1]))
-  markMap <- markMap[5:(which(markMap[[2]] == "ibdprob") - 1), ]
-  ## Get names of genotypes and compute number of founder alleles per genotype.
-  genoNames <- unique(sapply(X = strsplit(x = markMap[, 1],
-                                          split = "_haplotype"), FUN = "[[", 1))
-  nAlleles = nrow(markMap) / length(genoNames)
-  ## Convert markers to 3D array.
-  markArr <- array(dim = c(length(genoNames), nrow(map), nAlleles))
-  for (i in 1:nrow(map)) {
-    markArr[, i, ] <- matrix(as.numeric(markMap[, i + 1]),
-                             ncol = nAlleles, byrow = TRUE)
+  ## Read first header to determine whether infile is created
+  ## with julia or with mathematica
+  con <- file(infile, "r")
+  firstHeader <- readLines(con = con, n = 1)
+  close(con)
+  if (firstHeader == "MagicReconstruct,designinfo") {
+    rabbitRes <- readRABBITJulia(infile)
+  } else {
+    rabbitRes <- readRABBITMathematica(infile)
   }
-  ## Read parent names from file.
-  parents <- data.table::fread(infile, header = FALSE, nrows = nAlleles + 2,
-                               skip = "haplotypes in order",
-                               data.table = FALSE, select = 3)
-  parents <- as.character(parents[3:nrow(parents), ])
-  ## Add dimnames to markers: genotypes x markers x parents.
-  dimnames(markArr) <- list(genoNames, rownames(map), parents)
+  map <- rabbitRes$map
+  founderProbs <- rabbitRes$founderProbs
+  genoNames <- rownames(founderProbs)
+  parents <- dimnames(founderProbs)[[3]]
   ## Split pheno in pheno and covar.
   if (is.null(pedFile)) {
     if (!is.null(pheno)) {
@@ -164,7 +153,8 @@ readRABBIT <- function(infile,
     popType <- "RABBIT"
   }
   ## Create gDataMPP object.
-  res <- createGDataMPP(geno = markArr, map = map, pheno = pheno, covar = covar)
+  res <- createGDataMPP(geno = founderProbs, map = map, pheno = pheno,
+                        covar = covar)
   attr(x = res, which = "popType") <- popType
   attr(x = res, which = "genoCross") <- genoCross
   attr(x = res, which = "mapOrig") <- map
@@ -173,3 +163,154 @@ readRABBIT <- function(infile,
   }
   return(res)
 }
+
+#' Read infile for Mathematica
+#'
+#' @noRd
+#' @keywords internal
+readRABBITMathematica <- function(infile) {
+  ## Read map and marker probabilities.
+  markMap <- data.table::fread(infile, skip = "haploprob", fill = TRUE,
+                               data.table = FALSE)
+  ## Extract map.
+  map <- data.frame(chr = as.numeric(markMap[3, -1]),
+                    pos = as.numeric(markMap[4, -1]),
+                    row.names = as.character(markMap[2, -1]))
+  markMap <- markMap[5:(which(markMap[[2]] == "ibdprob") - 1), ]
+  ## Get names of genotypes and compute number of founder alleles per genotype.
+  genoNames <- unique(sapply(X = strsplit(x = markMap[, 1],
+                                          split = "_haplotype"), FUN = "[[", 1))
+  nAlleles = nrow(markMap) / length(genoNames)
+  ## Convert markers to 3D array.
+  founderProbs <- array(dim = c(length(genoNames), nrow(map), nAlleles))
+  for (i in 1:nrow(map)) {
+    founderProbs[, i, ] <- matrix(as.numeric(markMap[, i + 1]),
+                                  ncol = nAlleles, byrow = TRUE)
+  }
+  ## Read parent names from file.
+  parents <- data.table::fread(infile, header = FALSE, nrows = nAlleles + 2,
+                               skip = "haplotypes in order",
+                               data.table = FALSE, select = 3)
+  parents <- as.character(parents[3:nrow(parents), ])
+  ## Add dimnames to markers: genotypes x markers x parents.
+  dimnames(founderProbs) <- list(genoNames, rownames(map), parents)
+  res <- list(map = map, founderProbs = founderProbs)
+  return(res)
+}
+
+
+#' Read infile for Julia
+#'
+#' @noRd
+#' @keywords internal
+readRABBITJulia <- function(infile) {
+  ## Get the line numbers of the RABBIT csv table blocks.
+  rabbitHeaderLineIndexes <- getRabbitHeaderLines(infile)
+  ## Get the founders.
+  founderInfo <-
+    data.table::fread(infile,
+                      skip = rabbitHeaderLineIndexes$founderinfo$lineNr,
+                      nrows = rabbitHeaderLineIndexes$founderinfo$numLines,
+                      data.table = FALSE,
+                      header = TRUE)
+  ## Get the offspring.
+  offspringInfo <-
+    data.table::fread(infile,
+                      skip = rabbitHeaderLineIndexes$offspringinfo$lineNr,
+                      nrows = rabbitHeaderLineIndexes$offspringinfo$numLines,
+                      data.table = FALSE,
+                      header = TRUE)
+  ## Get the markers.
+  founderGeno <-
+    data.table::fread(infile,
+                      skip = rabbitHeaderLineIndexes$foundergeno$lineNr,
+                      nrows = rabbitHeaderLineIndexes$foundergeno$numLines,
+                      data.table = FALSE,
+                      header = TRUE)
+  ## Extract map.
+  map <- data.frame(chr = as.numeric(founderGeno[, 2]),
+                    pos = as.numeric(founderGeno[, 3]),
+                    row.names = as.character(founderGeno[, 1]))
+  ## Get the probabilities.
+  haploProb <-
+    data.table::fread(infile,
+                      skip = rabbitHeaderLineIndexes$haploprob$lineNr,
+                      nrows = rabbitHeaderLineIndexes$haploprob$numLines,
+                      data.table = FALSE,
+                      header = TRUE)
+  ## Prepare 3D array.
+  nMarkers <- nrow(founderGeno)
+  nOffspring <- nrow(offspringInfo)
+  nFounders <- nrow(founderInfo)
+  founderProbs <- array(dim = c(nOffspring, nMarkers, nFounders),
+                        dimnames = list(offspringInfo$individual,
+                                        founderGeno$marker,
+                                        founderInfo$individual))
+  nChrom <- nrow(haploProb) / nOffspring
+  ## Fill the 3D array (offspring, markers, founders).
+  chrStart <- 1
+  chrLength <- 0
+  for (i in 1:nrow(haploProb)) {
+    markerindex <- as.numeric(stringi::stri_split_regex(haploProb[i, "markerindex"], "[|]", simplify = TRUE))
+    haploindex <- as.numeric(stringi::stri_split_regex(haploProb[i, "haplotype_index"], "[|]", simplify = TRUE))
+    probabilities <- as.numeric(stringi::stri_split_regex(haploProb[i, "haploprob"], "[|]", simplify = TRUE))
+    mat <- Matrix::sparseMatrix(i = markerindex, j = haploindex,
+                                x = probabilities, check = FALSE)
+    if (i %% nOffspring == 1) {
+      chrStart <- chrStart + chrLength
+      chrLength <- dim(mat)[1]
+      chrEnd <- chrStart + chrLength - 1
+    }
+    founderProbs[i %% nOffspring, chrStart:chrEnd, ] <- as.numeric(mat)
+  }
+  res <- list(map = map, founderProbs = founderProbs)
+  return(res)
+}
+
+
+
+
+
+
+
+
+
+#' @noRd
+#' @keywords internal
+getRabbitHeaderLines <- function(filepath) {
+  con <- file(filepath, "r")
+  magicHeaders <- list()
+  i <- 0
+  curHeaderLineCount <-0
+  curHeader <- NULL
+  while (TRUE) {
+    line <- readLines(con, n = 1)
+    curHeaderLineCount <- curHeaderLineCount + 1
+    if (!length(line)) {
+      magicHeaders[[curHeader]]$numLines = curHeaderLineCount - 2
+      break
+    } else if (!is.null(line) & startsWith(line, "MagicReconstruct,")) {
+      if (!is.null(curHeader)) {
+        magicHeaders[[curHeader]]$numLines = curHeaderLineCount - 2
+      }
+      header <- gsub("MagicReconstruct,", "", line)
+      curHeader <- header
+      curHeaderLineCount <- 0
+      magicHeaders[[header]] <- list(lineNr = i + 1, numLines = 0)
+    }
+    i <- i + 1
+  }
+  close(con)
+  return(magicHeaders);
+}
+
+
+
+
+
+
+
+
+
+
+
