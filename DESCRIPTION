@@ -38,8 +38,10 @@ Imports:
     ggplot2,
     gridExtra,
     LMMsolver,
+    Matrix,
     scales,
-    statgenIBD (>= 1.0.4)
+    statgenIBD (>= 1.0.4),
+    stringi
 Suggests: 
     rmarkdown,
     knitr,
