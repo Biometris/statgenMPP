@@ -174,6 +174,18 @@ createGDataMPP <- function(gDataMPP = NULL,
         }
         markers <- markers[, colnames(markers) %in% rownames(map), ,
                            drop = FALSE]
+        ## Check that genotypes don't contain NA probabilities.
+        ## This might occur in RABBIT output.
+        ## Remove those genotypes.
+        genoNA <- apply(X = markers, MARGIN = 1, function(x) {
+          anyNA(x)
+        })
+        if (any(genoNA)) {
+          warning("The following genotypes have been removed because ",
+                  "they have missing values for probabilities:",
+                  paste(rownames(markers)[genoNA], collapse = ", "))
+          markers <- markers[!genoNA, , ]
+        }
         ## Check that probabilities for each marker sum to one.
         ## Always rescale values.
         ## Throw a warning if difference from one is too large.
