@@ -15,8 +15,8 @@ information as used by RABBIT as input.}
 
 \item{pheno}{A data frame with at least columns "genotype" for the
 "genotype" and one or more numerical columns containing phenotypic
-information. if \code{pedFile} is not specified also a column "cross"
-indicating the cross the genotype comes from is required.}
+information. A column "cross" can be used for indicating the cross the
+genotype comes from.}
 }
 \value{
 A \code{gDataMPP} object with map and markers corresponding to the

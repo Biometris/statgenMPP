@@ -11,8 +11,8 @@
 #' information as used by RABBIT as input.
 #' @param pheno A data frame with at least columns "genotype" for the
 #' "genotype" and one or more numerical columns containing phenotypic
-#' information. if \code{pedFile} is not specified also a column "cross"
-#' indicating the cross the genotype comes from is required.
+#' information. A column "cross" can be used for indicating the cross the
+#' genotype comes from.
 #'
 #' @return A \code{gDataMPP} object with map and markers corresponding to the
 #' imported information in the imported .csv file.
@@ -44,7 +44,7 @@ readRABBIT <- function(infile,
       stop("pheno should be a data.frame.\n")
     }
     ## If pedFile is included cross will be read from there.
-    minCols <- c("genotype", if (is.null(pedFile)) "cross")
+    minCols <- "genotype"
     missCols <- minCols[!sapply(X = minCols, FUN = function(minCol) {
       hasName(x = pheno, name = minCol)
     })]
@@ -55,7 +55,7 @@ readRABBIT <- function(infile,
       stop("The following columns are missing in pheno:\n",
            paste(missCols, collapse = ", "))
     }
-    trtCols <- colnames(pheno)[!colnames(pheno) %in% minCols]
+    trtCols <- colnames(pheno)[!colnames(pheno) %in% c(minCols, "cross")]
     nonNumCols <- trtCols[!sapply(X = pheno[trtCols], FUN = is.numeric)]
     if (length(nonNumCols) > 0) {
       stop("The following columns in pheno are not numeric:\n",
@@ -76,18 +76,19 @@ readRABBIT <- function(infile,
   founderProbs <- rabbitRes$founderProbs
   genoNames <- rownames(founderProbs)
   parents <- dimnames(founderProbs)[[3]]
-  ## Split pheno in pheno and covar.
   if (is.null(pedFile)) {
-    if (!is.null(pheno)) {
+    covar <- NULL
+    if (!is.null(pheno) && hasName(x = pheno, name = "cross")) {
+      ## Split pheno in pheno and covar.
       covar <- pheno["cross"]
       rownames(covar) <- pheno[["genotype"]]
       pheno <- pheno[-which(colnames(pheno) == "cross")]
-    } else {
-      covar <- NULL
     }
-  }
-  ## Read pedigree.
-  if (!is.null(pedFile)) {
+    genoCross <- covar
+    genoCross[["geno"]] <- rownames(covar)
+    popType <- "RABBIT"
+  } else {
+    ## Read pedigree.
     pedDat <- data.table::fread(pedFile, skip = "Generation",
                                 data.table = FALSE, fill = TRUE)
     ## Get offspring.
@@ -147,10 +148,6 @@ readRABBIT <- function(infile,
     offDat[["type"]] <- popType
     pedDat <- rbind(pedDat, offDat)
     pedDat <- pedDat[c("ID", "par1", "par2", "type")]
-  } else {
-    genoCross <- covar
-    genoCross[["geno"]] <- rownames(covar)
-    popType <- "RABBIT"
   }
   ## Create gDataMPP object.
   res <- createGDataMPP(geno = founderProbs, map = map, pheno = pheno,
@@ -267,14 +264,6 @@ readRABBITJulia <- function(infile) {
   return(res)
 }
 
-
-
-
-
-
-
-
-
 #' @noRd
 #' @keywords internal
 getRabbitHeaderLines <- function(filepath) {
@@ -303,14 +292,3 @@ getRabbitHeaderLines <- function(filepath) {
   close(con)
   return(magicHeaders);
 }
-
-
-
-
-
-
-
-
-
-
-
