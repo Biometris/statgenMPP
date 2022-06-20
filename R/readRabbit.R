@@ -76,7 +76,7 @@ readRABBIT <- function(infile,
   founderProbs <- rabbitRes$founderProbs
   genoNames <- rownames(founderProbs)
   parents <- dimnames(founderProbs)[[3]]
-  if (is.null(pedFile)) {
+  if (is.null(pedFile) && is.null(rabbitRes$pedDat)) {
     covar <- NULL
     if (!is.null(pheno) && hasName(x = pheno, name = "cross")) {
       ## Split pheno in pheno and covar.
@@ -88,9 +88,14 @@ readRABBIT <- function(infile,
     genoCross[["geno"]] <- rownames(covar)
     popType <- "RABBIT"
   } else {
-    ## Read pedigree.
-    pedDat <- data.table::fread(pedFile, skip = "Generation",
-                                data.table = FALSE, fill = TRUE)
+    if (is.null(rabbitRes$pedDat)) {
+      ## Read pedigree.
+      pedDat <- data.table::fread(pedFile, skip = "Generation",
+                                  data.table = FALSE, fill = TRUE)
+    } else {
+      ## Pedigree is included and read from julia input.
+      pedDat <- rabbitRes$pedDat
+    }
     ## Get offspring.
     offDat <- pedDat[pedDat[["Generation"]] %in% genoNames, ]
     offDat[["ID"]] <- offDat[["Generation"]]
@@ -155,7 +160,7 @@ readRABBIT <- function(infile,
   attr(x = res, which = "popType") <- popType
   attr(x = res, which = "genoCross") <- genoCross
   attr(x = res, which = "mapOrig") <- map
-  if (!is.null(pedFile)) {
+  if (!is.null(pedDat)) {
     attr(x = res, which = "pedigree") <- pedDat
   }
   return(res)
@@ -203,6 +208,14 @@ readRABBITMathematica <- function(infile) {
 readRABBITJulia <- function(infile) {
   ## Get the line numbers of the RABBIT csv table blocks.
   rabbitHeaderLineIndexes <- getRabbitHeaderLines(infile)
+  ## Get the pedigree.
+  pedDat <- data.table::fread(infile,
+                              skip = rabbitHeaderLineIndexes$designinfo$lineNr,
+                              nrows = rabbitHeaderLineIndexes$designinfo$numLines,
+                              data.table = FALSE,
+                              header = TRUE)
+  colnames(pedDat) <- c("MemberID", "MotherID", "FatherID",
+                        "Gender", "Generation")
   ## Get the founders.
   founderInfo <-
     data.table::fread(infile,
@@ -217,6 +230,11 @@ readRABBITJulia <- function(infile) {
                       nrows = rabbitHeaderLineIndexes$offspringinfo$numLines,
                       data.table = FALSE,
                       header = TRUE)
+  offPed <- offspringInfo #<- offspringInfo[!offspringInfo[["isoutlier"]], ]
+  colnames(offPed) <- c("Generation", "MemberID", "MotherID", "FatherID",
+                        "Gender")
+  offPed[["MotherID"]] <- offPed[["FatherID"]] <- NA
+  pedDat <- rbind(pedDat, offPed)
   ## Get the markers.
   founderGeno <-
     data.table::fread(infile,
@@ -258,9 +276,10 @@ readRABBITJulia <- function(infile) {
       chrLength <- dim(mat)[1]
       chrEnd <- chrStart + chrLength - 1
     }
-    founderProbs[i %% nOffspring, chrStart:chrEnd, ] <- as.numeric(mat)
+    founderProbs[if (i %% nOffspring == 0) nOffspring else i %% nOffspring,
+                 chrStart:chrEnd, ] <- as.numeric(mat)
   }
-  res <- list(map = map, founderProbs = founderProbs)
+  res <- list(map = map, founderProbs = founderProbs, pedDat = pedDat)
   return(res)
 }
 
@@ -270,7 +289,7 @@ getRabbitHeaderLines <- function(filepath) {
   con <- file(filepath, "r")
   magicHeaders <- list()
   i <- 0
-  curHeaderLineCount <-0
+  curHeaderLineCount <- 0
   curHeader <- NULL
   while (TRUE) {
     line <- readLines(con, n = 1)
