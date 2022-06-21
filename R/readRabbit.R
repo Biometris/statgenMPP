@@ -87,6 +87,7 @@ readRABBIT <- function(infile,
     genoCross <- covar
     genoCross[["geno"]] <- rownames(covar)
     popType <- "RABBIT"
+    pedDat <- NULL
   } else {
     if (is.null(rabbitRes$pedDat)) {
       ## Read pedigree.
