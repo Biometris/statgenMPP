@@ -20,19 +20,12 @@ scanQTL <- function(modDat,
                                cofMrk = NULL,
                                NULLmodel = TRUE)
   ## Initialize output.
-  minlog10p <- numeric(length = nMarkers)
-  QTLRegion <- rep(FALSE, nMarkers)
-  effects <- matrix(nrow = nMarkers, ncol = length(parents),
-                    dimnames = list(rownames(map), paste0("eff_", parents)))
-  for (i in seq_len(nMarkers)) {
+  tst <- foreach::foreach(i = seq_len(nMarkers)) %dopar% {
     scanMrk <- rownames(map)[i]
     cofMrk <- selectCofactors(map = map,
                               marker = i,
                               cofactors = cof,
                               QTLwindow = QTLwindow)
-    if (length(cofMrk) != length(cof)) {
-      QTLRegion[i] <- TRUE
-    }
     ## Fit model for current marker.
     fitModMrk <- randomQTLmodel(modDat = modDat,
                                 map = map,
@@ -52,12 +45,14 @@ scanQTL <- function(modDat,
                                   NULLmodel = TRUE)
       dev <- 2.0 * fitModMrk$logL - 2.0 * fitModCof$logL
     }
-    effects[i, ] <- coef(fitModMrk)[[rownames(map)[i]]]
-    minlog10p[i] <- -log10(0.5 * pchisq(dev, 1, lower.tail = FALSE))
-    if (verbose && i %% 25 == 0) {
-      cat(paste(i, "\n"))
-    }
+    list(length(cofMrk) != length(cof), # QTLRegion
+         -log10(0.5 * pchisq(dev, 1, lower.tail = FALSE)), # minlog10p
+         coef(fitModMrk)[[rownames(map)[i]]]) #effects
   }
+  QTLRegion <- sapply(X = tst, FUN = `[[`, 1)
+  minlog10p <- sapply(X = tst, FUN = `[[`, 2)
+  effects <- do.call(rbind, args = lapply(X = tst, FUN = `[[`, 3))
+  dimnames(effects) <- list(rownames(map), paste0("eff_", parents))
   scanRes <- data.table::data.table(trait = trait,
                                     snp = rownames(map),
                                     map,
@@ -67,9 +62,4 @@ scanQTL <- function(modDat,
                                     QTLRegion = QTLRegion)
   return(scanRes)
 }
-
-
-
-
-
 
