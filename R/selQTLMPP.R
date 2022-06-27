@@ -111,14 +111,8 @@ selQTLMPP <- function(MPPobj,
   ## Remove missing values for trait from modDat.
   ## Not strictly necessary, but it prevents warnings from LMMsolve later on.
   modDat <- droplevels(modDat[!is.na(modDat[[trait]]), ])
-  ## Flatten markers to 2D structure.
-  markers <- do.call(cbind, lapply(X = seq_len(ncol(markers)),
-                                   FUN = function(i) {
-                                     markers[, i, ]
-                                   }))
-  colnames(markers) <- paste0(rep(markerNames, each = nPar), "_", parents)
-  ## Merge markers to modDat.
-  modDat <- merge(modDat, markers, by.x = "genotype", by.y = "row.names")
+  ## Restrict markers to genotypes in modDat.
+  markers <- markers[rownames(markers) %in% modDat[["genotype"]], , ]
   ## Initialize parameters.
   cofactors <- NULL
   mapScan <- map
@@ -129,7 +123,7 @@ selQTLMPP <- function(MPPobj,
     }
     scanRes <- scanQTL(modDat = modDat,
                        map = mapScan,
-                       markers = MPPobj$markers[rownames(MPPobj$markers) %in% pheno$genotype, ,],
+                       markers = markers,
                        parents = parents,
                        trait = trait,
                        QTLwindow = QTLwindow,
@@ -162,12 +156,21 @@ selQTLMPP <- function(MPPobj,
   ## Final run with all markers and all cofactors.
   scanRes <- scanQTL(modDat = modDat,
                      map = map,
-                     markers = MPPobj$markers[rownames(MPPobj$markers) %in% pheno$genotype, ,],
+                     markers = markers,
                      parents = parents,
                      trait = trait,
                      QTLwindow = QTLwindow,
                      cof = cofactors,
                      verbose = verbose)
+  ## Flatten cofactor markers to 2D structure.
+  if (!is.null(cofactors)) {
+    markersCof <- do.call(cbind, lapply(X = cofactors, FUN = function(mrk) {
+      markers[, mrk, ]
+    }))
+    colnames(markersCof) <- paste0(rep(cofactors, each = nPar), "_", parents)
+    ## Merge markers to modDat.
+    modDat <- merge(modDat, markersCof, by.x = "genotype", by.y = "row.names")
+  }
   ## Fit model with all cofactors for computation of variance explained.
   finMod <- randomQTLmodel(modDat = modDat, map = map, parents = parents,
                            trait = trait, scanMrk = NULL, cofMrk = cofactors,

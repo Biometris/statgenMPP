@@ -41,6 +41,7 @@ Imports:
     LMMsolver,
     Matrix,
     scales,
+    spam,
     statgenIBD (>= 1.0.4),
     stringi
 Suggests: 

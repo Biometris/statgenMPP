@@ -1,6 +1,7 @@
 #' one-round genome scan with specified cofactor(s)
 #'
-#' @importFrom stats coef pchisq
+#' @importFrom stats coef pchisq model.matrix
+#' @importFrom foreach `%dopar%`
 #' @keywords internal
 scanQTL <- function(modDat,
                     map,
