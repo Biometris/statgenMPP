@@ -35,6 +35,7 @@ Depends:
     statgenGWAS (>= 1.0.8)
 Imports: 
     data.table,
+    foreach,
     ggplot2,
     gridExtra,
     LMMsolver,
