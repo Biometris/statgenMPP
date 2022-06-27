@@ -35,10 +35,10 @@ randomQTLmodel <- function(modDat,
     ranTerm = as.formula(ranTerm)
   }
   fitMod <- LMMsolver::LMMsolve(fixed = fixed,
-                                random = ranTerm,
-                                group = if (length(Lgrp) > 0) Lgrp,
-                                residual = ~cross,
-                                data = modDat,
-                                tolerance = 1.0e-3)
+                                  random = ranTerm,
+                                  group = if (length(Lgrp) > 0) Lgrp,
+                                  residual = ~cross,
+                                  data = modDat,
+                                  tolerance = 1.0e-3)
   return(fitMod)
 }

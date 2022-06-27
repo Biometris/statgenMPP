@@ -114,8 +114,8 @@ selQTLMPP <- function(MPPobj,
   ## Flatten markers to 2D structure.
   markers <- do.call(cbind, lapply(X = seq_len(ncol(markers)),
                                    FUN = function(i) {
-    markers[, i, ]
-  }))
+                                     markers[, i, ]
+                                   }))
   colnames(markers) <- paste0(rep(markerNames, each = nPar), "_", parents)
   ## Merge markers to modDat.
   modDat <- merge(modDat, markers, by.x = "genotype", by.y = "row.names")
@@ -129,6 +129,7 @@ selQTLMPP <- function(MPPobj,
     }
     scanRes <- scanQTL(modDat = modDat,
                        map = mapScan,
+                       markers = MPPobj$markers[rownames(MPPobj$markers) %in% pheno$genotype, ,],
                        parents = parents,
                        trait = trait,
                        QTLwindow = QTLwindow,
@@ -151,7 +152,7 @@ selQTLMPP <- function(MPPobj,
     ## Add new cofactor to list of cofactors for next round of scanning.
     cofactors <- c(cofactors, scanSel[which.max(scanSel[["minlog10p"]]), "snp"])
     qtlWinScan <- scanRes[scanRes[["QTLRegion"]] &
-                             !scanRes[["snp"]] %in% cofactors, "snp"]
+                            !scanRes[["snp"]] %in% cofactors, "snp"]
     if (length(cofactors) == 1) {
       lowPScan <- scanRes[!is.na(scanRes[["minlog10p"]]) &
                             scanRes[["minlog10p"]] < 0.31, "snp"]
@@ -161,6 +162,7 @@ selQTLMPP <- function(MPPobj,
   ## Final run with all markers and all cofactors.
   scanRes <- scanQTL(modDat = modDat,
                      map = map,
+                     markers = MPPobj$markers[rownames(MPPobj$markers) %in% pheno$genotype, ,],
                      parents = parents,
                      trait = trait,
                      QTLwindow = QTLwindow,

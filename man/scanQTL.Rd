@@ -7,6 +7,7 @@
 scanQTL(
   modDat,
   map,
+  markers,
   parents,
   QTLwindow = 10,
   cof = NULL,
