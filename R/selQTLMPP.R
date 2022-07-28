@@ -113,6 +113,8 @@ selQTLMPP <- function(MPPobj,
   modDat <- droplevels(modDat[!is.na(modDat[[trait]]), ])
   ## Restrict markers to genotypes in modDat.
   markers <- markers[rownames(markers) %in% modDat[["genotype"]], , ]
+  ## Restrict modDat to genotypes in markers.
+  modDat <- droplevels(modDat[modDat[["genotype"]] %in% rownames(markers), ])
   ## Initialize parameters.
   cofactors <- NULL
   mapScan <- map
