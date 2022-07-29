@@ -107,6 +107,8 @@ selQTLMPP <- function(MPPobj,
   nPar <- length(parents)
   markerNames <- dimnames(markers)[[2]]
   map <- MPPobj$map
+  ## Restrict map to markers in markers.
+  map <- map[rownames(map) %in% markerNames, ]
   ## Construct model data by merging phenotypic and genotypic data.
   ## Merge phenotypic data and covar (cross).
   if (!is.null(covar) && hasName(x = covar, name = "cross")) {
