@@ -73,3 +73,15 @@ summaryNA <- function(dat) {
   }
 }
 
+#' Helper function for accessing parallel computing functions.
+#'
+#' @noRd
+#' @importFrom foreach `%do%` `%dopar%`
+#' @keywords internal
+getOper <- function(x) {
+  if (x) {
+    `%dopar%`
+  } else {
+    `%do%`
+  }
+}

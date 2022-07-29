@@ -18,6 +18,8 @@
 #' @param maxCofactors A numerical value, the maximum number of cofactors to
 #' include in the model. If \code{NULL} cofactors are added until no new
 #' cofactors are found.
+#' @param parallel Should the computation of variance components be done in
+#' parallel? This requires a parallel back-end to be registered. See examples.
 #' @param verbose Should progress and intermediate plots be output?
 #'
 #' @return An object of class \code{QTLMPP}
@@ -45,9 +47,13 @@
 #' ## Single-QTL Mapping.
 #' ABC_SQM <- selQTLMPP(ABC, trait = "pheno", maxCofactors = 0)
 #'
-#' ## Multi-QTL Mapping
+#' ## Multi-QTL Mapping.
 #' \dontrun{
-#' ABC_MQM <- selQTLMPP(ABC, trait = "pheno")
+#' ## Register parallel back-end with 2 cores.
+#' doParallel::registerDoParallel(cores = 2)
+#'
+#' ## Run multi-QTL mapping.
+#' ABC_MQM <- selQTLMPP(ABC, trait = "pheno", parallel = TRUE)
 #' }
 #'
 #' @importFrom utils head tail
@@ -57,6 +63,7 @@ selQTLMPP <- function(MPPobj,
                       QTLwindow = 10,
                       threshold = 3,
                       maxCofactors = NULL,
+                      parallel = FALSE,
                       verbose = FALSE) {
   if (!inherits(MPPobj, "gDataMPP")) {
     stop("MPPobj should be an object of class gDataMPP.\n")
@@ -130,6 +137,7 @@ selQTLMPP <- function(MPPobj,
                        trait = trait,
                        QTLwindow = QTLwindow,
                        cof = cofactors,
+                       parallel = parallel,
                        verbose = verbose)
     if (verbose) {
       plotIntermediateScan(scanRes,
@@ -163,6 +171,7 @@ selQTLMPP <- function(MPPobj,
                      trait = trait,
                      QTLwindow = QTLwindow,
                      cof = cofactors,
+                     parallel = parallel,
                      verbose = verbose)
   ## Flatten cofactor markers to 2D structure.
   if (!is.null(cofactors)) {

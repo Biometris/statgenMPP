@@ -1,7 +1,6 @@
 #' one-round genome scan with specified cofactor(s)
 #'
 #' @importFrom stats coef pchisq model.matrix
-#' @importFrom foreach `%dopar%`
 #' @keywords internal
 scanQTL <- function(modDat,
                     map,
@@ -11,6 +10,7 @@ scanQTL <- function(modDat,
                     cof = NULL,
                     trait = NULL,
                     maxIter = 100,
+                    parallel = FALSE,
                     verbose = FALSE) {
   ## Get info from input.
   nPar <- length(parents)
@@ -34,7 +34,8 @@ scanQTL <- function(modDat,
                                   lRinv = lRinv, lGinv = lGinv0,
                                   tolerance = 1e-3)
   ## Fit models for each marker.
-  scanFull <- foreach::foreach(scanMrk = rownames(map)) %dopar% {
+  `%op%` <- getOper(parallel && foreach::getDoParRegistered())
+  scanFull <- foreach::foreach(scanMrk = rownames(map)) %op% {
     cofMrk <- selectCofactors(map = map,
                               marker = scanMrk,
                               cofactors = cof,

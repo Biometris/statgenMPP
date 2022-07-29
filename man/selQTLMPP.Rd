@@ -10,6 +10,7 @@ selQTLMPP(
   QTLwindow = 10,
   threshold = 3,
   maxCofactors = NULL,
+  parallel = FALSE,
   verbose = FALSE
 )
 }
@@ -28,6 +29,9 @@ is considered as part of that QTL.}
 \item{maxCofactors}{A numerical value, the maximum number of cofactors to
 include in the model. If \code{NULL} cofactors are added until no new
 cofactors are found.}
+
+\item{parallel}{Should the computation of variance components be done in
+parallel? This requires a parallel back-end to be registered. See examples.}
 
 \item{verbose}{Should progress and intermediate plots be output?}
 }
@@ -66,9 +70,13 @@ ABC <- calcIBDMPP(crossNames = c("AxB", "AxC"),
 ## Single-QTL Mapping.
 ABC_SQM <- selQTLMPP(ABC, trait = "pheno", maxCofactors = 0)
 
-## Multi-QTL Mapping
+## Multi-QTL Mapping.
 \dontrun{
-ABC_MQM <- selQTLMPP(ABC, trait = "pheno")
+## Register parallel back-end with 2 cores.
+doParallel::registerDoParallel(cores = 2)
+
+## Run multi-QTL mapping.
+ABC_MQM <- selQTLMPP(ABC, trait = "pheno", parallel = TRUE)
 }
 
 }

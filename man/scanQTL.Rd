@@ -13,6 +13,7 @@ scanQTL(
   cof = NULL,
   trait = NULL,
   maxIter = 100,
+  parallel = FALSE,
   verbose = FALSE
 )
 }
