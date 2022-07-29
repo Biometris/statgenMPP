@@ -22,3 +22,9 @@ singleGenoPlot <- getFromNamespace(x = "singleGenoPlot", ns = "statgenIBD")
 
 #' @keywords internal
 pedPlot <- getFromNamespace(x = "pedPlot", ns = "statgenIBD")
+
+#' @keywords internal
+constructRinv <- getFromNamespace(x = "constructRinv", ns = "LMMsolver")
+
+#' @keywords internal
+sparseMixedModels <- getFromNamespace(x = "sparseMixedModels", ns = "LMMsolver")

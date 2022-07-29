@@ -20,7 +20,7 @@ scanQTL <- function(modDat,
   y <- modDat[[trait]]
   X <- spam::as.spam(model.matrix(if (nCross > 1) ~cross else ~ 1,
                                   data = modDat))
-  lRinv <- LMMsolver:::constructRinv(modDat, residual = ~cross, weights = 1)
+  lRinv <- constructRinv(modDat, residual = ~cross, weights = 1)
   ## Fit NULL model with all cofactors.
   Z0 <- do.call(spam::cbind.spam, lapply(X = cof, FUN = function(mrk) {
     markers[, mrk, ]
@@ -30,9 +30,9 @@ scanQTL <- function(modDat,
                           rep(1, nPar),
                           rep(0, nPar * (length(cof) - i))))
   })
-  fitModNULL <- LMMsolver:::sparseMixedModels(y = y, X = X, Z = Z0,
-                                              lRinv = lRinv, lGinv = lGinv0,
-                                              tolerance = 1e-3)
+  fitModNULL <- sparseMixedModels(y = y, X = X, Z = Z0,
+                                  lRinv = lRinv, lGinv = lGinv0,
+                                  tolerance = 1e-3)
   ## Fit models for each marker.
   scanFull <- foreach::foreach(scanMrk = rownames(map)) %dopar% {
     cofMrk <- selectCofactors(map = map,
@@ -49,9 +49,9 @@ scanQTL <- function(modDat,
                             rep(0, nPar * (length(selMrk) - i))))
     })
     ## Fit model for current marker.
-    fitModMrk <- LMMsolver:::sparseMixedModels(y = y, X = X, Z = Z,
-                                               lRinv = lRinv, lGinv = lGinv,
-                                               tolerance = 1e-3)
+    fitModMrk <- sparseMixedModels(y = y, X = X, Z = Z,
+                                   lRinv = lRinv, lGinv = lGinv,
+                                   tolerance = 1e-3)
     ## Compute change in deviance.
     dev <- 2 * fitModMrk$logL - 2 * fitModNULL$logL
     ## Refit NULL model only if cofactors differ for current marker.
@@ -65,9 +65,9 @@ scanQTL <- function(modDat,
                               rep(1, nPar),
                               rep(0, nPar * (length(cofMrk) - i))))
       })
-      fitModCof <- LMMsolver:::sparseMixedModels(y = y, X = X, Z = Z1,
-                                                 lRinv = lRinv, lGinv = lGinv1,
-                                                 tolerance = 1e-3)
+      fitModCof <- sparseMixedModels(y = y, X = X, Z = Z1,
+                                     lRinv = lRinv, lGinv = lGinv1,
+                                     tolerance = 1e-3)
       dev <- 2 * fitModMrk$logL - 2 * fitModCof$logL
     }
     list(length(cofMrk) != length(cof), # QTLRegion
