@@ -72,7 +72,7 @@ scanQTL <- function(modDat,
       dev <- 2 * fitModMrk$logL - 2 * fitModCof$logL
     }
     list(length(cofMrk) != length(cof), # QTLRegion
-         -log10(0.5 * pchisq(dev, 1, lower.tail = FALSE)), # minlog10p
+         min(-log10(0.5 * pchisq(dev, 1, lower.tail = FALSE)), 300), # minlog10p
          fitModMrk$a[(1 + nCross):(length(parents) + nCross)]) #effects
   }
   QTLRegion <- sapply(X = scanFull, FUN = `[[`, 1)
