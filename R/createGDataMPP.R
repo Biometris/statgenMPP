@@ -437,16 +437,20 @@ plot.gDataMPP <- function(x,
   plotType <- match.arg(plotType)
   dotArgs <- list(...)
   map <- x$map
-  markers <- aperm(x$markers, c(2, 1, 3))
+  if (packageVersion("statgenIBD") <= "1.0.4") {
+    markers <- aperm(x$markers, c(2, 1, 3))
+  } else {
+    markers <- x$markers
+  }
   parents <- dimnames(markers)[[3]]
   pedigree <- attr(x = x, which = "pedigree")
   genoCross <- attr(x = x, which = "genoCross")
   popType <- attr(x = x, which = "popType")
   if (plotType == "genMap") {
     highlight <- dotArgs$highlight
-    missHighlight <- highlight[!highlight %in% rownames(markers)]
+    missHighlight <- highlight[!highlight %in% rownames(map)]
     if (length(missHighlight) > 0) {
-      stop("The following highlight genotypes are not in markers:\n",
+      stop("The following highlight markers are not in map:\n",
            paste(missHighlight, collapse = ", "))
     }
     if (length(highlight) > 0) {
@@ -460,15 +464,24 @@ plot.gDataMPP <- function(x,
     p <- allGenoPlot(markers = markers, map = map, parents = parents,
                      title = title)
   } else if (plotType == "singleGeno") {
-    dimnames(markers)[[3]] <- paste0("p",  parents)
-    markers <- markers[, genotype, , drop = FALSE]
+    if (packageVersion("statgenIBD") <= "1.0.4") {
+      dimnames(markers)[[3]] <- paste0("p",  parents)
+      markers <- markers[, genotype, , drop = FALSE]
+    } else {
+      markers <- markers[genotype, , , drop = FALSE]
+    }
     p <- singleGenoPlot(markers = markers, map = map, parents = parents,
                         genotype = genotype, title = title)
   } else if (plotType == "pedigree") {
-    p <- pedPlot(pedigree = pedigree, offSpring = colnames(markers),
-                 popType = popType,
-                 multiCross = length(unique(genoCross[["cross"]])) > 1,
-                 genoCross = genoCross, title = title)
+    if (packageVersion("statgenIBD") <= "1.0.4") {
+      p <- pedPlot(pedigree = pedigree, offSpring = colnames(markers),
+                   popType = popType,
+                   multiCross = length(unique(genoCross[["cross"]])) > 1,
+                   genoCross = genoCross, title = title)
+    } else {
+      p <- pedPlot(pedigree = pedigree, offSpring = rownames(markers),
+                   popType = popType, genoCross = genoCross, title = title)
+    }
   }
   if (output) {
     plot(p)

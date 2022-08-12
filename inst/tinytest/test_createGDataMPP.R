@@ -46,7 +46,7 @@ expect_equal(sumABC$markerSum$markerContent, c(`parents:` = "A, B, C"))
 
 # genMap
 expect_error(plot(ABC, highlight = "EXT_3_31"),
-             "The following highlight genotypes are not in markers")
+             "The following highlight markers are not in map")
 expect_silent(p1 <- plot(ABC, plotType = "genMap"))
 p1a <- plot(ABC, highlight = "EXT_3_30")
 

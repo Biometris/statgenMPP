@@ -175,15 +175,23 @@ calcIBDMPP <- function(crossNames,
   } else {
     phenoTot <- pheno
   }
-  ## Get marker names.
-  markerNames <- rownames(crossIBD$markers)
   ## Get number of parents.
   parents <- crossIBD$parents
   nPar <- length(parents)
   ## Construct empty marker matrix.
-  markers <- array(NA_real_, dim = c(dim(crossIBD$markers)[c(2, 1)], nPar),
-                   dimnames = c(dimnames(crossIBD$markers)[c(2, 1)],
-                                list(parents)))
+  if (packageVersion("statgenIBD") <= "1.0.4") {
+    ## Get marker names.
+    markerNames <- rownames(crossIBD$markers)
+    markers <- array(NA_real_, dim = c(dim(crossIBD$markers)[c(2, 1)], nPar),
+                     dimnames = c(dimnames(crossIBD$markers)[c(2, 1)],
+                                  list(parents)))
+  } else {
+    ## Get marker names.
+    markerNames <- colnames(crossIBD$markers)
+    markers <- array(NA_real_, dim = dim(crossIBD$markers),
+                     dimnames = c(dimnames(crossIBD$markers)[1:2],
+                                  list(parents)))
+  }
   ## Fill marker matrix.
   for (i in seq_along(markerNames)) {
     markers[, i, ] <- markers3DtoMat(markers = crossIBD$markers,
