@@ -63,6 +63,8 @@ selQTLMPP <- function(MPPobj,
                       QTLwindow = 10,
                       threshold = 3,
                       maxCofactors = NULL,
+                      kin = NULL,
+                      computeKin = FALSE,
                       parallel = FALSE,
                       verbose = FALSE) {
   if (!inherits(MPPobj, "gDataMPP")) {
@@ -117,6 +119,25 @@ selQTLMPP <- function(MPPobj,
     modDat <- pheno
     modDat[["cross"]] <- factor(1)
   }
+  if (computeKin) {
+    KInv <- sapply(X = unique(MPPobj$map$chr), FUN = function(chr) {
+      mrkNamesNonChr <- rownames(MPPobj$map)[MPPobj$map$chr != chr]
+      mrkNonChr <- apply(MPPobj$markers[, mrkNamesNonChr, ], MARGIN = 2,
+                         FUN = tcrossprod, simplify = FALSE)
+      KChr <- Reduce(`+`, mrkNonChr) / length(mrkNonChr)
+      eigKChr <- eigen(KChr)
+      KChrInv <- eigKChr$vectors[, eigKChr$values > 1e-13] %*%
+        diag(1 / eigKChr$values[eigKChr$values > 1e-13]) %*%
+        t(eigKChr$vectors[, eigKChr$values > 1e-13])
+      nearestPD(KChrInv)
+    }, simplify = FALSE)
+  } else if (!is.null(kin)) {
+    KInv <- sapply(kin, FUN = function(k) {
+      nearestPD(solve(k))
+    }, simplify = FALSE)
+  } else {
+    KInv <- NULL
+  }
   ## Remove missing values for trait from modDat.
   ## Not strictly necessary, but it prevents warnings from LMMsolve later on.
   modDat <- droplevels(modDat[!is.na(modDat[[trait]]), ])
@@ -139,6 +160,7 @@ selQTLMPP <- function(MPPobj,
                        trait = trait,
                        QTLwindow = QTLwindow,
                        cof = cofactors,
+                       KInv = KInv,
                        parallel = parallel,
                        verbose = verbose)
     if (verbose) {
@@ -173,6 +195,7 @@ selQTLMPP <- function(MPPobj,
                      trait = trait,
                      QTLwindow = QTLwindow,
                      cof = cofactors,
+                     KInv = KInv,
                      parallel = parallel,
                      verbose = verbose)
   ## Flatten cofactor markers to 2D structure.
