@@ -156,8 +156,8 @@ readRABBIT <- function(infile,
     pedDat <- pedDat[c("ID", "par1", "par2", "type")]
   }
   ## Create gDataMPP object.
-  res <- createGDataMPP(geno = founderProbs, map = map, pheno = pheno,
-                        covar = covar)
+  res <- createGDataMPPInternal(geno = founderProbs, map = map, pheno = pheno,
+                                covar = covar)
   attr(x = res, which = "popType") <- popType
   attr(x = res, which = "genoCross") <- genoCross
   attr(x = res, which = "mapOrig") <- map
