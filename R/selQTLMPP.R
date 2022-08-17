@@ -129,7 +129,9 @@ selQTLMPP <- function(MPPobj,
       KChrInv <- eigKChr$vectors[, eigKChr$values > 1e-13] %*%
         diag(1 / eigKChr$values[eigKChr$values > 1e-13]) %*%
         t(eigKChr$vectors[, eigKChr$values > 1e-13])
-      nearestPD(KChrInv)
+      KChrInv <- nearestPD(KChrInv)
+      rownames(KChrInv) <- colnames(KChrInv) <- rownames(MPPobj$markers)
+      KChrInv
     }, simplify = FALSE)
   } else if (!is.null(kin)) {
     KInv <- sapply(kin, FUN = function(k) {
@@ -243,6 +245,7 @@ selQTLMPP <- function(MPPobj,
   GWASInfo <- list(parents = parents)
   res <- createGWAS(GWAResult = list(pheno = GWARes),
                     signSnp = list(pheno = signSnp),
+                    kin = KInv,
                     thr = list(pheno = setNames(threshold, trait)),
                     GWASInfo = GWASInfo)
   ## Add QTLMPP class to simplify providing generic functions.

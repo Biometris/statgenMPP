@@ -15,7 +15,7 @@ scanQTL <- function(modDat,
                     verbose = FALSE) {
   ## Get info from input.
   nPar <- length(parents)
-  nGeno <- nrow(markers)
+  nGeno <- nrow(modDat)
   nCross <- length(unique(modDat[["cross"]]))
   ## Create general model matrices.
   y <- modDat[[trait]]
@@ -42,6 +42,8 @@ scanQTL <- function(modDat,
   scanFull <- foreach::foreach(chr = unique(map[["chr"]])) %op% {
     # KInvChr <- KInv
     KInvChr <- KInv[[chr]]
+    KInvChr <- KInvChr[rownames(KInvChr) %in% modDat[["genotype"]],
+                       rownames(KInvChr) %in% modDat[["genotype"]]]
     if (!is.null(KInvChr)) {
       lGinv1 <- spam::bdiag.spam(spam::spam(x = 0, nrow = length(cof) * nPar,
                                             ncol = length(cof) * nPar),
