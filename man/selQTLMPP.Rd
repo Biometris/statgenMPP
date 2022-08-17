@@ -10,7 +10,7 @@ selQTLMPP(
   QTLwindow = 10,
   threshold = 3,
   maxCofactors = NULL,
-  kin = NULL,
+  KInv = NULL,
   computeKin = FALSE,
   parallel = FALSE,
   verbose = FALSE

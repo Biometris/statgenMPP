@@ -38,12 +38,10 @@ scanQTL <- function(modDat,
                                 if (!is.null(KInv)) nGeno else 0)))
   })
   ## Fit models for each marker.
+  chrs <- unique(map[["chr"]])
   `%op%` <- getOper(parallel && foreach::getDoParRegistered())
-  scanFull <- foreach::foreach(chr = unique(map[["chr"]])) %op% {
-    # KInvChr <- KInv
-    KInvChr <- KInv[[chr]]
-    KInvChr <- KInvChr[rownames(KInvChr) %in% modDat[["genotype"]],
-                       rownames(KInvChr) %in% modDat[["genotype"]]]
+  scanFull <- foreach::foreach(i = seq_along(chrs)) %op% {
+    KInvChr <- KInv[[i]]
     if (!is.null(KInvChr)) {
       lGinv1 <- spam::bdiag.spam(spam::spam(x = 0, nrow = length(cof) * nPar,
                                             ncol = length(cof) * nPar),
@@ -54,7 +52,7 @@ scanQTL <- function(modDat,
     fitModNULL <- sparseMixedModels(y = y, X = X, Z = Z0,
                                     lRinv = lRinv, lGinv = lGinv0,
                                     tolerance = 1e-3)
-    chrMrk <- rownames(map)[map[["chr"]] == chr]
+    chrMrk <- rownames(map)[map[["chr"]] == chrs[i]]
     QTLRegion <- setNames(logical(length = length(chrMrk)), chrMrk)
     minlog10p <- setNames(numeric(length = length(chrMrk)), chrMrk)
     effects <- matrix(nrow = length(chrMrk), ncol = nPar,
