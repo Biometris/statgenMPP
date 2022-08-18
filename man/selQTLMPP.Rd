@@ -96,6 +96,10 @@ doParallel::registerDoParallel(cores = 2)
 
 ## Run multi-QTL mapping.
 ABC_MQM <- selQTLMPP(ABC, trait = "pheno", parallel = TRUE)
+
+## Run multi-QTL mapping - include kinship matrix.
+ABC_MQM_kin <- selQTLMPP(ABC, trait = "pheno", parallel = TRUE,
+                        computeKin = TRUE)
 }
 
 }
