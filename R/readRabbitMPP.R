@@ -21,15 +21,18 @@
 #' ## Read RABBIT data for barley.
 #' genoFile <- system.file("extdata/barley", "barley_magicReconstruct.zip",
 #'                        package = "statgenMPP")
-#' barleyMPMPP <- readRABBIT(unzip(genoFile, exdir = tempdir()))
+#' barleyMPMPP <- readRABBITMPP(unzip(genoFile, exdir = tempdir()))
 #'
-#' @references Reference to RABBIT.....
+#' @references Zheng, Chaozhi, Martin P Boer, and Fred A Van Eeuwijk.
+#' “Recursive Algorithms for Modeling Genomic Ancestral Origins in a Fixed
+#' Pedigree.” G3 Genes|Genomes|Genetics 8 (10): 3231–45.
+#' https://doi.org/10.1534/G3.118.200340.
 #'
 #' @importFrom utils hasName unzip
 #' @export
-readRABBIT <- function(infile,
-                       pedFile = NULL,
-                       pheno = NULL) {
+readRABBITMPP <- function(infile,
+                          pedFile = NULL,
+                          pheno = NULL) {
   if (missing(infile) || !is.character(infile) || length(infile) > 1 ||
       file.access(infile, mode = 4) == -1 || tools::file_ext(infile) != "csv") {
     stop("infile should be a character string indicating a readable .csv file")

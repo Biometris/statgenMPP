@@ -51,7 +51,7 @@ reference:
 - title: IBD calculations
 - contents:
   - calcIBDMPP
-  - readRABBIT
+  - readRABBITMPP
   - plot.gDataMPP
   - summary.gDataMPP
 - title: QTL Mapping

@@ -9,7 +9,7 @@
 #' the maximum number of cofactors is reached.
 #'
 #' @param MPPobj An object of class gDataMPP, typically the output of either
-#' \code{\link{calcIBDMPP}} or \code{\link{readRABBIT}}.
+#' \code{\link{calcIBDMPP}} or \code{\link{readRABBITMPP}}.
 #' @param trait A character string indicating the trait QTL mapping is done for.
 #' @param QTLwindow A numerical value indicating the window around a QTL that
 #' is considered as part of that QTL.

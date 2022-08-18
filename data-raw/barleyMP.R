@@ -1,6 +1,6 @@
 ## Read csv with phenoypic data.
 barleyPheno <- read.csv("data-raw/BarleyMP_pheno.csv")
-## Rename colums to match input format for readRABBIT.
+## Rename colums to match input format for readRABBITMPP.
 colnames(barleyPheno)[1] <- "genotype"
 colnames(barleyPheno)[3] <- "cross"
 ## Cross should be a factor for use in residual part of model.
@@ -21,9 +21,9 @@ pedFile <- system.file("extdata/barley/barley_pedInfo.csv",
 data("barleyPheno")
 
 ## read RABBIT output.
-barleyMPP <- readRABBIT(infile = inFile,
-                        pedFile = pedFile,
-                        pheno = barleyPheno)
+barleyMPP <- readRABBITMPP(infile = inFile,
+                           pedFile = pedFile,
+                           pheno = barleyPheno)
 
 ## Perform Multi-QTL Mapping.
 barleyMQM <- selQTLMPP(MPPobj = barleyMPP,

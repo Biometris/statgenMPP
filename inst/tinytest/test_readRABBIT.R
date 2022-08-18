@@ -1,4 +1,4 @@
-### Test readRABBIT
+### Test readRABBITMPP
 
 ## Define input files.
 
@@ -8,47 +8,47 @@ pedFile <- system.file("extdata/barley", "barley_pedInfo.csv",
                        package = "statgenMPP")
 
 ## Checks for correct input.
-expect_error(readRABBIT(infile = 1),
+expect_error(readRABBITMPP(infile = 1),
              "infile should be a character string indicating a readable")
-expect_error(readRABBIT(infile = "tst"),
+expect_error(readRABBITMPP(infile = "tst"),
              "infile should be a character string indicating a readable")
-expect_error(readRABBIT(infile = "tst.csv"),
+expect_error(readRABBITMPP(infile = "tst.csv"),
              "infile should be a character string indicating a readable")
 
-expect_error(readRABBIT(infile = unzip(genoFile, exdir = tempdir()),
-                        pedFile = 1),
+expect_error(readRABBITMPP(infile = unzip(genoFile, exdir = tempdir()),
+                           pedFile = 1),
              "pedFile should be a character string indicating a readable")
-expect_error(readRABBIT(infile = unzip(genoFile, exdir = tempdir()),
-                        pedFile = "tst"),
+expect_error(readRABBITMPP(infile = unzip(genoFile, exdir = tempdir()),
+                           pedFile = "tst"),
              "pedFile should be a character string indicating a readable")
-expect_error(readRABBIT(infile = unzip(genoFile, exdir = tempdir()),
-                        pedFile = "tst.csv"),
+expect_error(readRABBITMPP(infile = unzip(genoFile, exdir = tempdir()),
+                           pedFile = "tst.csv"),
              "pedFile should be a character string indicating a readable")
 
-expect_error(readRABBIT(infile = unzip(genoFile, exdir = tempdir()),
-                        pheno  = 1),
+expect_error(readRABBITMPP(infile = unzip(genoFile, exdir = tempdir()),
+                           pheno  = 1),
              "pheno should be a data.frame")
-expect_error(readRABBIT(infile = unzip(genoFile, exdir = tempdir()),
-                        pheno  = barleyPheno["cross"]),
+expect_error(readRABBITMPP(infile = unzip(genoFile, exdir = tempdir()),
+                           pheno  = barleyPheno["cross"]),
              "The following columns are missing in pheno")
 barleyPhenoChr <- barleyPheno
 barleyPhenoChr[["Awn_length"]] <- as.character(barleyPhenoChr[["Awn_length"]])
-expect_error(readRABBIT(infile = unzip(genoFile, exdir = tempdir()),
-                        pheno  = barleyPhenoChr),
+expect_error(readRABBITMPP(infile = unzip(genoFile, exdir = tempdir()),
+                           pheno  = barleyPhenoChr),
              "The following columns in pheno are not numeric")
 
 ## Different combinations of inputs should give similar output.
 expect_silent(barleyMPP <-
-                readRABBIT(infile = unzip(genoFile, exdir = tempdir())))
+                readRABBITMPP(infile = unzip(genoFile, exdir = tempdir())))
 expect_silent(barleyMPP2 <-
-                readRABBIT(infile = unzip(genoFile, exdir = tempdir()),
-                           pedFile = pedFile))
+                readRABBITMPP(infile = unzip(genoFile, exdir = tempdir()),
+                              pedFile = pedFile))
 expect_silent(barleyMPP3 <-
-                readRABBIT(infile = unzip(genoFile, exdir = tempdir()),
-                           pheno = barleyPheno))
+                readRABBITMPP(infile = unzip(genoFile, exdir = tempdir()),
+                              pheno = barleyPheno))
 expect_silent(barleyMPP4 <-
-                readRABBIT(infile = unzip(genoFile, exdir = tempdir()),
-                           pedFile = pedFile, pheno = barleyPheno))
+                readRABBITMPP(infile = unzip(genoFile, exdir = tempdir()),
+                              pedFile = pedFile, pheno = barleyPheno))
 
 ## General structure.
 expect_inherits(barleyMPP4, "gDataMPP")

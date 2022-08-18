@@ -295,7 +295,7 @@ Instead of performing IBD calculations directly with the package, it is also pos
 
 As an example we use a barley population described in @Liller2017-jz. This MPP design consists of 5 parents. Four wild parents were crossed with the cultivar Morex and then backcrossed with Morex once. Individuals from the four families from the backcrosses were then crossed with each other as in a full diallel design, which generated six F6 families through five generations of selfing. The trait of interest for this population is awn length ("Awn_length"). As for the maize NAM population, the data for this population is available in zipped format in the package.
 
-RABBIT output can be read using the `readRABBIT` function in `statgenMPP`. This has as input the standard RABBIT output summary file and the pedigree file that needs to be provided to RABBIT as well. This pedigree file is an optional input and is only used for plotting the pedigree structure of the population. Without it QTL mapping can still be performed. As for `calcIBDMPP` the phenotypic data has to be provided as a `data.frame`. This `data.frame` has been included in the package. 
+RABBIT output can be read using the `readRABBITMPP` function in `statgenMPP`. This has as input the standard RABBIT output summary file and the pedigree file that needs to be provided to RABBIT as well. This pedigree file is an optional input and is only used for plotting the pedigree structure of the population. Without it QTL mapping can still be performed. As for `calcIBDMPP` the phenotypic data has to be provided as a `data.frame`. This `data.frame` has been included in the package. 
 
 ```{r barleyIBD}
 ## Specify files containing RABBIT output.
@@ -312,9 +312,9 @@ pedFile <- system.file("extdata/barley/barley_pedInfo.csv",
 data("barleyPheno")
 
 ## read RABBIT output. 
-barleyMPP <- readRABBIT(infile = inFile,
-                        pedFile = pedFile,
-                        pheno = barleyPheno)
+barleyMPP <- readRABBITMPP(infile = inFile,
+                           pedFile = pedFile,
+                           pheno = barleyPheno)
 ```
 
 As for the maize example we can summarize and plot the imported data to get a first idea of its content.
