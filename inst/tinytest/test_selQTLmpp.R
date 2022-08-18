@@ -57,4 +57,3 @@ expect_equal_to_reference(ABC_MQM_max, "ABC_MQM_max", tolerance = 1e-6)
 expect_stdout(selQTLMPP(MPPobj = ABC, trait = "pheno", maxCofactors = 1,
                         verbose = TRUE),
               "QTL scan for trait pheno, 0 cofactors")
-

@@ -44,7 +44,7 @@ createGDataMPP <- function(IBDprob,
     stop("The following columns in pheno are not numeric:\n",
          paste(nonNumCols, collapse = ", "))
   }
-  if (!is.null(pheno) && hasName(x = pheno, name = "cross")) {
+  if (hasName(x = pheno, name = "cross")) {
     ## Split pheno in pheno and covar.
     covar <- pheno["cross"]
     rownames(covar) <- pheno[["genotype"]]
@@ -55,7 +55,7 @@ createGDataMPP <- function(IBDprob,
     rownames(covar) <- genoCross[["geno"]]
   }
   ## Create gDataMPP object.
-  res <- createGDataMPPInternal(geno = IBDprob$markers, map = IBDprob$map,
+  res <- createGDataMPPInternal(geno = markers, map = IBDprob$map,
                                 pheno = pheno, covar = covar)
   attr(x = res, which = "popType") <- IBDprob$popType
   attr(x = res, which = "genoCross") <- genoCross

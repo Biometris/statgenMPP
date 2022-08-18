@@ -15,8 +15,8 @@
 #' where \eqn{Z} is the genotype x parents matrix for the marker. It is also
 #' possible to specify a list of precomputed inverses of chromosome
 #' specific kinship matrices in \code{KInv}. Note that adding a kinship matrix
-#' to the model increases the computation time a lot, especially for populations
-#' with many genotypes.
+#' to the model increases the computation time a lot, especially for large
+#' populations.
 #'
 #' @param MPPobj An object of class gDataMPP, typically the output of either
 #' \code{\link{calcIBDMPP}} or \code{\link{readRABBITMPP}}.

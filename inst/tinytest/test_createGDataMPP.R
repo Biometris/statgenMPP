@@ -1,59 +1,43 @@
-### Test calcIBDMPP
+### Test createGDataMPP
 
-## Define input files.
-
-markerFiles <- c(system.file("extdata/multipop", "AxB.txt",
-                             package = "statgenMPP"),
-                 system.file("extdata/multipop", "AxC.txt",
-                             package = "statgenMPP"))
+markerFile <- system.file("extdata/multipop", "AxB.txt",
+                          package = "statgenMPP")
 mapFile <- system.file("extdata/multipop", "mapfile.txt",
                        package = "statgenMPP")
 
 pheno <- read.delim(system.file("extdata/multipop", "AxBxCpheno.txt",
                                 package = "statgenMPP"))
-
-## Compute IBD probabilities.
-ABC <- calcIBDMPP(crossNames = c("AxB", "AxC"),
-                  markerFiles = markerFiles,
-                  pheno = pheno, popType = "F4DH",
-                  mapFile = mapFile, evalDist = 5)
-
-## Check summary.
-
-sumABC <- summary(ABC)
-
-expect_inherits(sumABC, "summary.gDataMPP")
-expect_equal(names(sumABC), c("mapSum", "markerSum", "phenoSum", "covarSum"))
-
-## Check printed output.
-sumABCprnt <- capture.output(summary(ABC))
-expect_true("\tNumber of traits: 1 " %in% sumABCprnt)
-expect_true("\tTraitnames: pheno " %in% sumABCprnt)
-expect_true(" AxB:100  " %in% sumABCprnt)
-expect_true(" AxC: 80  " %in% sumABCprnt)
-
-# Function is a copy of function from statgenGWAS except for markerSum bit.
-# Only check that.
-
-expect_inherits(sumABC$markerSum, "list")
-expect_equal(names(sumABC$markerSum), c("nMarkers", "nGeno", "markerContent"))
-expect_equal(sumABC$markerSum$markerContent, c(`parents:` = "A, B, C"))
-
-## Check plot.
-
-# All plots are called directly from statgenGWAS or statgenIBD.
-# Not much can be tested here.
-
-# genMap
-expect_error(plot(ABC, highlight = "EXT_3_31"),
-             "The following highlight markers are not in map")
-expect_silent(p1 <- plot(ABC, plotType = "genMap"))
-p1a <- plot(ABC, highlight = "EXT_3_30")
-
-expect_equal(length(p1a$layers), length(p1$layers) + 2)
+pheno2 <- pheno[, -1, drop = FALSE]
+pheno3 <- pheno
+pheno3[["pheno"]] <- as.character(pheno3[["pheno"]])
 
 
-expect_silent(p2 <- plot(ABC, plotType = "singleGeno", genotype = "AxB0001"))
-expect_silent(p3 <- plot(ABC, plotType = "allGeno"))
-expect_silent(p4 <- plot(ABC, plotType = "pedigree"))
+## Compute IBD probabilities using statgenIBD.
+tstIBD <- statgenIBD::calcIBD(popType = "F4DH", markerFile = markerFile,
+                              mapFile = mapFile, evalDist = 5)
+
+expect_error(createGDataMPP(IBDprob = 1),
+             "IBDprob should be an object of class IBDprob")
+expect_error(createGDataMPP(IBDprob = tstIBD, pheno = 1),
+             "pheno should be an data.frame")
+expect_error(createGDataMPP(IBDprob = tstIBD, pheno = pheno2),
+             "The following columns are missing in pheno")
+expect_error(createGDataMPP(IBDprob = tstIBD, pheno = pheno3),
+             "The following columns in pheno are not numeric")
+
+tstMPP <- createGDataMPP(tstIBD, pheno)
+
+expect_inherits(tstMPP, "gDataMPP")
+expect_equal_to_reference(tstMPP, "gDataMPP")
+
+## Check that cross is copied from pheno.
+pheno4 <- pheno
+pheno4[["cross"]] <- factor(1)
+
+tstMPP_cross <- createGDataMPP(tstIBD, pheno4)
+expect_inherits(tstMPP_cross$covar, "data.frame")
+expect_null(tstMPP_cross$pheno$pheno[["cross"]])
+
+
+
 
