@@ -41,17 +41,23 @@ The calculations of the IBDs are based on Hidden Markov Models (HMM) and inherit
 
 We follow the methods described in @Li2021 for QTL mapping. In the first step a model without markers is fitted:
 
-$$y = X\beta + \varepsilon, \quad \varepsilon \sim { }N\left( {0, \oplus_{k = 1}^{F} I_{{n_{k} }} \sigma_{{\varepsilon_{k} }}^{2} } \right),$$
-where $y$ is a vector with phenotypes, $X$ the design matrix for the cross structure, $\beta$ a vector of fixed cross intercepts, and the residual term $\varepsilon$ has a cross-specific variance covariance structure  $\oplus_{k = 1}^{F} I_{{n_{k} }}$ in which $\sigma_{\varepsilon_{k}}^{2}$ is the residual variance of the $k^{th}$ cross with family size $n_{k}$. For an n-way cross where $k = 1$, e.g. MAGIC designs, the variance covariance structure of residual term is homogeneous.
+$$y = X\beta + \varepsilon, \quad \varepsilon \sim { }N\left( {0, \oplus_{k = 1}^{F} I_{{n_{k} }} \sigma_{{\varepsilon_{k} }}^{2} } \right),$$ where $y$ is a vector with phenotypes, $X$ the design matrix for the cross structure, $\beta$ a vector of fixed cross intercepts, and the residual term $\varepsilon$ has a cross-specific variance covariance structure $\oplus_{k = 1}^{F} I_{{n_{k} }}$ in which $\sigma_{\varepsilon_{k}}^{2}$ is the residual variance of the $k^{th}$ cross with family size $n_{k}$. For an n-way cross where $k = 1$, e.g. MAGIC designs, the variance covariance structure of residual term is homogeneous.
 
 Then for each of the evaluation points $q$ in the map a second model is fitted:
 
-$$y = X\beta + M_{q} a_{q} + \varepsilon, a_{q} \sim { }N\left( {0,I_{P} \sigma_{q}^{2} } \right), \varepsilon \sim { }N\left( {0, \oplus_{k = 1}^{F} I_{{n_{k} }} \sigma_{{\varepsilon_{k} }}^{2} } \right),$$
-where $M_{q}$ is the design matrix containing the expected number of parental alleles as a function of IBD probabilities, $a_{q}$ is the vector of random parental effects with variance covariance structure $I_{P} \sigma_{q}^{2}$, where $\sigma_{q}^{2}$ is the genetic variance of the QTL effects at P parents.
+$$y = X\beta + M_{q} a_{q} + \varepsilon, a_{q} \sim { }N\left( {0,I_{P} \sigma_{q}^{2} } \right), \varepsilon \sim { }N\left( {0, \oplus_{k = 1}^{F} I_{{n_{k} }} \sigma_{{\varepsilon_{k} }}^{2} } \right),$$ where $M_{q}$ is the design matrix containing the expected number of parental alleles as a function of IBD probabilities, $a_{q}$ is the vector of random parental effects with variance covariance structure $I_{P} \sigma_{q}^{2}$, where $\sigma_{q}^{2}$ is the genetic variance of the QTL effects at P parents.
 
-Variance components of a putative QTL from the two models are evaluated to perform the likelihood ratio test (LRT). The p-value is calculated using a $\chi^2$ mixture approximation for the Likelihood Ratio Test. 
+Variance components of a putative QTL from the two models are evaluated to perform the likelihood ratio test (LRT). The p-value is calculated using a $\chi^2$ mixture approximation for the Likelihood Ratio Test.
 
 For Multi-QTL Mapping (MQM) the first steps are the same. However after the first round of scanning the QTL with the highest $-log10(p)$ value is added as a cofactor in the model and a new round of scanning is done. This is repeated until no new QTLs are found with a $-log10(p)$ value above a predefined threshold, or until the predefined maximum number of cofactors is added to the model. In a region of specified width around a cofactor no new cofactors can be detected.
+
+It is possible to include a polygenic $g$ term in the models to control for background genetic information. The models fitted then become:
+
+$$y = X\beta + g + \varepsilon, \quad g \sim { }N\left( {0,K \sigma_{g}^{2} } \right), \varepsilon \sim { }N\left( {0, \oplus_{k = 1}^{F} I_{{n_{k} }} \sigma_{{\varepsilon_{k} }}^{2} } \right),$$
+
+$$y = X\beta + M_{q} a_{q} + g + \varepsilon, a_{q} \sim { }N\left( {0,I_{P} \sigma_{q}^{2} } \right), g \sim { }N\left( {0,K \sigma_{g}^{2} } \right), \varepsilon \sim { }N\left( {0, \oplus_{k = 1}^{F} I_{{n_{k} }} \sigma_{{\varepsilon_{k} }}^{2} } \right),$$
+
+where the VCOV structure of the polygenic term $g$ is $K \sigma_{g}^{2}$ with $\sigma_{g}^{2}$ the variance of the polygenic effect, and $K$ a kinship matrix. To avoid proximal contamination a chromosome specific kinship matrix is used, computed using the markers on the other chromosomes.
 
 ## Example simulated data
 
@@ -64,7 +70,7 @@ simMrkDat <- read.delim(system.file("extdata/multipop", "AxB.txt", package = "st
 knitr::kable(simMrkDat[1:4, 1:5])
 ```
 
-In this example markers M1_1 and M1_4 are segregating in the AxB cross, M1_2 and M_1_3 not.  
+In this example markers M1_1 and M1_4 are segregating in the AxB cross, M1_2 and M1_3 not.\
 A map file is also required. This should also be a tab-delimited file with three columns, "marker name", "chromosome" and "position". The map file cannot contain a header and has to be identical for all crosses.
 
 Phenotypic data can be added as a `data.frame` when computing IBD probabilities. Such a `data.frame` should have a first column "genotype" and all other columns have to be numerical. For the simulated NAM population the `data.frame` with phenotypic data starts like this:
@@ -133,7 +139,7 @@ Finally we visualize the computed IBD probabilities across the genome for a sele
 plot(ABCMPP, plotType = "singleGeno", genotype = "AxB0001")
 ```
 
-Using the computed IBD probabilities we can now do the actual QTL Mapping using the `selQTLMPP` function. First we perform a SQM by setting `maxCofactors = 0`. Our trait of interest, pheno, is specified in the `trait` argument of the function. 
+Using the computed IBD probabilities we can now do the actual QTL Mapping using the `selQTLMPP` function. First we perform a SQM by setting `maxCofactors = 0`. Our trait of interest, pheno, is specified in the `trait` argument of the function.
 
 ```{r ABCSQM}
 ## Perform Single-QTL Mapping.
@@ -142,14 +148,14 @@ ABCSQM <- selQTLMPP(MPPobj = ABCMPP,
                     maxCofactors = 0)
 ```
 
-The results of the SQM can be plotted using  the `plot` function with `plotType = "QTLProfile"`. 
+The results of the SQM can be plotted using the `plot` function with `plotType = "QTLProfile"`.
 
 ```{r QPABCSQM}
 ## Plot QTL Profile for ABC SQM.
 plot(ABCSQM, plotType = "QTLProfile")
 ```
 
-Already from the SQM the position of the three simulated QTLs is quite clear. We can get an even better result using MQM.For that, again we use the `selQTLMPP` function. We don't specify the `maxCofactors` to let the algorithm determine the number of cofactors based on the threshold and QTLwindow. As long as new markers are found with a $-log10(p)$ value above `threshold` and the maximum number of cofactors is not reached, a new round of scanning is done. In the new round of scanning the marker with the highest $-log10(p)$ value from the previous round is added to the cofactors. Based on the profile plot for the SQM the `threshold` is set to 3. The `QTLwindow` is not specified and therefore left at its default value of 10cM.
+Already from the SQM the position of the three simulated QTLs is quite clear. We can get an even better result using MQM. For that, again we use the `selQTLMPP` function. We don't specify the `maxCofactors` to let the algorithm determine the number of cofactors based on the threshold and QTLwindow. As long as new markers are found with a $-log10(p)$ value above `threshold` and the maximum number of cofactors is not reached, a new round of scanning is done. In the new round of scanning the marker with the highest $-log10(p)$ value from the previous round is added to the cofactors. Based on the profile plot for the SQM the `threshold` is set to 3. The `QTLwindow` is not specified and therefore left at its default value of 10cM.
 
 ```{r ABCMQM}
 ## Perform Multi-QTL Mapping.
@@ -158,7 +164,18 @@ ABCMQM <- selQTLMPP(MPPobj = ABCMPP,
                     threshold = 3)
 ```
 
-First we plot the positions of the QTLs found on the genetic map. This will produce a plot similar the the genetic map plot we have seen before, but now the QTLs will be highlighted. This plot can be made by specifying `plotType = "QTLRegion"`
+It is possible to include a polygenic term in the model to control for background genetic information. To do this a list of inverses of chromosome specific kinship matrices can either be computed by the `selQTLMPP` function or specified by the user. In the former case it is enough to specify `computeKin = TRUE`. When doing so the kinship matrix is computed by averaging $Z Z^t$ over all markers, where $Z$ is the genotype $\times$ parents matrix for the marker. A list of precomputed inverses of chromosome specific kinship matrices can be specified in `KInv`. Note that adding a kinship matrix to the model increases the computation time a lot, especially for large populations. It is advisable to use parallel computing when doing so (see [Parallel computing](#parCom)).
+
+```{r ABCMQM_kin, eval=FALSE}
+## Perform Multi-QTL Mapping.
+# Compute kinship matrices.
+ABCMQM_kin <- selQTLMPP(MPPobj = ABCMPP,
+                        trait = "pheno",
+                        threshold = 3,
+                        computeKin = TRUE)
+```
+
+Next we can visualize the results. First we plot the positions of the QTLs found on the genetic map. This will produce a plot similar the the genetic map plot we have seen before, but now the QTLs will be highlighted. This plot can be made by specifying `plotType = "QTLRegion"`
 
 ```{r plotQRABCMQM}
 ## Plot QTL Profile for ABC MQM.
@@ -200,6 +217,7 @@ From the output of `selQTLMPP` the p-Values and effects for all markers can be e
 ABCMQMres <- ABCMQM$GWAResult$pheno
 head(ABCMQMres[, 1:8])
 ```
+
 It is also possible to only extract the markers that are either QTLs or within the window of one of the selected QTLs, as specified when calling the `selQTLMPP` function. As for the full results, this information in stored in the output as a `data.table` that can be extracted as shown below. The columns in this `data.table` are identical to those in the full results except for an additional column at the end, snpStatus, that shows whether a marker is a QTL or within the window of a QTL.
 
 ```{r extractABCQTL}
@@ -212,7 +230,7 @@ head(ABCMQMQTL[, c(2:8, 10)])
 
 As a second example we use data from a maize NAM population described in @Giraud2014. The NAM population consists of 10 bi-parental doubled haploid (DH) crosses with central parent F353. The total population consists of 841 individuals. Several traits were measured in four locations across Europe. We calculated the best linear unbiased estimations (BLUEs) of those traits using the R package [statgenSTA](https://biometris.github.io/statgenSTA/). As an example, we perform QTL mapping for only the mean value of the number of days to silking ("mean_DtSILK") across all locations. The data for this population is available from the package in zipped format.
 
-As for the simulated data, before doing QTL detection we first compute IBD probabilities on a grid of positions along the genome. 
+As for the simulated data, before doing QTL detection we first compute IBD probabilities on a grid of positions along the genome.
 
 ```{r maizeIBD}
 ## Define names of crosses.
@@ -295,7 +313,7 @@ Instead of performing IBD calculations directly with the package, it is also pos
 
 As an example we use a barley population described in @Liller2017-jz. This MPP design consists of 5 parents. Four wild parents were crossed with the cultivar Morex and then backcrossed with Morex once. Individuals from the four families from the backcrosses were then crossed with each other as in a full diallel design, which generated six F6 families through five generations of selfing. The trait of interest for this population is awn length ("Awn_length"). As for the maize NAM population, the data for this population is available in zipped format in the package.
 
-RABBIT output can be read using the `readRABBITMPP` function in `statgenMPP`. This has as input the standard RABBIT output summary file and the pedigree file that needs to be provided to RABBIT as well. This pedigree file is an optional input and is only used for plotting the pedigree structure of the population. Without it QTL mapping can still be performed. As for `calcIBDMPP` the phenotypic data has to be provided as a `data.frame`. This `data.frame` has been included in the package. 
+RABBIT output can be read using the `readRABBITMPP` function in `statgenMPP`. This has as input the standard RABBIT output summary file and the pedigree file that needs to be provided to RABBIT as well. This pedigree file is an optional input and is only used for plotting the pedigree structure of the population. Without it QTL mapping can still be performed. As for `calcIBDMPP` the phenotypic data has to be provided as a `data.frame`. This `data.frame` has been included in the package.
 
 ```{r barleyIBD}
 ## Specify files containing RABBIT output.
@@ -329,7 +347,7 @@ summary(barleyMPP)
 plot(barleyMPP, plotType = "pedigree")
 ```
 
-Performing SQM and MQM for imported RABBIT output works in the same way as for IBD probabilities computed directly in the package. Since a full scan would take long we precomputed the results and included them in the package.  
+Performing SQM and MQM for imported RABBIT output works in the same way as for IBD probabilities computed directly in the package. Since a full scan would take long we precomputed the results and included them in the package.
 
 ```{r barleyMQM, eval=FALSE}
 ## Perform Multi-QTL Mapping with threshold 4.
@@ -339,6 +357,7 @@ barleyMQM <- selQTLMPP(MPPobj = barleyMPP,
 ```
 
 There is a very large QTL on chromosome 7. To be able to more clearly distinguish the differences between the other QTLs they are plotted separately.
+
 ```{r QPbarleyMQM16}
 ## Plot QTL Profile for barley MQM - chromosome 1-6.
 plot(barleyMQM, plotType = "QTLProfileExt", chr = 1:6)
@@ -356,9 +375,9 @@ The QTLs found are very similar in both position, size and effects as described 
 summary(barleyMQM)
 ```
 
-## Parallel computing
+## Parallel computing {#parCom}
 
-To improve performance, it is possible to use parallel computing to perform the QTL mapping. To do this, a parallel back-end has to be specified by the user, e.g. by using `registerDoParallel` from the `doParallel` package (see the example below). Besides, in the `selQTLMPP` function the argument `parallel` has to be set to `TRUE`. With these settings the computations are done in parallel per chromosome. Of course, this doesn't have an effect on the output. The MQM below gives exactly the same results as the non-parallel one described earlier in the vignette. 
+To improve performance, it is possible to use parallel computing to perform the QTL mapping. To do this, a parallel back-end has to be specified by the user, e.g. by using `registerDoParallel` from the `doParallel` package (see the example below). Besides, in the `selQTLMPP` function the argument `parallel` has to be set to `TRUE`. With these settings the computations are done in parallel per chromosome. Of course, this doesn't have an effect on the output. The MQM below gives exactly the same results as the non-parallel one described earlier in the vignette.
 
 ```{r ABCMQMPar, eval = FALSE}
 ## Register parallel back-end with 2 cores.
@@ -382,4 +401,3 @@ options(op)
 ------------------------------------------------------------------------
 
 ## References
-
