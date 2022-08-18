@@ -27,7 +27,7 @@ op <- options(width = 90,
 
 ## The statgenMPP package
 
-The `statgenMPP` package is developed as an easy-to-use package for QTL mapping in  multi-parent populations. The package has many ways of visualizing inputs and results.
+The `statgenMPP` package is developed as an easy-to-use package for QTL mapping in multi-parent populations. The package has many ways of visualizing inputs and results.
 
 This vignette describes in detail how to perform the IBD calculations and how to do QTL mapping using the IBD probabilities in a mixed model framework, using the [LMMsolver](https://biometris.github.io/LMMsolver/) R package. This will be illustrated using three example data sets. The first data set is a simulated NAM data set with three parents, that is relatively small and runs fast and is mainly used to show the functionality of the package. Then two data sets from literature are used to show the validity of the results from the package, first a maize data set, the dent panel of the EU-NAM maize project (@Giraud2014). The second data set is a barley data set for awn length described in @Liller2017-jz.
 
@@ -257,7 +257,7 @@ summary(maizeMPP)
 plot(maizeMPP, plotType = "pedigree")
 ```
 
-Now we can used the computed IBD probabilities to perform SQM.
+Now we can use the computed IBD probabilities to perform SQM.
 
 ```{r maizeSQM, eval=FALSE}
 ## Perform Single-QTL Mapping.
@@ -282,7 +282,7 @@ maizeMQM <- selQTLMPP(MPPobj = maizeMPP,
                       threshold = 5)
 ```
 
-We only look at the combined plot of the QTL Profile and the parental effects. This should give us the most direct inside in the QTLs found and the effects the different parents in the crosses have.
+We only look at the combined plot of the QTL Profile and the parental effects. This should give us the most direct insight in the QTLs found and the effects the different parents in the crosses have.
 
 ```{r plotQPEmaizeMQM}
 ## Plot QTL Profile for maize MQM.
@@ -356,7 +356,24 @@ The QTLs found are very similar in both position, size and effects as described 
 summary(barleyMQM)
 ```
 
-The properties of using statgenMPP for QTL mapping in MPPs have been shown with several examples we demonstrated here. This easy-to-use R package, integrating the HMM method for IBD calculation and the mixed-model approach for QTL mapping, provides us with a general framework to estimate multi-allelic QTL effects in terms of parent origins. 
+## Parallel computing
+
+To improve performance, it is possible to use parallel computing to perform the QTL mapping. To do this, a parallel back-end has to be specified by the user, e.g. by using `registerDoParallel` from the `doParallel` package (see the example below). Besides, in the `selQTLMPP` function the argument `parallel` has to be set to `TRUE`. With these settings the computations are done in parallel per chromosome. Of course, this doesn't have an effect on the output. The MQM below gives exactly the same results as the non-parallel one described earlier in the vignette. 
+
+```{r ABCMQMPar, eval = FALSE}
+## Register parallel back-end with 2 cores.
+doParallel::registerDoParallel(cores = 2)
+
+## Perform Multi-QTL Mapping.
+ABCMQM_Par <- selQTLMPP(MPPobj = ABCMPP,
+                        trait = "pheno",
+                        threshold = 3,
+                        parallel = TRUE)
+```
+
+## Summary
+
+The properties of using statgenMPP for QTL mapping in MPPs have been shown with several examples we demonstrated here. This easy-to-use R package, integrating the HMM method for IBD calculation and the mixed-model approach for QTL mapping, provides us with a general framework to estimate multi-allelic QTL effects in terms of parent origins.
 
 ```{r winddown, include = FALSE}
 options(op)
