@@ -8,6 +8,16 @@
 #' no new markers with a \eqn{-log10(p)} value above the threshold or until
 #' the maximum number of cofactors is reached.
 #'
+#' By default only family specific effects and residual variances and no
+#' kinship relations are included in the model. It is possible to include
+#' kinship relations by either specifying \code{computeKin = TRUE}. When doing
+#' so the kinship matrix is computed by averaging \eqn{Z Z^t} over all markers,
+#' where \eqn{Z} is the genotype x parents matrix for the marker. It is also
+#' possible to specify a list of precomputed inverses of chromosome
+#' specific kinship matrices in \code{KInv}. Note that adding a kinship matrix
+#' to the model increases the computation time a lot, especially for populations
+#' with many genotypes.
+#'
 #' @param MPPobj An object of class gDataMPP, typically the output of either
 #' \code{\link{calcIBDMPP}} or \code{\link{readRABBITMPP}}.
 #' @param trait A character string indicating the trait QTL mapping is done for.
@@ -18,6 +28,10 @@
 #' @param maxCofactors A numerical value, the maximum number of cofactors to
 #' include in the model. If \code{NULL} cofactors are added until no new
 #' cofactors are found.
+#' @param KInv A list of inverses of chromosome specific kinship matrices. If
+#' \code{NULL} and \code{computeKin = FALSE} no kinship matrix is included in
+#' the models.
+#' @param computeKin Should chromosome specific kinship matrices be computed?
 #' @param parallel Should the computation of variance components be done in
 #' parallel? This requires a parallel back-end to be registered. See examples.
 #' @param verbose Should progress and intermediate plots be output?

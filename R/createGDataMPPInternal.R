@@ -426,6 +426,7 @@ print.summary.gDataMPP <- function(x,
 #'
 #' @return A ggplot object is invisibly returned.
 #'
+#' @importFrom utils packageVersion
 #' @export
 plot.gDataMPP <- function(x,
                           ...,

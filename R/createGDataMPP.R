@@ -10,6 +10,7 @@
 #' genotype comes from. This column is ignored if the `IBDprob` has an
 #' attribute genoCross containing this information (the default behaviour).
 #'
+#' @importFrom utils packageVersion
 #' @export
 createGDataMPP <- function(IBDprob,
                            pheno) {
