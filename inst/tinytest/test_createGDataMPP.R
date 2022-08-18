@@ -19,7 +19,7 @@ tstIBD <- statgenIBD::calcIBD(popType = "F4DH", markerFile = markerFile,
 expect_error(createGDataMPP(IBDprob = 1),
              "IBDprob should be an object of class IBDprob")
 expect_error(createGDataMPP(IBDprob = tstIBD, pheno = 1),
-             "pheno should be an data.frame")
+             "pheno should be a data.frame")
 expect_error(createGDataMPP(IBDprob = tstIBD, pheno = pheno2),
              "The following columns are missing in pheno")
 expect_error(createGDataMPP(IBDprob = tstIBD, pheno = pheno3),
