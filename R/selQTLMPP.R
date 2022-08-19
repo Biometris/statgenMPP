@@ -13,8 +13,8 @@
 #' kinship relations by either specifying \code{computeKin = TRUE}. When doing
 #' so the kinship matrix is computed by averaging \eqn{Z Z^t} over all markers,
 #' where \eqn{Z} is the genotype x parents matrix for the marker. It is also
-#' possible to specify a list of precomputed inverses of chromosome
-#' specific kinship matrices in \code{KInv}. Note that adding a kinship matrix
+#' possible to specify a list of precomputed chromosome
+#' specific kinship matrices in \code{K}. Note that adding a kinship matrix
 #' to the model increases the computation time a lot, especially for large
 #' populations.
 #'
@@ -28,7 +28,7 @@
 #' @param maxCofactors A numerical value, the maximum number of cofactors to
 #' include in the model. If \code{NULL} cofactors are added until no new
 #' cofactors are found.
-#' @param KInv A list of inverses of chromosome specific kinship matrices. If
+#' @param K A list of chromosome specific kinship matrices. If
 #' \code{NULL} and \code{computeKin = FALSE} no kinship matrix is included in
 #' the models.
 #' @param computeKin Should chromosome specific kinship matrices be computed?
@@ -81,7 +81,7 @@ selQTLMPP <- function(MPPobj,
                       QTLwindow = 10,
                       threshold = 3,
                       maxCofactors = NULL,
-                      KInv = NULL,
+                      K = NULL,
                       computeKin = FALSE,
                       parallel = FALSE,
                       verbose = FALSE) {
@@ -120,11 +120,11 @@ selQTLMPP <- function(MPPobj,
        maxCofactors < 0)) {
     stop("maxCofactors should be a positive numerical value.\n")
   }
-  if (!is.null(KInv) &&
-      (!is.list(KInv) || !all(sapply(KInv, FUN = function(k) {
-        is.matrix(KInv) || inherits(KInv, "Matrix")})) ||
-       length(KInv) != length(unique(map$chr)))) {
-    stop("KInv should be a list of matrices of length equal to the ",
+  if (!is.null(K) &&
+      (!is.list(K) || !all(sapply(K, FUN = function(k) {
+        is.matrix(K) || inherits(K, "Matrix")})) ||
+       length(K) != length(unique(map$chr)))) {
+    stop("K should be a list of matrices of length equal to the ",
          "number of chromosomes in the map.\n")
   }
   if (is.null(maxCofactors)) {
@@ -152,26 +152,32 @@ selQTLMPP <- function(MPPobj,
   modDat <- droplevels(modDat[modDat[["genotype"]] %in% rownames(markers), ])
   ## Compute kinship matrices.
   if (computeKin) {
-    KInv <- sapply(X = unique(map$chr), FUN = function(chr) {
+    K <- sapply(X = unique(map$chr), FUN = function(chr) {
       mrkNamesNonChr <- rownames(map)[map$chr != chr]
       mrkNonChr <- apply(markers[, mrkNamesNonChr, ], MARGIN = 2,
                          FUN = tcrossprod, simplify = FALSE)
       KChr <- Reduce(`+`, mrkNonChr) / length(mrkNonChr)
-      eigKChr <- eigen(KChr)
-      KChrInv <- eigKChr$vectors[, eigKChr$values > 1e-13] %*%
-        diag(1 / eigKChr$values[eigKChr$values > 1e-13]) %*%
-        t(eigKChr$vectors[, eigKChr$values > 1e-13])
-      KChrInv <- nearestPD(KChrInv)
-      rownames(KChrInv) <- colnames(KChrInv) <- rownames(markers)
-      KChrInv
+
     }, simplify = FALSE)
-  } else if (!is.null(KInv)) {
-    KInv <- sapply(KInv, FUN = function(k) {
-      k[rownames(k) %in% modDat[["genotype"]],
-        rownames(k) %in% modDat[["genotype"]]]
+  } else if (!is.null(K)) {
+    K <- sapply(K, FUN = function(KChr) {
+      KChr[rownames(KChr) %in% modDat[["genotype"]],
+           rownames(KChr) %in% modDat[["genotype"]]]
     }, simplify = FALSE)
   } else {
-    KInv <- NULL
+    K <- NULL
+  }
+  if (!is.null(K)) {
+    ## Compute spectral decomposition.
+    Usc <- sapply(K, FUN = function(KChr) {
+      eigKChr <- eigen(KChr)
+      selEigVals <- eigKChr$values > sqrt(.Machine$double.eps)
+      U <- eigKChr$vectors[, selEigVals]
+      d <- eigKChr$values[selEigVals]
+      U %*% diag(sqrt(d))
+    }, simplify = FALSE)
+  } else {
+    Usc <- NULL
   }
   ## Initialize parameters.
   cofactors <- NULL
@@ -188,7 +194,7 @@ selQTLMPP <- function(MPPobj,
                        trait = trait,
                        QTLwindow = QTLwindow,
                        cof = cofactors,
-                       KInv = KInv,
+                       Usc = Usc,
                        parallel = parallel,
                        verbose = verbose)
     if (verbose) {
@@ -223,7 +229,7 @@ selQTLMPP <- function(MPPobj,
                      trait = trait,
                      QTLwindow = QTLwindow,
                      cof = cofactors,
-                     KInv = KInv,
+                     Usc = Usc,
                      parallel = parallel,
                      verbose = verbose)
   ## Flatten cofactor markers to 2D structure.
@@ -271,7 +277,7 @@ selQTLMPP <- function(MPPobj,
   GWASInfo <- list(parents = parents)
   res <- createGWAS(GWAResult = list(pheno = GWARes),
                     signSnp = list(pheno = signSnp),
-                    kin = KInv,
+                    kin = K,
                     thr = list(pheno = setNames(threshold, trait)),
                     GWASInfo = GWASInfo)
   ## Add QTLMPP class to simplify providing generic functions.

@@ -10,7 +10,7 @@ selQTLMPP(
   QTLwindow = 10,
   threshold = 3,
   maxCofactors = NULL,
-  KInv = NULL,
+  K = NULL,
   computeKin = FALSE,
   parallel = FALSE,
   verbose = FALSE
@@ -32,7 +32,7 @@ is considered as part of that QTL.}
 include in the model. If \code{NULL} cofactors are added until no new
 cofactors are found.}
 
-\item{KInv}{A list of inverses of chromosome specific kinship matrices. If
+\item{K}{A list of chromosome specific kinship matrices. If
 \code{NULL} and \code{computeKin = FALSE} no kinship matrix is included in
 the models.}
 
@@ -61,8 +61,8 @@ kinship relations are included in the model. It is possible to include
 kinship relations by either specifying \code{computeKin = TRUE}. When doing
 so the kinship matrix is computed by averaging \eqn{Z Z^t} over all markers,
 where \eqn{Z} is the genotype x parents matrix for the marker. It is also
-possible to specify a list of precomputed inverses of chromosome
-specific kinship matrices in \code{KInv}. Note that adding a kinship matrix
+possible to specify a list of precomputed chromosome
+specific kinship matrices in \code{K}. Note that adding a kinship matrix
 to the model increases the computation time a lot, especially for large
 populations.
 }

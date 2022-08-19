@@ -164,7 +164,7 @@ ABCMQM <- selQTLMPP(MPPobj = ABCMPP,
                     threshold = 3)
 ```
 
-It is possible to include a polygenic term in the model to control for background genetic information. To do this a list of inverses of chromosome specific kinship matrices can either be computed by the `selQTLMPP` function or specified by the user. In the former case it is enough to specify `computeKin = TRUE`. When doing so the kinship matrix is computed by averaging $Z Z^t$ over all markers, where $Z$ is the genotype $\times$ parents matrix for the marker. A list of precomputed inverses of chromosome specific kinship matrices can be specified in `KInv`. Note that adding a kinship matrix to the model increases the computation time a lot, especially for large populations. It is advisable to use parallel computing when doing so (see [Parallel computing](#parCom)).
+It is possible to include a polygenic term in the model to control for background genetic information. To do this a list of inverses of chromosome specific kinship matrices can either be computed by the `selQTLMPP` function or specified by the user. In the former case it is enough to specify `computeKin = TRUE`. When doing so the kinship matrix is computed by averaging $Z Z^t$ over all markers, where $Z$ is the genotype $\times$ parents matrix for the marker. A list of precomputed chromosome specific kinship matrices can be specified in `K`. Note that adding a kinship matrix to the model increases the computation time a lot, especially for large populations. It is advisable to use parallel computing when doing so (see [Parallel computing](#parCom)).
 
 ```{r ABCMQM_kin, eval=FALSE}
 ## Perform Multi-QTL Mapping.

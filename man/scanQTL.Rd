@@ -11,7 +11,7 @@ scanQTL(
   parents,
   QTLwindow = 10,
   cof = NULL,
-  KInv = NULL,
+  Usc = NULL,
   trait = NULL,
   maxIter = 100,
   parallel = FALSE,
