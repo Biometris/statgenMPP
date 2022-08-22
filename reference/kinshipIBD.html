@@ -119,7 +119,7 @@ in the input file. Only required if <code>chrSpecific = TRUE</code>.</p></dd>
 
 
 <dt>chrSpecific</dt>
-<dd><p>Should chromomsome specific kinship matrices be
+<dd><p>Should chromosome specific kinship matrices be
 computed?</p></dd>
 
 </dl></div>
@@ -130,6 +130,32 @@ computed?</p></dd>
 <p>A kinship matrix or a list of chromosome specific kinship matrices.</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Read phenotypic data.</span></span></span>
+<span class="r-in"><span><span class="va">pheno</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.delim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/multipop"</span>, <span class="st">"AxBxCpheno.txt"</span>,</span></span>
+<span class="r-in"><span>                               package <span class="op">=</span> <span class="st">"statgenMPP"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co">## Rename first column to genotype.</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">pheno</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"genotype"</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Compute IBD probabilities for simulated population - AxB, AxC.</span></span></span>
+<span class="r-in"><span><span class="va">ABC</span> <span class="op">&lt;-</span> <span class="fu"><a href="calcIBDmpp.html">calcIBDMPP</a></span><span class="op">(</span>crossNames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AxB"</span>, <span class="st">"AxC"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                  markerFiles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/multipop"</span>, <span class="st">"AxB.txt"</span>,</span></span>
+<span class="r-in"><span>                                              package <span class="op">=</span> <span class="st">"statgenMPP"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                                  <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/multipop"</span>, <span class="st">"AxC.txt"</span>,</span></span>
+<span class="r-in"><span>                                              package <span class="op">=</span> <span class="st">"statgenMPP"</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                  pheno <span class="op">=</span> <span class="va">pheno</span>,</span></span>
+<span class="r-in"><span>                  popType <span class="op">=</span> <span class="st">"F4DH"</span>,</span></span>
+<span class="r-in"><span>                  mapFile <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/multipop"</span>, <span class="st">"mapfile.txt"</span>,</span></span>
+<span class="r-in"><span>                                        package <span class="op">=</span> <span class="st">"statgenMPP"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                  evalDist <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Compute chromosome specific kinship matrices.</span></span></span>
+<span class="r-in"><span><span class="va">KChrSpec</span> <span class="op">&lt;-</span> <span class="fu">kinshipIBD</span><span class="op">(</span>markers <span class="op">=</span> <span class="va">ABC</span><span class="op">$</span><span class="va">markers</span>, map <span class="op">=</span> <span class="va">ABC</span><span class="op">$</span><span class="va">map</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 

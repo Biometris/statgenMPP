@@ -93,7 +93,7 @@ IBDprob (computed or imported using statgenIBD) and phenotypic data.</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>IBDprob</dt>
-<dd><p>An object of class IBDprob</p></dd>
+<dd><p>An object of class <code>IBDprob</code>.</p></dd>
 
 
 <dt>pheno</dt>
@@ -104,7 +104,38 @@ genotype comes from. This column is ignored if the <code>IBDprob</code> has an
 attribute genoCross containing this information (the default behaviour).</p></dd>
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    
 
+<p>An object of class <code>gDataMPP</code></p>
+
+
+    </div>
+
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">#' ## Read phenotypic data.</span></span></span>
+<span class="r-in"><span><span class="va">pheno</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.delim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/multipop"</span>, <span class="st">"AxBxCpheno.txt"</span>,</span></span>
+<span class="r-in"><span>                               package <span class="op">=</span> <span class="st">"statgenMPP"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co">## Rename first column to genotype.</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">pheno</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"genotype"</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Compute IBD probabilities for simulated population using statgenIBD - AxB</span></span></span>
+<span class="r-in"><span><span class="va">AB</span> <span class="op">&lt;-</span> <span class="fu">statgenIBD</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/statgenIBD/man/calcIBD.html" class="external-link">calcIBD</a></span><span class="op">(</span>popType <span class="op">=</span> <span class="st">"F4DH"</span>,</span></span>
+<span class="r-in"><span>                         markerFile <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/multipop"</span>, <span class="st">"AxB.txt"</span>,</span></span>
+<span class="r-in"><span>                                                 package <span class="op">=</span> <span class="st">"statgenMPP"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                         mapFile <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/multipop"</span>, <span class="st">"mapfile.txt"</span>,</span></span>
+<span class="r-in"><span>                                              package <span class="op">=</span> <span class="st">"statgenMPP"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                         evalDist <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Create an object of class gDataMPP from IBD probabilities and</span></span></span>
+<span class="r-in"><span><span class="co">## phenotypic data.</span></span></span>
+<span class="r-in"><span><span class="va">ABMPP</span> <span class="op">&lt;-</span> <span class="fu">createGDataMPP</span><span class="op">(</span>IBDprob <span class="op">=</span> <span class="va">AB</span>, pheno <span class="op">=</span> <span class="va">pheno</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 
