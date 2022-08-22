@@ -15,7 +15,7 @@
 #' should not be cumulative over the chromosomes. Other columns are ignored.
 #' Marker names should be in the row names. These should match the marker names
 #' in the input file. Only required if \code{chrSpecific = TRUE}.
-#' @param chrSpecific Should chromomsome specific kinship matrices be
+#' @param chrSpecific Should chromosome specific kinship matrices be
 #' computed?
 #'
 #' @return A kinship matrix or a list of chromosome specific kinship matrices.
