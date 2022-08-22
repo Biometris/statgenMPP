@@ -155,8 +155,14 @@ selQTLMPP <- function(MPPobj,
     kinshipIBD(map = map, markers = markers)
   } else if (!is.null(K)) {
     K <- sapply(K, FUN = function(KChr) {
-      KChr[rownames(KChr) %in% modDat[["genotype"]],
-           rownames(KChr) %in% modDat[["genotype"]]]
+      K <- lapply(X = K, FUN = function(k) {
+        ## Remove genotypes not in data.
+        KChr[rownames(KChr) %in% modDat[["genotype"]],
+             rownames(KChr) %in% modDat[["genotype"]]]
+        ## Assure order of genotypes is identical to that in markers.
+        KChr[order(match(rownames(KChr), rownames(markers))),
+             order(match(colnames(KChr), rownames(markers)))]
+      })
     }, simplify = FALSE)
   } else {
     K <- NULL
