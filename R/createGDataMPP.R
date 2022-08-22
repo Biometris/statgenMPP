@@ -13,12 +13,11 @@
 #' @return An object of class \code{gDataMPP}
 #'
 #' @examples
-#' #' ## Read phenotypic data.
+#' ## Read phenotypic data.
 #' pheno <- read.delim(system.file("extdata/multipop", "AxBxCpheno.txt",
 #'                                package = "statgenMPP"))
 #' ## Rename first column to genotype.
 #' colnames(pheno)[1] <- "genotype"
-#'
 #'
 #' ## Compute IBD probabilities for simulated population using statgenIBD - AxB
 #' AB <- statgenIBD::calcIBD(popType = "F4DH",
