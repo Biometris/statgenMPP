@@ -28,10 +28,10 @@ ABCMPP <- calcIBDMPP(crossNames = c("AxB", "AxC"),
 doParallel::registerDoParallel(cores = 4)
 
 ## Run multi-QTL mapping.
-ABC_MQM <- selQTLMPP(ABCMPP, trait = "pheno", parallel = TRUE)
+ABC_MQM <- selQTLMPP(ABCMPP, trait = "yield", parallel = TRUE)
 
 ## Run multi-QTL mapping with kinship.
-ABC_MQM2 <- selQTLMPP(ABCMPP, trait = "pheno", parallel = TRUE, computeKin = TRUE)
+ABC_MQM2 <- selQTLMPP(ABCMPP, trait = "yield", parallel = TRUE, computeKin = TRUE)
 
 ABC_MQM$signSnp
 ABC_MQM2$signSnp

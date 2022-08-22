@@ -21,7 +21,7 @@ ABC <- calcIBDMPP(crossNames = c("AxB", "AxC"),
                   mapFile = mapFile, evalDist = 25)
 
 ## QTL Detection.
-ABC_MQM <- selQTLMPP(MPPobj = ABC, trait = "pheno")
+ABC_MQM <- selQTLMPP(MPPobj = ABC, trait = "yield")
 
 ## Summary.
 sumABC <- capture.output(summary(ABC_MQM))

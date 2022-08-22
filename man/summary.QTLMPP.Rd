@@ -35,7 +35,7 @@ ABC <- calcIBDMPP(crossNames = c("AxB", "AxC"),
                   evalDist = 5)
 
 ## Multi-QTL Mapping.
-ABC_MQM <- selQTLMPP(ABC, trait = "pheno")
+ABC_MQM <- selQTLMPP(ABC, trait = "yield")
 
 ## Print summary.
 summary(ABC_MQM)

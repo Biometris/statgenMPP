@@ -87,7 +87,7 @@ ABC <- calcIBDMPP(crossNames = c("AxB", "AxC"),
                   evalDist = 5)
 
 ## Single-QTL Mapping.
-ABC_SQM <- selQTLMPP(ABC, trait = "pheno", maxCofactors = 0)
+ABC_SQM <- selQTLMPP(ABC, trait = "yield", maxCofactors = 0)
 
 ## Multi-QTL Mapping.
 \dontrun{
@@ -95,14 +95,14 @@ ABC_SQM <- selQTLMPP(ABC, trait = "pheno", maxCofactors = 0)
 doParallel::registerDoParallel(cores = 2)
 
 ## Run multi-QTL mapping.
-ABC_MQM <- selQTLMPP(ABC, trait = "pheno", parallel = TRUE)
+ABC_MQM <- selQTLMPP(ABC, trait = "yield", parallel = TRUE)
 
 ## Run multi-QTL mapping - include kinship matrix.
-ABC_MQM_kin <- selQTLMPP(ABC, trait = "pheno", parallel = TRUE,
+ABC_MQM_kin <- selQTLMPP(ABC, trait = "yield", parallel = TRUE,
                         computeKin = TRUE)
 }
 
 }
 \seealso{
-\code{\link{computeKinship}}
+\code{\link{kinshipIBD}}
 }

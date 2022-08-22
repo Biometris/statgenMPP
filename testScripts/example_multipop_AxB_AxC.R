@@ -62,7 +62,7 @@ MPPobj2 <- calcIBDmpp(crossNames = crossNames,
 
 # 3. genome scan for multi-QTLs
 MPPobj2a <- selQTLmpp(MPPobj2, QTLwindow = 10, threshold = 3,
-                      trait = "pheno", CIM = TRUE)
+                      trait = "yield", CIM = TRUE)
 MPPobj2a$signSnp
 
 

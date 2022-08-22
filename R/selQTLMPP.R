@@ -59,7 +59,7 @@
 #'                   evalDist = 5)
 #'
 #' ## Single-QTL Mapping.
-#' ABC_SQM <- selQTLMPP(ABC, trait = "pheno", maxCofactors = 0)
+#' ABC_SQM <- selQTLMPP(ABC, trait = "yield", maxCofactors = 0)
 #'
 #' ## Multi-QTL Mapping.
 #' \dontrun{
@@ -67,14 +67,14 @@
 #' doParallel::registerDoParallel(cores = 2)
 #'
 #' ## Run multi-QTL mapping.
-#' ABC_MQM <- selQTLMPP(ABC, trait = "pheno", parallel = TRUE)
+#' ABC_MQM <- selQTLMPP(ABC, trait = "yield", parallel = TRUE)
 #'
 #' ## Run multi-QTL mapping - include kinship matrix.
-#' ABC_MQM_kin <- selQTLMPP(ABC, trait = "pheno", parallel = TRUE,
+#' ABC_MQM_kin <- selQTLMPP(ABC, trait = "yield", parallel = TRUE,
 #'                         computeKin = TRUE)
 #' }
 #'
-#' @seealso \code{\link{computeKinship}}
+#' @seealso \code{\link{kinshipIBD}}
 #'
 #' @importFrom utils head tail
 #' @export

@@ -28,7 +28,7 @@ expect_equal(names(sumABC), c("mapSum", "markerSum", "phenoSum", "covarSum"))
 ## Check printed output.
 sumABCprnt <- capture.output(summary(ABC))
 expect_true("\tNumber of traits: 1 " %in% sumABCprnt)
-expect_true("\tTraitnames: pheno " %in% sumABCprnt)
+expect_true("\tTraitnames: yield " %in% sumABCprnt)
 expect_true(" AxB:100  " %in% sumABCprnt)
 expect_true(" AxC: 80  " %in% sumABCprnt)
 

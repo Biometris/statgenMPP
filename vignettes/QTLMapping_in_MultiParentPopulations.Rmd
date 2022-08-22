@@ -80,7 +80,7 @@ simPhenoDat <- read.delim(system.file("extdata/multipop", "AxBxCpheno.txt", pack
 knitr::kable(head(simPhenoDat))
 ```
 
-The phenotypic data only contains a single trait, pheno. When performing IBD calculations and specifying phenotypic data, the phenotypic data will be combined with computed IBD probabilities. For this, the genotype specified in the ID column in the marker file(s) will be matched with the genotype in the genotype column in the `data.frame` with phenotypic information. Phenotypic data for all crosses can either be added from a single `data.frame` containing phenotypic data for all crosses, or a `list` of `data.frames` each containing phenotypic data for a single cross.
+The phenotypic data only contains a single trait, yield. When performing IBD calculations and specifying phenotypic data, the phenotypic data will be combined with computed IBD probabilities. For this, the genotype specified in the ID column in the marker file(s) will be matched with the genotype in the genotype column in the `data.frame` with phenotypic information. Phenotypic data for all crosses can either be added from a single `data.frame` containing phenotypic data for all crosses, or a `list` of `data.frames` each containing phenotypic data for a single cross.
 
 ```{r simIBD}
 ## Specify files containing markers.
@@ -139,12 +139,12 @@ Finally we visualize the computed IBD probabilities across the genome for a sele
 plot(ABCMPP, plotType = "singleGeno", genotype = "AxB0001")
 ```
 
-Using the computed IBD probabilities we can now do the actual QTL Mapping using the `selQTLMPP` function. First we perform a SQM by setting `maxCofactors = 0`. Our trait of interest, pheno, is specified in the `trait` argument of the function.
+Using the computed IBD probabilities we can now do the actual QTL Mapping using the `selQTLMPP` function. First we perform a SQM by setting `maxCofactors = 0`. Our trait of interest, yield, is specified in the `trait` argument of the function.
 
 ```{r ABCSQM}
 ## Perform Single-QTL Mapping.
 ABCSQM <- selQTLMPP(MPPobj = ABCMPP,
-                    trait = "pheno",
+                    trait = "yield",
                     maxCofactors = 0)
 ```
 
@@ -160,7 +160,7 @@ Already from the SQM the position of the three simulated QTLs is quite clear. We
 ```{r ABCMQM}
 ## Perform Multi-QTL Mapping.
 ABCMQM <- selQTLMPP(MPPobj = ABCMPP,
-                    trait = "pheno",
+                    trait = "yield",
                     threshold = 3)
 ```
 
@@ -170,7 +170,7 @@ It is possible to include a polygenic term in the model to control for backgroun
 ## Perform Multi-QTL Mapping.
 # Compute kinship matrices.
 ABCMQM_kin <- selQTLMPP(MPPobj = ABCMPP,
-                        trait = "pheno",
+                        trait = "yield",
                         threshold = 3,
                         computeKin = TRUE)
 ```
@@ -214,7 +214,7 @@ From the output of `selQTLMPP` the p-Values and effects for all markers can be e
 
 ```{r extractABCRes}
 ## Extract results of QTL mapping.
-ABCMQMres <- ABCMQM$GWAResult$pheno
+ABCMQMres <- ABCMQM$GWAResult$yield
 head(ABCMQMres[, 1:8])
 ```
 
@@ -222,7 +222,7 @@ It is also possible to only extract the markers that are either QTLs or within t
 
 ```{r extractABCQTL}
 ## Extract QTLs and markers within QTL windows.
-ABCMQMQTL <- ABCMQM$signSnp$pheno
+ABCMQMQTL <- ABCMQM$signSnp$yield
 head(ABCMQMQTL[, c(2:8, 10)])
 ```
 
@@ -385,7 +385,7 @@ doParallel::registerDoParallel(cores = 2)
 
 ## Perform Multi-QTL Mapping.
 ABCMQM_Par <- selQTLMPP(MPPobj = ABCMPP,
-                        trait = "pheno",
+                        trait = "yield",
                         threshold = 3,
                         parallel = TRUE)
 ```

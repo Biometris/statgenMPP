@@ -124,7 +124,7 @@ ABC <- calcIBDMPP(crossNames = c("AxB", "AxC"),
                   evalDist = 5)
 
 ## Multi-QTL Mapping.
-ABC_MQM <- selQTLMPP(ABC, trait = "pheno")
+ABC_MQM <- selQTLMPP(ABC, trait = "yield")
 
 ## QTL Profile plot.
 plot(ABC_MQM, plotType = "QTLProfile")

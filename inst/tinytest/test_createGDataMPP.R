@@ -9,7 +9,7 @@ pheno <- read.delim(system.file("extdata/multipop", "AxBxCpheno.txt",
                                 package = "statgenMPP"))
 pheno2 <- pheno[, -1, drop = FALSE]
 pheno3 <- pheno
-pheno3[["pheno"]] <- as.character(pheno3[["pheno"]])
+pheno3[["yield"]] <- as.character(pheno3[["yield"]])
 
 
 ## Compute IBD probabilities using statgenIBD.
@@ -37,7 +37,3 @@ pheno4[["cross"]] <- factor(1)
 tstMPP_cross <- createGDataMPP(tstIBD, pheno4)
 expect_inherits(tstMPP_cross$covar, "data.frame")
 expect_null(tstMPP_cross$pheno$pheno[["cross"]])
-
-
-
-

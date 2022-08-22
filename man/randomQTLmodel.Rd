@@ -8,7 +8,7 @@ randomQTLmodel(
   modDat,
   map,
   parents,
-  trait = "pheno",
+  trait = "yield",
   scanMrk = NULL,
   cofMrk = NULL,
   NULLmodel = FALSE

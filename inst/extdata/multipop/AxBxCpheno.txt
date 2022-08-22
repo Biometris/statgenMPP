@@ -1,4 +1,4 @@
-genotype	pheno
+genotype	yield
 AxB0001	9.890637
 AxB0002	6.546568
 AxB0003	7.899249
