@@ -154,7 +154,7 @@ selQTLMPP <- function(MPPobj,
   modDat <- droplevels(modDat[modDat[["genotype"]] %in% rownames(markers), ])
   ## Compute kinship matrices.
   if (computeKin) {
-    kinshipIBD(map = map, markers = markers)
+    K <- kinshipIBD(map = map, markers = markers)
   } else if (!is.null(K)) {
     K <- sapply(K, FUN = function(KChr) {
       K <- lapply(X = K, FUN = function(k) {
