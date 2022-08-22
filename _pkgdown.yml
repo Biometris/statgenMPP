@@ -52,6 +52,7 @@ reference:
 - contents:
   - calcIBDMPP
   - readRABBITMPP
+  - createGDataMPP
   - plot.gDataMPP
   - summary.gDataMPP
 - title: QTL Mapping
@@ -60,6 +61,7 @@ reference:
   - summary.QTLMPP
   - print.summary.QTLMPP
   - plot.QTLMPP
+  - kinshipIBD
 - title: Data
 - contents:
   - barleyPheno

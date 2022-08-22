@@ -1,13 +1,12 @@
-## New release
+## Second release
 
-- Initial CRAN release
-- After earlier release replaced doi in DESCRIPTION using correct notation
+- Improvements in the algorithm to increase performance and reduce memory allocation. Also allow for parallel computing.
 
 ----
 
 ## Test environments
 
-* local Windows 10 install, R 4.1.3
+* local Windows 10 install, R 4.2.1
 * winbuilder (develop)
 * macbuilder
 * Ubuntu (on github actions, devel and release)
@@ -21,21 +20,6 @@
 There were no ERRORs or WARNINGs.
 
 There was 1 NOTE
-
-* checking CRAN incoming feasibility ... NOTE
-Maintainer: 'Bart-Jan van Rossum <bart-jan.vanrossum@wur.nl>'
-
-New submission
-
-
-Possibly misspelled words in DESCRIPTION:
-  IBD (23:70)
-  MPP (23:44)
-  QTL (2:8, 25:49)
-  al (26:11)
-  et (26:8)
-  
-These are spelled correctly.     
 
 Found the following (possibly) invalid URLs:
   URL: https://doi.org/10.1073/pnas.1100465108
