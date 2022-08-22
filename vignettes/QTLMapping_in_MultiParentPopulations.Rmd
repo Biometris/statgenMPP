@@ -41,7 +41,7 @@ The calculations of the IBDs are based on Hidden Markov Models (HMM) and inherit
 
 We follow the methods described in @Li2021 for QTL mapping. In the first step a model without markers is fitted:
 
-$$y = X\beta + \varepsilon, \quad \varepsilon \sim { }N\left( {0, \oplus_{k = 1}^{F} I_{{n_{k} }} \sigma_{{\varepsilon_{k} }}^{2} } \right),$$ where $y$ is a vector with phenotypes, $X$ the design matrix for the cross structure, $\beta$ a vector of fixed cross intercepts, and the residual term $\varepsilon$ has a cross-specific variance covariance structure $\oplus_{k = 1}^{F} I_{{n_{k} }}$ in which $\sigma_{\varepsilon_{k}}^{2}$ is the residual variance of the $k^{th}$ cross with family size $n_{k}$. For an n-way cross where $k = 1$, e.g. MAGIC designs, the variance covariance structure of residual term is homogeneous.
+$$y = X\beta + \varepsilon, \quad \varepsilon \sim { }N\left( {0, \oplus_{k = 1}^{F} I_{{n_{k} }} \sigma_{{\varepsilon_{k} }}^{2} } \right),$$ where $y$ is a vector with phenotypes, $X$ the design matrix for the cross structure, $\beta$ a vector of fixed cross intercepts, and the residual term $\varepsilon$ has a cross-specific variance covariance structure $\oplus_{k = 1}^{F} I_{{n_{k} \sigma_{\varepsilon_{k}}^{2}}}$ in which $\sigma_{\varepsilon_{k}}^{2}$ is the residual variance of the $k^{th}$ cross with family size $n_{k}$, and $F$ is the number of families. If $F=1$, for example for a single biparental cross or a MAGIC population, the variance covariance structure of the residual term is homogeneous.
 
 Then for each of the evaluation points $q$ in the map a second model is fitted:
 
@@ -57,11 +57,20 @@ $$y = X\beta + g + \varepsilon, \quad g \sim { }N\left( {0,K \sigma_{g}^{2} } \r
 
 $$y = X\beta + M_{q} a_{q} + g + \varepsilon, a_{q} \sim { }N\left( {0,I_{P} \sigma_{q}^{2} } \right), g \sim { }N\left( {0,K \sigma_{g}^{2} } \right), \varepsilon \sim { }N\left( {0, \oplus_{k = 1}^{F} I_{{n_{k} }} \sigma_{{\varepsilon_{k} }}^{2} } \right),$$
 
-where the VCOV structure of the polygenic term $g$ is $K \sigma_{g}^{2}$ with $\sigma_{g}^{2}$ the variance of the polygenic effect, and $K$ a kinship matrix. To avoid proximal contamination a chromosome specific kinship matrix is used, computed using the markers on the other chromosomes.
+where the VCOV structure of the polygenic term $g$ is $K \sigma_{g}^{2}$ with $\sigma_{g}^{2}$ the variance of the polygenic effect, and $K$ a kinship matrix. To avoid proximal contamination a chromosome specific kinship matrix is used, computed using the markers on the other chromosomes. 
+
+The symmetric kinship matrix $K$ can have zero eigenvalues, which leads to problems solving the mixed model equations. For that reason we use a spectral decomposition of $K$, $K=U D U^{-1}$, and only use the eigenvectors $U_+$, with corresponding positive eigenvalues in diagonal matrix $D_+$. Using the transformation $g=Zu$, with $Z=U_+ D_+^{1/2}$ we obtain 
+
+$$y = X\beta + Zu + \varepsilon, \quad u \sim { }N\left( {0,I \sigma_{u}^{2} } \right), \varepsilon \sim { }N\left( {0, \oplus_{k = 1}^{F} I_{{n_{k} }} \sigma_{{\varepsilon_{k} }}^{2} } \right),$$
+
+$$y = X\beta + M_{q} a_{q} + Zu + \varepsilon, a_{q} \sim { }N\left( {0,I_{P} \sigma_{q}^{2} } \right), g \sim { }N\left( {0,I \sigma_{u}^{2} } \right), \varepsilon \sim { }N\left( {0, \oplus_{k = 1}^{F} I_{{n_{k} }} \sigma_{{\varepsilon_{k} }}^{2} } \right),$$
+
 
 ## Example simulated data
 
-As a first example for performing IBD calculations and QTL mapping for a multi-parent population we use a relatively simple simulated data set. The example contains simulated data for two F4DH populations. For the first population the parents where A and B, for the second the parents where A and C. The first population consists of 100 individuals, the second of 80 individuals. This is a simple example of a NAM population, having parent A as central parent. The data is simulated with three QTLs, on chromosome 1, 2, and 3. All necessary data for this population is available in the package.
+As a first example for performing IBD calculations and QTL mapping for a multi-parent population we use a relatively simple simulated data set. The example contains simulated data for two F4DH populations. The population type F4DH is cross between two parents, followed by 3 generations of selfings, followed by a DH generation, see [statgenIBD](https://biometris.github.io/statgenIBD/) for details.   
+
+For the first population the parents where A and B, for the second the parents where A and C. The first population consists of 100 individuals, the second of 80 individuals. This is a simple example of a NAM population, having parent A as central parent. The data is simulated with three QTLs, on chromosome 1, 2, and 3. All necessary data for this population is available in the package.
 
 Before doing QTL detection we compute IBD probabilities on a grid of positions along the genome. This can be done using the `calcIBDMPP` function in the `statgenMPP` package. To perform IBD calculations a marker file is required for each of the populations. These files should be a tab-delimited file with first column ID identifying the genotype. The following columns should contain marker information. The first rows should contain the parents used in the cross. As an example, the file for the first cross, AxB, starts like this:
 
