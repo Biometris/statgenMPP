@@ -115,12 +115,11 @@ attribute genoCross containing this information (the default behaviour).</p></dd
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">#' ## Read phenotypic data.</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Read phenotypic data.</span></span></span>
 <span class="r-in"><span><span class="va">pheno</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.delim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/multipop"</span>, <span class="st">"AxBxCpheno.txt"</span>,</span></span>
 <span class="r-in"><span>                               package <span class="op">=</span> <span class="st">"statgenMPP"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co">## Rename first column to genotype.</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">pheno</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"genotype"</span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Compute IBD probabilities for simulated population using statgenIBD - AxB</span></span></span>
 <span class="r-in"><span><span class="va">AB</span> <span class="op">&lt;-</span> <span class="fu">statgenIBD</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/statgenIBD/man/calcIBD.html" class="external-link">calcIBD</a></span><span class="op">(</span>popType <span class="op">=</span> <span class="st">"F4DH"</span>,</span></span>
