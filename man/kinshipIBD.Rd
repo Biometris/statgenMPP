@@ -4,26 +4,30 @@
 \alias{kinshipIBD}
 \title{Compute kinship matrix for IBD probabilities}
 \usage{
-kinshipIBD(map, markers, chrSpecific = TRUE)
+kinshipIBD(markers, map = NULL, chrSpecific = TRUE)
 }
 \arguments{
-\item{map}{A data.frame with columns \code{chr} for chromosome and
-\code{pos} for position. Positions should be in centimorgan (cM). They
-should not be cumulative over the chromosomes. Other columns are ignored.
-Marker names should be in the row names. These should match the marker names
-in the input file.}
-
 \item{markers}{An n x m x p array with IBD probabilities with genotypes in
 the rows (n), markers in the columns (m), and parents in the 3rd dimension
 (p).}
 
+\item{map}{A data.frame with columns \code{chr} for chromosome and
+\code{pos} for position. Positions should be in centimorgan (cM). They
+should not be cumulative over the chromosomes. Other columns are ignored.
+Marker names should be in the row names. These should match the marker names
+in the input file. Only required if \code{chrSpecific = TRUE}.}
+
 \item{chrSpecific}{Should chromomsome specific kinship matrices be
-computed.}
+computed?}
 }
 \value{
 A kinship matrix or a list of chromosome specific kinship matrices.
 }
 \description{
 Compute a kinship matrix or a list of chromosome specific kinship matrices
-for a 3D array of IBD probabilities
+for a 3D array of IBD probabilities. The kinship matrix is computed by
+averaging \eqn{Z Z^t} over all markers, where \eqn{Z} is the genotype x
+parents matrix for the marker. If \code{chrSpecific = TRUE} chromosome
+specific kinship matrices are computed for each chromosome based only on the
+markers on all other chromosomes.
 }

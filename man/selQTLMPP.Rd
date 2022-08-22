@@ -103,3 +103,6 @@ ABC_MQM_kin <- selQTLMPP(ABC, trait = "pheno", parallel = TRUE,
 }
 
 }
+\seealso{
+\code{\link{computeKinship}}
+}

@@ -74,6 +74,8 @@
 #'                         computeKin = TRUE)
 #' }
 #'
+#' @seealso \code{\link{computeKinship}}
+#'
 #' @importFrom utils head tail
 #' @export
 selQTLMPP <- function(MPPobj,
