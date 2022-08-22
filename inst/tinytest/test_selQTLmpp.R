@@ -42,7 +42,6 @@ expect_error(selQTLMPP(MPPobj = ABC, trait = "yield", maxCofactors = "1"),
 expect_error(selQTLMPP(MPPobj = ABC, trait = "yield", maxCofactors = c(1, 2)),
              "maxCofactors should be a positive numerical value")
 
-ABC_SQM <- selQTLMPP(MPPobj = ABC, trait = "yield", maxCofactors = 0)
 ABC_MQM_max <- selQTLMPP(MPPobj = ABC, trait = "yield")
 
 ## General structure.
@@ -57,3 +56,15 @@ expect_equal_to_reference(ABC_MQM_max, "ABC_MQM_max", tolerance = 1e-6)
 expect_stdout(selQTLMPP(MPPobj = ABC, trait = "yield", maxCofactors = 1,
                         verbose = TRUE),
               "QTL scan for trait yield, 0 cofactors")
+
+## Option kin.
+ABC_SQM_kin <- selQTLMPP(MPPobj = ABC, trait = "yield", computeKin = TRUE,
+                         maxCofactors = 0)
+expect_inherits(ABC_SQM_kin$kinship, "list")
+expect_equal(length(ABC_SQM_kin$kinship), 5)
+
+ABC_SQM_kin2 <- selQTLMPP(MPPobj = ABC, trait = "yield",
+                          K = ABC_SQM_kin$kinship, maxCofactors = 0)
+
+expect_equal(ABC_SQM_kin, ABC_SQM_kin2)
+

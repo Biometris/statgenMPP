@@ -124,7 +124,7 @@ selQTLMPP <- function(MPPobj,
   }
   if (!is.null(K) &&
       (!is.list(K) || !all(sapply(K, FUN = function(k) {
-        is.matrix(K) || inherits(K, "Matrix")})) ||
+        is.matrix(k) || inherits(k, "Matrix")})) ||
        length(K) != length(unique(map$chr)))) {
     stop("K should be a list of matrices of length equal to the ",
          "number of chromosomes in the map.\n")
@@ -157,14 +157,12 @@ selQTLMPP <- function(MPPobj,
     K <- kinshipIBD(map = map, markers = markers)
   } else if (!is.null(K)) {
     K <- sapply(K, FUN = function(KChr) {
-      K <- lapply(X = K, FUN = function(k) {
         ## Remove genotypes not in data.
         KChr[rownames(KChr) %in% modDat[["genotype"]],
              rownames(KChr) %in% modDat[["genotype"]]]
         ## Assure order of genotypes is identical to that in markers.
         KChr[order(match(rownames(KChr), rownames(markers))),
              order(match(colnames(KChr), rownames(markers)))]
-      })
     }, simplify = FALSE)
   } else {
     K <- NULL

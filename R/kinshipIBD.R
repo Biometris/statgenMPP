@@ -40,10 +40,13 @@ kinshipIBD <- function(markers,
       mrkNonChr <- apply(markers[, mrkNamesNonChr, ], MARGIN = 2,
                          FUN = tcrossprod, simplify = FALSE)
       KChr <- Reduce(`+`, mrkNonChr) / length(mrkNonChr)
+      rownames(KChr) <- colnames(KChr) <- rownames(markers)
+      return(KChr)
     }, simplify = FALSE)
   } else {
     mrk <- apply(markers, MARGIN = 2, FUN = tcrossprod, simplify = FALSE)
     K <- Reduce(`+`, mrk) / ncol(markers)
+    rownames(K) <- colnames(K) <- rownames(markers)
   }
   return(K)
 }
