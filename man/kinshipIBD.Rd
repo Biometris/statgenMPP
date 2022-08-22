@@ -17,7 +17,7 @@ should not be cumulative over the chromosomes. Other columns are ignored.
 Marker names should be in the row names. These should match the marker names
 in the input file. Only required if \code{chrSpecific = TRUE}.}
 
-\item{chrSpecific}{Should chromomsome specific kinship matrices be
+\item{chrSpecific}{Should chromosome specific kinship matrices be
 computed?}
 }
 \value{
@@ -30,4 +30,28 @@ averaging \eqn{Z Z^t} over all markers, where \eqn{Z} is the genotype x
 parents matrix for the marker. If \code{chrSpecific = TRUE} chromosome
 specific kinship matrices are computed for each chromosome based only on the
 markers on all other chromosomes.
+}
+\examples{
+## Read phenotypic data.
+pheno <- read.delim(system.file("extdata/multipop", "AxBxCpheno.txt",
+                               package = "statgenMPP"))
+## Rename first column to genotype.
+colnames(pheno)[1] <- "genotype"
+
+
+## Compute IBD probabilities for simulated population - AxB, AxC.
+ABC <- calcIBDMPP(crossNames = c("AxB", "AxC"),
+                  markerFiles = c(system.file("extdata/multipop", "AxB.txt",
+                                              package = "statgenMPP"),
+                                  system.file("extdata/multipop", "AxC.txt",
+                                              package = "statgenMPP")),
+                  pheno = pheno,
+                  popType = "F4DH",
+                  mapFile = system.file("extdata/multipop", "mapfile.txt",
+                                        package = "statgenMPP"),
+                  evalDist = 5)
+
+## Compute chromosome specific kinship matrices.
+KChrSpec <- kinshipIBD(markers = ABC$markers, map = ABC$map)
+
 }

@@ -14,8 +14,8 @@
 #' information. A column "cross" can be used for indicating the cross the
 #' genotype comes from.
 #'
-#' @return A \code{gDataMPP} object with map and markers corresponding to the
-#' imported information in the imported .csv file.
+#' @return An object of class \code{gDataMPP} with map and markers
+#' corresponding to the imported information in the imported .csv file.
 #'
 #' @examples
 #' ## Read RABBIT data for barley.

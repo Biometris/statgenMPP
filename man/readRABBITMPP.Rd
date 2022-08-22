@@ -19,8 +19,8 @@ information. A column "cross" can be used for indicating the cross the
 genotype comes from.}
 }
 \value{
-A \code{gDataMPP} object with map and markers corresponding to the
-imported information in the imported .csv file.
+An object of class \code{gDataMPP} with map and markers
+corresponding to the imported information in the imported .csv file.
 }
 \description{
 Read a file with IBD probabilities computed by the RABBIT software package.
