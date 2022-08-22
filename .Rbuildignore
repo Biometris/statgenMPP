@@ -11,3 +11,4 @@
 ^docs$
 .github
 ^cran-comments\.md$
+^CRAN-SUBMISSION$
