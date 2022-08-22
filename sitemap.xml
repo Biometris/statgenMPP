@@ -31,10 +31,16 @@
     <loc>/reference/calcIBDmpp.html</loc>
   </url>
   <url>
+    <loc>/reference/createGDataMPP.html</loc>
+  </url>
+  <url>
     <loc>/reference/effectPlot.html</loc>
   </url>
   <url>
     <loc>/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/kinshipIBD.html</loc>
   </url>
   <url>
     <loc>/reference/maizeMQM.html</loc>
@@ -43,7 +49,7 @@
     <loc>/reference/maizeSQM.html</loc>
   </url>
   <url>
-    <loc>/reference/plot.QTLmpp.html</loc>
+    <loc>/reference/plot.QTLMPP.html</loc>
   </url>
   <url>
     <loc>/reference/plot.gDataMpp.html</loc>
@@ -55,13 +61,13 @@
     <loc>/reference/randomQTLmodel.html</loc>
   </url>
   <url>
-    <loc>/reference/readRABBIT.html</loc>
+    <loc>/reference/readRABBITMPP.html</loc>
   </url>
   <url>
     <loc>/reference/scanQTL.html</loc>
   </url>
   <url>
-    <loc>/reference/selQTLmpp.html</loc>
+    <loc>/reference/selQTLMPP.html</loc>
   </url>
   <url>
     <loc>/reference/statgenMPP-package.html</loc>
