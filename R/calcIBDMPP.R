@@ -188,7 +188,7 @@ calcIBDMPP <- function(crossNames,
   } else {
     ## Get marker names.
     markerNames <- colnames(crossIBD$markers)
-    markers <- array(NA_real_, dim = dim(crossIBD$markers),
+    markers <- array(NA_real_, dim = c(dim(crossIBD$markers)[1:2], nPar),
                      dimnames = c(dimnames(crossIBD$markers)[1:2],
                                   list(parents)))
   }
