@@ -1,7 +1,7 @@
 Package: statgenMPP
 Title: QTL Mapping for Multi Parent Populations
-Version: 1.0.1.9000
-Date: 2022-08-22
+Version: 1.0.1.1
+Date: 2022-08-24
 Authors@R: c(person(given = "Wenhao", 
                     family = "Li", 
                     email = "wenhao.li@wur.nl", 

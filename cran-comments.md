@@ -1,6 +1,6 @@
-## Second release
+## Bugfix
 
-- Improvements in the algorithm to increase performance and reduce memory allocation. Also allow for parallel computing.
+- The release from 2 days ago turned out to have a major bug. This release fixes this. Sorry for the inconvenience caused. 
 
 ----
 
