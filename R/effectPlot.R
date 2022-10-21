@@ -30,19 +30,28 @@ effectPlot <- function(effectDat,
   map <- merge(map[, !colnames(map) %in% c("add", "cumPos")],
                addPos, by = "chr")
   map[["cumPos"]] <- map[["pos"]] + map[["add"]]
+  map[["width"]] <- unlist(
+    aggregate(x = map[["pos"]], by = list(map[["chr"]]),
+              FUN = function(x) {
+                diff0 <- diff(c(0, x), lag = 2) / 2
+                return(c(diff0, tail(diff0, 1)))
+              }, simplify = FALSE)[, 2])
   ## Compute postions of labels for chromosomes.
-  xMarks <- aggregate(x = map$cumPos, by = list(map$chr), FUN = function(x) {
-    min(x) + (max(x) - min(x)) / 2
-  })[, 2]
+  xMarks <- aggregate(x = map[["cumPos"]], by = list(map[["chr"]]),
+                      FUN = function(x) {
+                        min(x) + (max(x) - min(x)) / 2
+                      })[, 2]
   ## Compute chromosome boundaries.
-  chrBnd <- c(0, aggregate(x = map$cumPos,
-                           by = list(map$chr), FUN = max)[[2]] + 2.5)
+  chrBnd <- c(0, aggregate(x = map[["cumPos"]],
+                           by = list(map[["chr"]]), FUN = max)[[2]])
+  chrBnd <- chrBnd + c(0, aggregate(x = map[["width"]], by = list(map[["chr"]]),
+                                    FUN = tail, 1)[[2]])
   ## Add cumulative position from map to effects.
-  parEffData <- merge(effectDat, map[, c("snp", "cumPos")],
+  parEffData <- merge(effectDat, map[, c("snp", "cumPos", "width")],
                       by = "snp", sort = FALSE)
   ## Only plotting the effects for significant SNPs. Remove all others.
-  parEffData <- parEffData[interaction(parEffData$snp, parEffData$trait) %in%
-                             interaction(signSnp$snp, signSnp$trait), ]
+  parEffData <- parEffData[interaction(parEffData[["snp"]], parEffData[["trait"]]) %in%
+                              interaction(signSnp[["snp"]], signSnp[["trait"]]), ]
   if (nrow(parEffData) > 0) {
     maxVal <- max(abs(parEffData$effect), na.rm = TRUE)
   }
@@ -65,9 +74,8 @@ effectPlot <- function(effectDat,
   if (nrow(parEffData) > 0) {
     p <- p +
       ggplot2::geom_tile(ggplot2::aes_string(x = "cumPos", y = "trait",
-                                             fill = "effect"),
-                           height = 1, width = 5,
-                           data = parEffData) +
+                                             fill = "effect", width = "width"),
+                         height = 1, data = parEffData) +
       ggplot2::scale_fill_gradientn(colors = c("blue", "cyan", "white",
                                                "yellow","red"),
                                     values = scales::rescale(c(-1,
