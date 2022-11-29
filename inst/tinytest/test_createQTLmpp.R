@@ -24,6 +24,7 @@ ABC <- calcIBDMPP(crossNames = c("AxB", "AxC"),
 ABC_MQM <- selQTLMPP(MPPobj = ABC, trait = "yield")
 
 ## Summary.
+options(datatable.print.class=FALSE)
 sumABC <- capture.output(summary(ABC_MQM))
 expect_true("Number of QTLs: 3 " %in% sumABC)
 expect_true("Threshold: 3 " %in% sumABC)
