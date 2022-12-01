@@ -1,0 +1,22 @@
+citHeader("To cite statgenMPP in publications use:")
+
+citEntry(
+  entry    = "Article",
+  title    = "statgenMPP: an R package implementing an IBD-based mixed model approach for QTL mapping in a wide range of multi-parent populations",
+  author   = c(person("Wenhao", "Li"),
+               person("Martin P", "Boer"),
+               person("Bart-Jan", "van Rossum"),
+               person("Chaozhi", "Zheng"),
+               person("Ronny V L", "Joosen"),
+               person("Fred A", "van Eeuwijk")),
+  journal  = "Bioinformatics",
+  year     = 2022,
+  volume   = 38,
+  number   = 22,
+  pages    = "5134-5136",
+  url      = "https://doi.org/10.1093/bioinformatics/btac662",
+  doi      = "10.1093/bioinformatics/btac662",
+  textVersion = paste(
+  "Wenhao Li, Martin P Boer, Bart-Jan van Rossum, Chaozhi Zheng, Ronny V L Joosen, Fred A van Eeuwijk, statgenMPP: an R package implementing an IBD-based mixed model approach for QTL mapping in a wide range of multi-parent populations, Bioinformatics, Volume 38, Issue 22, 15 November 2022, Pages 5134–5136, https://doi.org/10.1093/bioinformatics/btac662"
+  )
+)
