@@ -1,3 +1,7 @@
+# statgenMPP 1.0.2
+
+* A minor bug in the summary for `gDataMPP` objects is fixed. Now the corret number of genotypes is shown also when there is only one cross.
+
 # statgenMPP 1.0.1.1
 
 * Internal fix. No user visible changes.

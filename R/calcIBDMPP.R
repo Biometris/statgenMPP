@@ -157,8 +157,8 @@ calcIBDMPP <- function(crossNames,
   ## Replace cross names by cross names provided in input.
   if (nCross == 1) {
     covar <- data.frame(cross = rep(x = crossNames,
-                                    times = ncol(crossIBD$markers)),
-                        row.names = colnames(crossIBD$markers))
+                                    times = nrow(crossIBD$markers)),
+                        row.names = rownames(crossIBD$markers))
   } else {
     crossDat <- data.frame(cross = paste0("cross", seq_len(nCross)),
                            crossName = crossNames)
