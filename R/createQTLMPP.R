@@ -74,7 +74,8 @@ print.summary.QTLMPP <- function(x,
   if (nrow(x) > 0) {
     nSignSnp <- nrow(x)
     cat("Number of QTLs:", nSignSnp, "\n\n")
-    print(data.table::data.table(x), row.names = FALSE, digits = 3)
+    print(data.table::data.table(x), row.names = FALSE, digits = 3,
+          class = FALSE)
     cat("\n")
   } else {
     cat("No QTLs found.", "\n\n")
