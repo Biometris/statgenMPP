@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">statgenMPP</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -95,12 +95,14 @@
 
 
 
-<script src="QTLMapping_in_MultiParentPopulations_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+
+<div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>QTL Mapping in Multi-Parent Populations</h1>
-                        <h4 data-toc-skip class="author">Wenhao Li, Martin Boer, and Bart-Jan van Rossum</h4>
+                        <h4 data-toc-skip class="author">Wenhao Li,
+Martin Boer, and Bart-Jan van Rossum</h4>
             
-            <h4 data-toc-skip class="date">2022-08-24</h4>
+            <h4 data-toc-skip class="date">2022-12-02</h4>
       
       
       <div class="d-none name"><code>QTLMapping_in_MultiParentPopulations.Rmd</code></div>
@@ -111,8 +113,21 @@
 <div class="section level2">
 <h2 id="the-statgenmpp-package">The statgenMPP package<a class="anchor" aria-label="anchor" href="#the-statgenmpp-package"></a>
 </h2>
-<p>The <code>statgenMPP</code> package is developed as an easy-to-use package for QTL mapping in multi-parent populations. The package has many ways of visualizing inputs and results.</p>
-<p>This vignette describes in detail how to perform the IBD calculations and how to do QTL mapping using the IBD probabilities in a mixed model framework, using the <a href="https://biometris.github.io/LMMsolver/" class="external-link">LMMsolver</a> R package. This will be illustrated using three example data sets. The first data set is a simulated NAM data set with three parents, that is relatively small and runs fast and is mainly used to show the functionality of the package. Then two data sets from literature are used to show the validity of the results from the package, first a maize data set, the dent panel of the EU-NAM maize project (<span class="citation">Giraud et al. (<a href="#ref-Giraud2014" role="doc-biblioref">2014</a>)</span>). The second data set is a barley data set for awn length described in <span class="citation">Liller et al. (<a href="#ref-Liller2017-jz" role="doc-biblioref">2017</a>)</span>.</p>
+<p>The <code>statgenMPP</code> package is developed as an easy-to-use
+package for QTL mapping in multi-parent populations. The package has
+many ways of visualizing inputs and results.</p>
+<p>This vignette describes in detail how to perform the IBD calculations
+and how to do QTL mapping using the IBD probabilities in a mixed model
+framework, using the <a href="https://biometris.github.io/LMMsolver/" class="external-link">LMMsolver</a> R package.
+This will be illustrated using three example data sets. The first data
+set is a simulated NAM data set with three parents, that is relatively
+small and runs fast and is mainly used to show the functionality of the
+package. Then two data sets from literature are used to show the
+validity of the results from the package, first a maize data set, the
+dent panel of the EU-NAM maize project (<span class="citation">Giraud et
+al. (<a href="#ref-Giraud2014" role="doc-biblioref">2014</a>)</span>).
+The second data set is a barley data set for awn length described in
+<span class="citation">Liller et al. (<a href="#ref-Liller2017-jz" role="doc-biblioref">2017</a>)</span>.</p>
 </div>
 <div class="section level2">
 <h2 id="theoretical-background">Theoretical background<a class="anchor" aria-label="anchor" href="#theoretical-background"></a>
@@ -120,32 +135,117 @@
 <div class="section level3">
 <h3 id="ibd-calculations">IBD Calculations<a class="anchor" aria-label="anchor" href="#ibd-calculations"></a>
 </h3>
-<p>The calculations of the IBDs are based on Hidden Markov Models (HMM) and inheritance vectors and are performed using the <a href="https://biometris.github.io/statgenIBD/" class="external-link">statgenIBD</a> R package. For details of the theory see <span class="citation">Lander and Green (<a href="#ref-Lander1987" role="doc-biblioref">1987</a>)</span> and <span class="citation">Huang et al. (<a href="#ref-Huang2011" role="doc-biblioref">2011</a>)</span>. It is also possible to import IBD probabilities computed using the <a href="https://github.com/chaozhi/RABBIT" class="external-link">RABBIT</a> software <span class="citation">(Zheng, Boer, and Van Eeuwijk <a href="#ref-Zheng2014" role="doc-biblioref">2014</a>, <a href="#ref-Zheng2015" role="doc-biblioref">2015</a>, <a href="#ref-Zheng2018" role="doc-biblioref">2018</a>)</span>. Using the <code>statgenIBD</code> package, IBD probabilities can be calculated for many different types of populations. See <a href="https://biometris.github.io/statgenIBD/articles/IBDCalculations.html" class="external-link">the statgenIBD vignette</a> for an overview of these populations. Using RABBIT more complex populations such as MAGIC can also be analyzed.</p>
+<p>The calculations of the IBDs are based on Hidden Markov Models (HMM)
+and inheritance vectors and are performed using the <a href="https://biometris.github.io/statgenIBD/" class="external-link">statgenIBD</a> R package.
+For details of the theory see <span class="citation">Lander and Green
+(<a href="#ref-Lander1987" role="doc-biblioref">1987</a>)</span> and
+<span class="citation">Huang et al. (<a href="#ref-Huang2011" role="doc-biblioref">2011</a>)</span>. It is also possible to import IBD
+probabilities computed using the <a href="https://github.com/chaozhi/RABBIT" class="external-link">RABBIT</a> software <span class="citation">(<a href="#ref-Zheng2014" role="doc-biblioref">Zheng,
+Boer, and Van Eeuwijk 2014</a>, <a href="#ref-Zheng2015" role="doc-biblioref">2015</a>, <a href="#ref-Zheng2018" role="doc-biblioref">2018</a>)</span>. Using the <code>statgenIBD</code>
+package, IBD probabilities can be calculated for many different types of
+populations. See <a href="https://biometris.github.io/statgenIBD/articles/IBDCalculations.html" class="external-link">the
+statgenIBD vignette</a> for an overview of these populations. Using
+RABBIT more complex populations such as MAGIC can also be analyzed.</p>
 </div>
 <div class="section level3">
 <h3 id="qtl-mapping">QTL Mapping<a class="anchor" aria-label="anchor" href="#qtl-mapping"></a>
 </h3>
-<p>We follow the methods described in <span class="citation">Li et al. (<a href="#ref-Li2021" role="doc-biblioref">2021</a>)</span> for QTL mapping. In the first step a model without markers is fitted:</p>
-<p><span class="math display">\[y = X\beta + \varepsilon, \quad \varepsilon \sim { }N\left( {0, \oplus_{k = 1}^{F} I_{{n_{k} }} \sigma_{{\varepsilon_{k} }}^{2} } \right),\]</span> where <span class="math inline">\(y\)</span> is a vector with phenotypes, <span class="math inline">\(X\)</span> the design matrix for the cross structure, <span class="math inline">\(\beta\)</span> a vector of fixed cross intercepts, and the residual term <span class="math inline">\(\varepsilon\)</span> has a cross-specific variance covariance structure <span class="math inline">\(\oplus_{k = 1}^{F} I_{{n_{k} \sigma_{\varepsilon_{k}}^{2}}}\)</span> in which <span class="math inline">\(\sigma_{\varepsilon_{k}}^{2}\)</span> is the residual variance of the <span class="math inline">\(k^{th}\)</span> cross with family size <span class="math inline">\(n_{k}\)</span>, and <span class="math inline">\(F\)</span> is the number of families. If <span class="math inline">\(F=1\)</span>, for example for a single biparental cross or a MAGIC population, the variance covariance structure of the residual term is homogeneous.</p>
-<p>Then for each of the evaluation points <span class="math inline">\(q\)</span> in the map a second model is fitted:</p>
-<p><span class="math display">\[y = X\beta + M_{q} a_{q} + \varepsilon, a_{q} \sim { }N\left( {0,I_{P} \sigma_{q}^{2} } \right), \varepsilon \sim { }N\left( {0, \oplus_{k = 1}^{F} I_{{n_{k} }} \sigma_{{\varepsilon_{k} }}^{2} } \right),\]</span> where <span class="math inline">\(M_{q}\)</span> is the design matrix containing the expected number of parental alleles as a function of IBD probabilities, <span class="math inline">\(a_{q}\)</span> is the vector of random parental effects with variance covariance structure <span class="math inline">\(I_{P} \sigma_{q}^{2}\)</span>, where <span class="math inline">\(\sigma_{q}^{2}\)</span> is the genetic variance of the QTL effects at P parents.</p>
-<p>Variance components of a putative QTL from the two models are evaluated to perform the likelihood ratio test (LRT). The p-value is calculated using a <span class="math inline">\(\chi^2\)</span> mixture approximation for the Likelihood Ratio Test.</p>
-<p>For Multi-QTL Mapping (MQM) the first steps are the same. However after the first round of scanning the QTL with the highest <span class="math inline">\(-log10(p)\)</span> value is added as a cofactor in the model and a new round of scanning is done. This is repeated until no new QTLs are found with a <span class="math inline">\(-log10(p)\)</span> value above a predefined threshold, or until the predefined maximum number of cofactors is added to the model. In a region of specified width around a cofactor no new cofactors can be detected.</p>
-<p>It is possible to include a polygenic <span class="math inline">\(g\)</span> term in the models to control for background genetic information. The models fitted then become:</p>
-<p><span class="math display">\[y = X\beta + g + \varepsilon, \quad g \sim { }N\left( {0,K \sigma_{g}^{2} } \right), \varepsilon \sim { }N\left( {0, \oplus_{k = 1}^{F} I_{{n_{k} }} \sigma_{{\varepsilon_{k} }}^{2} } \right),\]</span></p>
-<p><span class="math display">\[y = X\beta + M_{q} a_{q} + g + \varepsilon, a_{q} \sim { }N\left( {0,I_{P} \sigma_{q}^{2} } \right), g \sim { }N\left( {0,K \sigma_{g}^{2} } \right), \varepsilon \sim { }N\left( {0, \oplus_{k = 1}^{F} I_{{n_{k} }} \sigma_{{\varepsilon_{k} }}^{2} } \right),\]</span></p>
-<p>where the VCOV structure of the polygenic term <span class="math inline">\(g\)</span> is <span class="math inline">\(K \sigma_{g}^{2}\)</span> with <span class="math inline">\(\sigma_{g}^{2}\)</span> the variance of the polygenic effect, and <span class="math inline">\(K\)</span> a kinship matrix. To avoid proximal contamination a chromosome specific kinship matrix is used, computed using the markers on the other chromosomes.</p>
-<p>The symmetric kinship matrix <span class="math inline">\(K\)</span> can have zero eigenvalues, which leads to problems solving the mixed model equations. For that reason we use a spectral decomposition of <span class="math inline">\(K\)</span>, <span class="math inline">\(K=U D U^{-1}\)</span>, and only use the eigenvectors <span class="math inline">\(U_+\)</span>, with corresponding positive eigenvalues in diagonal matrix <span class="math inline">\(D_+\)</span>. Using the transformation <span class="math inline">\(g=Zu\)</span>, with <span class="math inline">\(Z=U_+ D_+^{1/2}\)</span> we obtain</p>
-<p><span class="math display">\[y = X\beta + Zu + \varepsilon, \quad u \sim { }N\left( {0,I \sigma_{u}^{2} } \right), \varepsilon \sim { }N\left( {0, \oplus_{k = 1}^{F} I_{{n_{k} }} \sigma_{{\varepsilon_{k} }}^{2} } \right),\]</span></p>
-<p><span class="math display">\[y = X\beta + M_{q} a_{q} + Zu + \varepsilon, a_{q} \sim { }N\left( {0,I_{P} \sigma_{q}^{2} } \right), g \sim { }N\left( {0,I \sigma_{u}^{2} } \right), \varepsilon \sim { }N\left( {0, \oplus_{k = 1}^{F} I_{{n_{k} }} \sigma_{{\varepsilon_{k} }}^{2} } \right),\]</span></p>
+<p>We follow the methods described in <span class="citation">Li et al.
+(<a href="#ref-Li2021" role="doc-biblioref">2021</a>)</span> for QTL
+mapping. In the first step a model without markers is fitted:</p>
+<p><span class="math display">\[y = X\beta + \varepsilon, \quad
+\varepsilon \sim { }N\left( {0, \oplus_{k = 1}^{F} I_{{n_{k} }}
+\sigma_{{\varepsilon_{k} }}^{2} } \right),\]</span> where <span class="math inline">\(y\)</span> is a vector with phenotypes, <span class="math inline">\(X\)</span> the design matrix for the cross
+structure, <span class="math inline">\(\beta\)</span> a vector of fixed
+cross intercepts, and the residual term <span class="math inline">\(\varepsilon\)</span> has a cross-specific variance
+covariance structure <span class="math inline">\(\oplus_{k = 1}^{F}
+I_{{n_{k} \sigma_{\varepsilon_{k}}^{2}}}\)</span> in which <span class="math inline">\(\sigma_{\varepsilon_{k}}^{2}\)</span> is the
+residual variance of the <span class="math inline">\(k^{th}\)</span>
+cross with family size <span class="math inline">\(n_{k}\)</span>, and
+<span class="math inline">\(F\)</span> is the number of families. If
+<span class="math inline">\(F=1\)</span>, for example for a single
+biparental cross or a MAGIC population, the variance covariance
+structure of the residual term is homogeneous.</p>
+<p>Then for each of the evaluation points <span class="math inline">\(q\)</span> in the map a second model is
+fitted:</p>
+<p><span class="math display">\[y = X\beta + M_{q} a_{q} + \varepsilon,
+a_{q} \sim { }N\left( {0,I_{P} \sigma_{q}^{2} } \right), \varepsilon
+\sim { }N\left( {0, \oplus_{k = 1}^{F} I_{{n_{k} }}
+\sigma_{{\varepsilon_{k} }}^{2} } \right),\]</span> where <span class="math inline">\(M_{q}\)</span> is the design matrix containing the
+expected number of parental alleles as a function of IBD probabilities,
+<span class="math inline">\(a_{q}\)</span> is the vector of random
+parental effects with variance covariance structure <span class="math inline">\(I_{P} \sigma_{q}^{2}\)</span>, where <span class="math inline">\(\sigma_{q}^{2}\)</span> is the genetic variance of
+the QTL effects at P parents.</p>
+<p>Variance components of a putative QTL from the two models are
+evaluated to perform the likelihood ratio test (LRT). The p-value is
+calculated using a <span class="math inline">\(\chi^2\)</span> mixture
+approximation for the Likelihood Ratio Test.</p>
+<p>For Multi-QTL Mapping (MQM) the first steps are the same. However
+after the first round of scanning the QTL with the highest <span class="math inline">\(-log10(p)\)</span> value is added as a cofactor in
+the model and a new round of scanning is done. This is repeated until no
+new QTLs are found with a <span class="math inline">\(-log10(p)\)</span>
+value above a predefined threshold, or until the predefined maximum
+number of cofactors is added to the model. In a region of specified
+width around a cofactor no new cofactors can be detected.</p>
+<p>It is possible to include a polygenic <span class="math inline">\(g\)</span> term in the models to control for
+background genetic information. The models fitted then become:</p>
+<p><span class="math display">\[y = X\beta + g + \varepsilon, \quad g
+\sim { }N\left( {0,K \sigma_{g}^{2} } \right), \varepsilon \sim {
+}N\left( {0, \oplus_{k = 1}^{F} I_{{n_{k} }} \sigma_{{\varepsilon_{k}
+}}^{2} } \right),\]</span></p>
+<p><span class="math display">\[y = X\beta + M_{q} a_{q} + g +
+\varepsilon, a_{q} \sim { }N\left( {0,I_{P} \sigma_{q}^{2} } \right), g
+\sim { }N\left( {0,K \sigma_{g}^{2} } \right), \varepsilon \sim {
+}N\left( {0, \oplus_{k = 1}^{F} I_{{n_{k} }} \sigma_{{\varepsilon_{k}
+}}^{2} } \right),\]</span></p>
+<p>where the VCOV structure of the polygenic term <span class="math inline">\(g\)</span> is <span class="math inline">\(K
+\sigma_{g}^{2}\)</span> with <span class="math inline">\(\sigma_{g}^{2}\)</span> the variance of the
+polygenic effect, and <span class="math inline">\(K\)</span> a kinship
+matrix. To avoid proximal contamination a chromosome specific kinship
+matrix is used, computed using the markers on the other chromosomes.</p>
+<p>The symmetric kinship matrix <span class="math inline">\(K\)</span>
+can have zero eigenvalues, which leads to problems solving the mixed
+model equations. For that reason we use a spectral decomposition of
+<span class="math inline">\(K\)</span>, <span class="math inline">\(K=U
+D U^{-1}\)</span>, and only use the eigenvectors <span class="math inline">\(U_+\)</span>, with corresponding positive
+eigenvalues in diagonal matrix <span class="math inline">\(D_+\)</span>.
+Using the transformation <span class="math inline">\(g=Zu\)</span>, with
+<span class="math inline">\(Z=U_+ D_+^{1/2}\)</span> we obtain</p>
+<p><span class="math display">\[y = X\beta + Zu + \varepsilon, \quad u
+\sim { }N\left( {0,I \sigma_{u}^{2} } \right), \varepsilon \sim {
+}N\left( {0, \oplus_{k = 1}^{F} I_{{n_{k} }} \sigma_{{\varepsilon_{k}
+}}^{2} } \right),\]</span></p>
+<p><span class="math display">\[y = X\beta + M_{q} a_{q} + Zu +
+\varepsilon, a_{q} \sim { }N\left( {0,I_{P} \sigma_{q}^{2} } \right), g
+\sim { }N\left( {0,I \sigma_{u}^{2} } \right), \varepsilon \sim {
+}N\left( {0, \oplus_{k = 1}^{F} I_{{n_{k} }} \sigma_{{\varepsilon_{k}
+}}^{2} } \right),\]</span></p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="example-simulated-data">Example simulated data<a class="anchor" aria-label="anchor" href="#example-simulated-data"></a>
 </h2>
-<p>As a first example for performing IBD calculations and QTL mapping for a multi-parent population we use a relatively simple simulated data set. The example contains simulated data for two F4DH populations. The population type F4DH is cross between two parents, followed by 3 generations of selfings, followed by a DH generation, see <a href="https://biometris.github.io/statgenIBD/" class="external-link">statgenIBD</a> for details.</p>
-<p>For the first population the parents where A and B, for the second the parents where A and C. The first population consists of 100 individuals, the second of 80 individuals. This is a simple example of a NAM population, having parent A as central parent. The data is simulated with three QTLs, on chromosome 1, 2, and 3. All necessary data for this population is available in the package.</p>
-<p>Before doing QTL detection we compute IBD probabilities on a grid of positions along the genome. This can be done using the <code>calcIBDMPP</code> function in the <code>statgenMPP</code> package. To perform IBD calculations a marker file is required for each of the populations. These files should be a tab-delimited file with first column ID identifying the genotype. The following columns should contain marker information. The first rows should contain the parents used in the cross. As an example, the file for the first cross, AxB, starts like this:</p>
+<p>As a first example for performing IBD calculations and QTL mapping
+for a multi-parent population we use a relatively simple simulated data
+set. The example contains simulated data for two F4DH populations. The
+population type F4DH is cross between two parents, followed by 3
+generations of selfings, followed by a DH generation, see <a href="https://biometris.github.io/statgenIBD/" class="external-link">statgenIBD</a> for
+details.</p>
+<p>For the first population the parents where A and B, for the second
+the parents where A and C. The first population consists of 100
+individuals, the second of 80 individuals. This is a simple example of a
+NAM population, having parent A as central parent. The data is simulated
+with three QTLs, on chromosome 1, 2, and 3. All necessary data for this
+population is available in the package.</p>
+<p>Before doing QTL detection we compute IBD probabilities on a grid of
+positions along the genome. This can be done using the
+<code>calcIBDMPP</code> function in the <code>statgenMPP</code> package.
+To perform IBD calculations a marker file is required for each of the
+populations. These files should be a tab-delimited file with first
+column ID identifying the genotype. The following columns should contain
+marker information. The first rows should contain the parents used in
+the cross. As an example, the file for the first cross, AxB, starts like
+this:</p>
 <table class="table">
 <thead><tr class="header">
 <th align="left">ID</th>
@@ -185,9 +285,17 @@
 </tr>
 </tbody>
 </table>
-<p>In this example markers M1_1 and M1_4 are segregating in the AxB cross, M1_2 and M1_3 not.<br>
-A map file is also required. This should also be a tab-delimited file with three columns, “marker name”, “chromosome” and “position”. The map file cannot contain a header and has to be identical for all crosses.</p>
-<p>Phenotypic data can be added as a <code>data.frame</code> when computing IBD probabilities. Such a <code>data.frame</code> should have a first column “genotype” and all other columns have to be numerical. For the simulated NAM population the <code>data.frame</code> with phenotypic data starts like this:</p>
+<p>In this example markers M1_1 and M1_4 are segregating in the AxB
+cross, M1_2 and M1_3 not.<br>
+A map file is also required. This should also be a tab-delimited file
+with three columns, “marker name”, “chromosome” and “position”. The map
+file cannot contain a header and has to be identical for all
+crosses.</p>
+<p>Phenotypic data can be added as a <code>data.frame</code> when
+computing IBD probabilities. Such a <code>data.frame</code> should have
+a first column “genotype” and all other columns have to be numerical.
+For the simulated NAM population the <code>data.frame</code> with
+phenotypic data starts like this:</p>
 <table class="table">
 <thead><tr class="header">
 <th align="left">genotype</th>
@@ -220,7 +328,16 @@ A map file is also required. This should also be a tab-delimited file with three
 </tr>
 </tbody>
 </table>
-<p>The phenotypic data only contains a single trait, yield. When performing IBD calculations and specifying phenotypic data, the phenotypic data will be combined with computed IBD probabilities. For this, the genotype specified in the ID column in the marker file(s) will be matched with the genotype in the genotype column in the <code>data.frame</code> with phenotypic information. Phenotypic data for all crosses can either be added from a single <code>data.frame</code> containing phenotypic data for all crosses, or a <code>list</code> of <code>data.frames</code> each containing phenotypic data for a single cross.</p>
+<p>The phenotypic data only contains a single trait, yield. When
+performing IBD calculations and specifying phenotypic data, the
+phenotypic data will be combined with computed IBD probabilities. For
+this, the genotype specified in the ID column in the marker file(s) will
+be matched with the genotype in the genotype column in the
+<code>data.frame</code> with phenotypic information. Phenotypic data for
+all crosses can either be added from a single <code>data.frame</code>
+containing phenotypic data for all crosses, or a <code>list</code> of
+<code>data.frames</code> each containing phenotypic data for a single
+cross.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Specify files containing markers.</span></span>
 <span><span class="co"># One file for each of the two crosses.</span></span>
@@ -254,7 +371,15 @@ A map file is also required. This should also be a tab-delimited file with three
 <span>                     popType <span class="op">=</span> <span class="st">"F4DH"</span>,</span>
 <span>                     mapFile <span class="op">=</span> <span class="va">mapFile</span>,</span>
 <span>                     evalDist <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
-<p>With <code>calcIBDMPP</code> IBD probabilities are computed on a grid for each of the crosses separately and then combined into a single output object. The value of <code>evalDist</code> can be used to specify the maximum distance (in cM) between two evaluation points on the grid. The exact distance depends on the length of the chromosomes. The output is stored in an object of class <code>gDataMPP</code> (genomic Data for Multi Parent Populations) in which information about map, markers, and phenotypic data is combined. With the <code>summary</code> function we can get some insight in this information.</p>
+<p>With <code>calcIBDMPP</code> IBD probabilities are computed on a grid
+for each of the crosses separately and then combined into a single
+output object. The value of <code>evalDist</code> can be used to specify
+the maximum distance (in cM) between two evaluation points on the grid.
+The exact distance depends on the length of the chromosomes. The output
+is stored in an object of class <code>gDataMPP</code> (genomic Data for
+Multi Parent Populations) in which information about map, markers, and
+phenotypic data is combined. With the <code>summary</code> function we
+can get some insight in this information.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Print summary</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">ABCMPP</span><span class="op">)</span></span>
@@ -274,40 +399,79 @@ A map file is also required. This should also be a tab-delimited file with three
 <span><span class="co">#&gt; crosses          </span></span>
 <span><span class="co">#&gt;  AxB:100  </span></span>
 <span><span class="co">#&gt;  AxC: 80</span></span></code></pre></div>
-<p>To get a further idea about the population and the computed IBD probabilities we can visualize the results. First we have a look at structure of the pedigree of the population using <code>plotType = "pedigree"</code> to get a general idea of what the design looks like.</p>
+<p>To get a further idea about the population and the computed IBD
+probabilities we can visualize the results. First we have a look at
+structure of the pedigree of the population using
+<code>plotType = "pedigree"</code> to get a general idea of what the
+design looks like.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Plot structure of the pedigree.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ABCMPP</span>, plotType <span class="op">=</span> <span class="st">"pedigree"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/plotPABCMPP-1.png" width="672"></p>
-<p>Next we look at the genetic map using <code>plotType = "genMap"</code>. This will display the genetic map of the population showing the length of each of the chromosomes and indicating the positions where the IBD probabilities were calculated. Optionally it is possible to highlight one or more markers using <code>highlight</code> argument.</p>
+<p>Next we look at the genetic map using
+<code>plotType = "genMap"</code>. This will display the genetic map of
+the population showing the length of each of the chromosomes and
+indicating the positions where the IBD probabilities were calculated.
+Optionally it is possible to highlight one or more markers using
+<code>highlight</code> argument.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Plot genetic map.</span></span>
 <span><span class="co"># Highlight marker on chromosome 3 at position 40.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ABCMPP</span>, plotType <span class="op">=</span> <span class="st">"genMap"</span>, highlight <span class="op">=</span> <span class="st">"EXT_3_40"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/plotGABCMPP-1.png" width="672"></p>
-<p>Finally we visualize the computed IBD probabilities across the genome for a selected genotype using <code>plotType = "singleGeno"</code>. This plot will show the IBD probabilities for all parents for all positions on the genome for the selected genotype.</p>
+<p>Finally we visualize the computed IBD probabilities across the genome
+for a selected genotype using <code>plotType = "singleGeno"</code>. This
+plot will show the IBD probabilities for all parents for all positions
+on the genome for the selected genotype.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Plot IBD probabilities for genotype AxB0001.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ABCMPP</span>, plotType <span class="op">=</span> <span class="st">"singleGeno"</span>, genotype <span class="op">=</span> <span class="st">"AxB0001"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/plotSGABCMPP-1.png" width="672"></p>
-<p>Using the computed IBD probabilities we can now do the actual QTL Mapping using the <code>selQTLMPP</code> function. First we perform a SQM by setting <code>maxCofactors = 0</code>. Our trait of interest, yield, is specified in the <code>trait</code> argument of the function.</p>
+<p>Using the computed IBD probabilities we can now do the actual QTL
+Mapping using the <code>selQTLMPP</code> function. First we perform a
+SQM by setting <code>maxCofactors = 0</code>. Our trait of interest,
+yield, is specified in the <code>trait</code> argument of the
+function.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Perform Single-QTL Mapping.</span></span>
 <span><span class="va">ABCSQM</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/selQTLMPP.html">selQTLMPP</a></span><span class="op">(</span>MPPobj <span class="op">=</span> <span class="va">ABCMPP</span>,</span>
 <span>                    trait <span class="op">=</span> <span class="st">"yield"</span>,</span>
 <span>                    maxCofactors <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
-<p>The results of the SQM can be plotted using the <code>plot</code> function with <code>plotType = "QTLProfile"</code>.</p>
+<p>The results of the SQM can be plotted using the <code>plot</code>
+function with <code>plotType = "QTLProfile"</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Plot QTL Profile for ABC SQM.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ABCSQM</span>, plotType <span class="op">=</span> <span class="st">"QTLProfile"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/QPABCSQM-1.png" width="672"></p>
-<p>Already from the SQM the position of the three simulated QTLs is quite clear. We can get an even better result using MQM. For that, again we use the <code>selQTLMPP</code> function. We don’t specify the <code>maxCofactors</code> to let the algorithm determine the number of cofactors based on the threshold and QTLwindow. As long as new markers are found with a <span class="math inline">\(-log10(p)\)</span> value above <code>threshold</code> and the maximum number of cofactors is not reached, a new round of scanning is done. In the new round of scanning the marker with the highest <span class="math inline">\(-log10(p)\)</span> value from the previous round is added to the cofactors. Based on the profile plot for the SQM the <code>threshold</code> is set to 3. The <code>QTLwindow</code> is not specified and therefore left at its default value of 10cM.</p>
+<p>Already from the SQM the position of the three simulated QTLs is
+quite clear. We can get an even better result using MQM. For that, again
+we use the <code>selQTLMPP</code> function. We don’t specify the
+<code>maxCofactors</code> to let the algorithm determine the number of
+cofactors based on the threshold and QTLwindow. As long as new markers
+are found with a <span class="math inline">\(-log10(p)\)</span> value
+above <code>threshold</code> and the maximum number of cofactors is not
+reached, a new round of scanning is done. In the new round of scanning
+the marker with the highest <span class="math inline">\(-log10(p)\)</span> value from the previous round
+is added to the cofactors. Based on the profile plot for the SQM the
+<code>threshold</code> is set to 3. The <code>QTLwindow</code> is not
+specified and therefore left at its default value of 10cM.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Perform Multi-QTL Mapping.</span></span>
 <span><span class="va">ABCMQM</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/selQTLMPP.html">selQTLMPP</a></span><span class="op">(</span>MPPobj <span class="op">=</span> <span class="va">ABCMPP</span>,</span>
 <span>                    trait <span class="op">=</span> <span class="st">"yield"</span>,</span>
 <span>                    threshold <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<p>It is possible to include a polygenic term in the model to control for background genetic information. To do this a list of chromosome specific kinship matrices can either be computed by the <code>selQTLMPP</code> function or specified by the user. In the former case it is enough to specify <code>computeKin = TRUE</code>. When doing so the kinship matrix is computed by averaging <span class="math inline">\(Z Z^t\)</span> over all markers, where <span class="math inline">\(Z\)</span> is the genotype <span class="math inline">\(\times\)</span> parents matrix with IBD probabilities for the marker. A list of precomputed chromosome specific kinship matrices can be specified in <code>K</code>. Note that adding a kinship matrix to the model increases the computation time a lot, especially for large populations. It is advisable to use parallel computing when doing so (see <a href="#parCom">Parallel computing</a>).</p>
+<p>It is possible to include a polygenic term in the model to control
+for background genetic information. To do this a list of chromosome
+specific kinship matrices can either be computed by the
+<code>selQTLMPP</code> function or specified by the user. In the former
+case it is enough to specify <code>computeKin = TRUE</code>. When doing
+so the kinship matrix is computed by averaging <span class="math inline">\(Z Z^t\)</span> over all markers, where <span class="math inline">\(Z\)</span> is the genotype <span class="math inline">\(\times\)</span> parents matrix with IBD
+probabilities for the marker. A list of precomputed chromosome specific
+kinship matrices can be specified in <code>K</code>. Note that adding a
+kinship matrix to the model increases the computation time a lot,
+especially for large populations. It is advisable to use parallel
+computing when doing so (see <a href="#parCom">Parallel
+computing</a>).</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Perform Multi-QTL Mapping.</span></span>
 <span><span class="co"># Compute kinship matrices.</span></span>
@@ -315,27 +479,44 @@ A map file is also required. This should also be a tab-delimited file with three
 <span>                        trait <span class="op">=</span> <span class="st">"yield"</span>,</span>
 <span>                        threshold <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>                        computeKin <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p>Next we can visualize the results. First we plot the positions of the QTLs found on the genetic map. This will produce a plot similar the the genetic map plot we have seen before, but now the QTLs will be highlighted. This plot can be made by specifying <code>plotType = "QTLRegion"</code></p>
+<p>Next we can visualize the results. First we plot the positions of the
+QTLs found on the genetic map. This will produce a plot similar the the
+genetic map plot we have seen before, but now the QTLs will be
+highlighted. This plot can be made by specifying
+<code>plotType = "QTLRegion"</code></p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Plot QTL Profile for ABC MQM.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ABCMQM</span>, plotType <span class="op">=</span> <span class="st">"QTLRegion"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/plotQRABCMQM-1.png" width="672"></p>
-<p>As for the SQM we can also plot the QTL profile. The QTLs found will be highlighted in the profile in red.</p>
+<p>As for the SQM we can also plot the QTL profile. The QTLs found will
+be highlighted in the profile in red.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Plot QTL Profile for ABC MQM.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ABCMQM</span>, plotType <span class="op">=</span> <span class="st">"QTLProfile"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/plotQPABCMQM-1.png" width="672"></p>
-<p>It is also possible to plot the size of the parental effects for each of the QTLs found. Positive effects of a parent on the trait will be indicated by shades of red, negative effects by shades of blue. The stronger the color, the larger the effect for the specific parent is. This plot can be made using <code>plotType = "parEffs"</code>.</p>
+<p>It is also possible to plot the size of the parental effects for each
+of the QTLs found. Positive effects of a parent on the trait will be
+indicated by shades of red, negative effects by shades of blue. The
+stronger the color, the larger the effect for the specific parent is.
+This plot can be made using <code>plotType = "parEffs"</code>.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Plot QTL Profile for ABC MQM.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ABCMQM</span>, plotType <span class="op">=</span> <span class="st">"parEffs"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/plotPEABCMQM-1.png" width="672"></p>
-<p>Finally a combined plot of the QTL profile and the parental can be made. In this plot the two previous plots are plotted above each other with the chromosomes and positions aligned to allow for easily getting an overview of which effect belongs to which QTL in the QTL profile. This plot can be made using <code>plotType = "QTLProfileExt"</code>.</p>
+<p>Finally a combined plot of the QTL profile and the parental can be
+made. In this plot the two previous plots are plotted above each other
+with the chromosomes and positions aligned to allow for easily getting
+an overview of which effect belongs to which QTL in the QTL profile.
+This plot can be made using <code>plotType = "QTLProfileExt"</code>.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Plot QTL Profile for ABC MQM.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ABCMQM</span>, plotType <span class="op">=</span> <span class="st">"QTLProfileExt"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/plotQPEABCMQM-1.png" width="672"></p>
-<p>A summary of the QTL-analyis gives a short overview containing the total number of markers and the number of QTLs found. Also for all QTL their position on the chromosome is shown as well as the nearest marker on the original map, the explained variance and the effects of all parents.</p>
+<p>A summary of the QTL-analyis gives a short overview containing the
+total number of markers and the number of QTLs found. Also for all QTL
+their position on the chromosome is shown as well as the nearest marker
+on the original map, the explained variance and the effects of all
+parents.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Print summary</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">ABCMQM</span><span class="op">)</span></span>
@@ -350,13 +531,26 @@ A map file is also required. This should also be a tab-delimited file with three
 <span><span class="co">#&gt;  EXT_1_25   1  25    M1_3     16.45   0.242 -1.417  0.859  0.558</span></span>
 <span><span class="co">#&gt;  EXT_2_75   2  75    M2_8      8.59   0.217  0.833 -1.327  0.495</span></span>
 <span><span class="co">#&gt;  EXT_3_65   3  65    M3_7     11.69   0.287  0.984  0.560 -1.544</span></span></code></pre></div>
-<p>From the output of <code>selQTLMPP</code> the p-Values and effects for all markers can be extracted. They are stored in a <code>data.table</code> within the output object. The example below shows how to extract them. The output will contain columns evalPos, chr and pos with name, chromosome number and evaluation position and columns pValue and eff_par1, eff_par2, eff_par.. with the effects of all parents for that marker.</p>
+<p>From the output of <code>selQTLMPP</code> the p-Values and effects
+for all markers can be extracted. They are stored in a
+<code>data.table</code> within the output object. The example below
+shows how to extract them. The output will contain columns evalPos, chr
+and pos with name, chromosome number and evaluation position and columns
+pValue and eff_par1, eff_par2, eff_par.. with the effects of all parents
+for that marker.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Extract results of QTL mapping.</span></span>
 <span><span class="va">ABCMQMres</span> <span class="op">&lt;-</span> <span class="va">ABCMQM</span><span class="op">$</span><span class="va">GWAResult</span><span class="op">$</span><span class="va">yield</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ABCMQMres</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt; NULL</span></span></code></pre></div>
-<p>It is also possible to only extract the markers that are either QTLs or within the window of one of the selected QTLs, as specified when calling the <code>selQTLMPP</code> function. As for the full results, this information in stored in the output as a <code>data.table</code> that can be extracted as shown below. The columns in this <code>data.table</code> are identical to those in the full results except for an additional column at the end, snpStatus, that shows whether a marker is a QTL or within the window of a QTL.</p>
+<p>It is also possible to only extract the markers that are either QTLs
+or within the window of one of the selected QTLs, as specified when
+calling the <code>selQTLMPP</code> function. As for the full results,
+this information in stored in the output as a <code>data.table</code>
+that can be extracted as shown below. The columns in this
+<code>data.table</code> are identical to those in the full results
+except for an additional column at the end, snpStatus, that shows
+whether a marker is a QTL or within the window of a QTL.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Extract QTLs and markers within QTL windows.</span></span>
 <span><span class="va">ABCMQMQTL</span> <span class="op">&lt;-</span> <span class="va">ABCMQM</span><span class="op">$</span><span class="va">signSnp</span><span class="op">$</span><span class="va">yield</span></span>
@@ -366,8 +560,17 @@ A map file is also required. This should also be a tab-delimited file with three
 <div class="section level2">
 <h2 id="example-maize">Example maize<a class="anchor" aria-label="anchor" href="#example-maize"></a>
 </h2>
-<p>As a second example we use data from a maize NAM population described in <span class="citation">Giraud et al. (<a href="#ref-Giraud2014" role="doc-biblioref">2014</a>)</span>. The NAM population consists of 10 bi-parental doubled haploid (DH) crosses with central parent F353. The total population consists of 841 individuals. Several traits were measured in four locations across Europe. We calculated the best linear unbiased estimations (BLUEs) of those traits using the R package <a href="https://biometris.github.io/statgenSTA/" class="external-link">statgenSTA</a>. As an example, we perform QTL mapping for only the mean value of the number of days to silking (“mean_DtSILK”) across all locations. The data for this population is available from the package in zipped format.</p>
-<p>As for the simulated data, before doing QTL detection we first compute IBD probabilities on a grid of positions along the genome.</p>
+<p>As a second example we use data from a maize NAM population described
+in <span class="citation">Giraud et al. (<a href="#ref-Giraud2014" role="doc-biblioref">2014</a>)</span>. The NAM population consists of 10
+bi-parental doubled haploid (DH) crosses with central parent F353. The
+total population consists of 841 individuals. Several traits were
+measured in four locations across Europe. We calculated the best linear
+unbiased estimations (BLUEs) of those traits using the R package <a href="https://biometris.github.io/statgenSTA/" class="external-link">statgenSTA</a>. As an
+example, we perform QTL mapping for only the mean value of the number of
+days to silking (“mean_DtSILK”) across all locations. The data for this
+population is available from the package in zipped format.</p>
+<p>As for the simulated data, before doing QTL detection we first
+compute IBD probabilities on a grid of positions along the genome.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Define names of crosses.</span></span>
 <span><span class="va">crosses</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"F353x"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"B73"</span>, <span class="st">"D06"</span>, <span class="st">"D09"</span>, <span class="st">"EC169"</span>, <span class="st">"F252"</span>, <span class="st">"F618"</span>, </span>
@@ -405,7 +608,8 @@ A map file is also required. This should also be a tab-delimited file with three
 <span>                       popType <span class="op">=</span> <span class="st">"DH"</span>,</span>
 <span>                       mapFile <span class="op">=</span> <span class="va">mapFile</span>,</span>
 <span>                       evalDist <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
-<p>We then have a look at the summary and some of the plots to get an overview of the pedigree and the computed probabilities.</p>
+<p>We then have a look at the summary and some of the plots to get an
+overview of the pedigree and the computed probabilities.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Print summary</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">maizeMPP</span><span class="op">)</span></span>
@@ -443,18 +647,25 @@ A map file is also required. This should also be a tab-delimited file with three
 <span><span class="va">maizeSQM</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/selQTLMPP.html">selQTLMPP</a></span><span class="op">(</span>MPPobj <span class="op">=</span> <span class="va">maizeMPP</span>,</span>
 <span>                      trait <span class="op">=</span> <span class="st">"mean_DtSILK"</span>,</span>
 <span>                      maxCofactors <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
-<p>We plot the QTL profile for the SQM to get an idea of reasonable values to use for the <code>threshold</code> and <code>QTLwindow</code> in the MQM that we do next.</p>
+<p>We plot the QTL profile for the SQM to get an idea of reasonable
+values to use for the <code>threshold</code> and <code>QTLwindow</code>
+in the MQM that we do next.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Plot QTL Profile for maize SQM.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">maizeSQM</span>, plotType <span class="op">=</span> <span class="st">"QTLProfile"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/QPmaizeSQM-1.png" width="672"></p>
-<p>Based on the plot for the SQM the <code>threshold</code> is set to 5 to restrict a bit the number of QTLs that will be detected in the MQM. The <code>QTLwindow</code> is not specified and therefore left at its default value of 10cM.</p>
+<p>Based on the plot for the SQM the <code>threshold</code> is set to 5
+to restrict a bit the number of QTLs that will be detected in the MQM.
+The <code>QTLwindow</code> is not specified and therefore left at its
+default value of 10cM.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Perform Multi-QTL Mapping.</span></span>
 <span><span class="va">maizeMQM</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/selQTLMPP.html">selQTLMPP</a></span><span class="op">(</span>MPPobj <span class="op">=</span> <span class="va">maizeMPP</span>,</span>
 <span>                      trait <span class="op">=</span> <span class="st">"mean_DtSILK"</span>,</span>
 <span>                      threshold <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
-<p>We only look at the combined plot of the QTL Profile and the parental effects. This should give us the most direct insight in the QTLs found and the effects the different parents in the crosses have.</p>
+<p>We only look at the combined plot of the QTL Profile and the parental
+effects. This should give us the most direct insight in the QTLs found
+and the effects the different parents in the crosses have.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Plot QTL Profile for maize MQM.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">maizeMQM</span>, plotType <span class="op">=</span> <span class="st">"QTLProfileExt"</span><span class="op">)</span></span></code></pre></div>
@@ -463,9 +674,31 @@ A map file is also required. This should also be a tab-delimited file with three
 <div class="section level2">
 <h2 id="example-barley">Example barley<a class="anchor" aria-label="anchor" href="#example-barley"></a>
 </h2>
-<p>Instead of performing IBD calculations directly with the package, it is also possible to import IBD probabilities computed using RABBIT software <span class="citation">(Zheng, Boer, and Van Eeuwijk <a href="#ref-Zheng2014" role="doc-biblioref">2014</a>, <a href="#ref-Zheng2015" role="doc-biblioref">2015</a>, <a href="#ref-Zheng2018" role="doc-biblioref">2018</a>)</span>. The main advantage of using RABBIT for IBD calculations is that it can handle complex pedigree populations and therefore can also be used in cases where the population structure is more complex than those that can be computed using <code>statgenIBD</code>, e.g. in the maize NAM population described before.</p>
-<p>As an example we use a barley population described in <span class="citation">Liller et al. (<a href="#ref-Liller2017-jz" role="doc-biblioref">2017</a>)</span>. This MPP design consists of 5 parents. Four wild parents were crossed with the cultivar Morex and then backcrossed with Morex once. Individuals from the four families from the backcrosses were then crossed with each other as in a full diallel design, which generated six F6 families through five generations of selfing. The trait of interest for this population is awn length (“Awn_length”). As for the maize NAM population, the data for this population is available in zipped format in the package.</p>
-<p>RABBIT output can be read using the <code>readRABBITMPP</code> function in <code>statgenMPP</code>. This has as input the standard RABBIT output summary file and the pedigree file that needs to be provided to RABBIT as well. This pedigree file is an optional input and is only used for plotting the pedigree structure of the population. Without it QTL mapping can still be performed. As for <code>calcIBDMPP</code> the phenotypic data has to be provided as a <code>data.frame</code>. This <code>data.frame</code> has been included in the package.</p>
+<p>Instead of performing IBD calculations directly with the package, it
+is also possible to import IBD probabilities computed using RABBIT
+software <span class="citation">(<a href="#ref-Zheng2014" role="doc-biblioref">Zheng, Boer, and Van Eeuwijk 2014</a>, <a href="#ref-Zheng2015" role="doc-biblioref">2015</a>, <a href="#ref-Zheng2018" role="doc-biblioref">2018</a>)</span>. The main
+advantage of using RABBIT for IBD calculations is that it can handle
+complex pedigree populations and therefore can also be used in cases
+where the population structure is more complex than those that can be
+computed using <code>statgenIBD</code>, e.g. in the maize NAM population
+described before.</p>
+<p>As an example we use a barley population described in <span class="citation">Liller et al. (<a href="#ref-Liller2017-jz" role="doc-biblioref">2017</a>)</span>. This MPP design consists of 5
+parents. Four wild parents were crossed with the cultivar Morex and then
+backcrossed with Morex once. Individuals from the four families from the
+backcrosses were then crossed with each other as in a full diallel
+design, which generated six F6 families through five generations of
+selfing. The trait of interest for this population is awn length
+(“Awn_length”). As for the maize NAM population, the data for this
+population is available in zipped format in the package.</p>
+<p>RABBIT output can be read using the <code>readRABBITMPP</code>
+function in <code>statgenMPP</code>. This has as input the standard
+RABBIT output summary file and the pedigree file that needs to be
+provided to RABBIT as well. This pedigree file is an optional input and
+is only used for plotting the pedigree structure of the population.
+Without it QTL mapping can still be performed. As for
+<code>calcIBDMPP</code> the phenotypic data has to be provided as a
+<code>data.frame</code>. This <code>data.frame</code> has been included
+in the package.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Specify files containing RABBIT output.</span></span>
 <span><span class="co">## Extract in a temporary directory.</span></span>
@@ -484,7 +717,8 @@ A map file is also required. This should also be a tab-delimited file with three
 <span><span class="va">barleyMPP</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/readRABBITMPP.html">readRABBITMPP</a></span><span class="op">(</span>infile <span class="op">=</span> <span class="va">inFile</span>,</span>
 <span>                           pedFile <span class="op">=</span> <span class="va">pedFile</span>,</span>
 <span>                           pheno <span class="op">=</span> <span class="va">barleyPheno</span><span class="op">)</span></span></code></pre></div>
-<p>As for the maize example we can summarize and plot the imported data to get a first idea of its content.</p>
+<p>As for the maize example we can summarize and plot the imported data
+to get a first idea of its content.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Summary.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">barleyMPP</span><span class="op">)</span></span>
@@ -512,13 +746,18 @@ A map file is also required. This should also be a tab-delimited file with three
 <code class="sourceCode R"><span><span class="co">## Plot structure of the pedigree.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">barleyMPP</span>, plotType <span class="op">=</span> <span class="st">"pedigree"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/plotPbarleyIBD-1.png" width="672"></p>
-<p>Performing SQM and MQM for imported RABBIT output works in the same way as for IBD probabilities computed directly in the package. Since a full scan would take long we precomputed the results and included them in the package.</p>
+<p>Performing SQM and MQM for imported RABBIT output works in the same
+way as for IBD probabilities computed directly in the package. Since a
+full scan would take long we precomputed the results and included them
+in the package.</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Perform Multi-QTL Mapping with threshold 4.</span></span>
 <span><span class="va">barleyMQM</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/selQTLMPP.html">selQTLMPP</a></span><span class="op">(</span>MPPobj <span class="op">=</span> <span class="va">barleyMPP</span>,</span>
 <span>                       trait <span class="op">=</span> <span class="st">"Awn_length"</span>,</span>
 <span>                       threshold <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
-<p>There is a very large QTL on chromosome 7. To be able to more clearly distinguish the differences between the other QTLs they are plotted separately.</p>
+<p>There is a very large QTL on chromosome 7. To be able to more clearly
+distinguish the differences between the other QTLs they are plotted
+separately.</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Plot QTL Profile for barley MQM - chromosome 1-6.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">barleyMQM</span>, plotType <span class="op">=</span> <span class="st">"QTLProfileExt"</span>, chr <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span></span></code></pre></div>
@@ -527,7 +766,10 @@ A map file is also required. This should also be a tab-delimited file with three
 <code class="sourceCode R"><span><span class="co">## Plot QTL Profile for barley MQM - chromosome 7.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">barleyMQM</span>, plotType <span class="op">=</span> <span class="st">"QTLProfileExt"</span>, chr <span class="op">=</span> <span class="fl">7</span><span class="op">)</span></span></code></pre></div>
 <p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/QPbarleyMQM7-1.png" width="672"></p>
-<p>The QTLs found are very similar in both position, size and effects as described in <span class="citation">Liller et al. (<a href="#ref-Liller2017-jz" role="doc-biblioref">2017</a>)</span>. This can also be clearly seen by comparing the summary of the MQM with the table of effects in this paper.</p>
+<p>The QTLs found are very similar in both position, size and effects as
+described in <span class="citation">Liller et al. (<a href="#ref-Liller2017-jz" role="doc-biblioref">2017</a>)</span>. This
+can also be clearly seen by comparing the summary of the MQM with the
+table of effects in this paper.</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Summary.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">barleyMQM</span><span class="op">)</span></span>
@@ -568,7 +810,16 @@ A map file is also required. This should also be a tab-delimited file with three
 <div class="section level2">
 <h2 id="parCom">Parallel computing<a class="anchor" aria-label="anchor" href="#parCom"></a>
 </h2>
-<p>To improve performance, it is possible to use parallel computing to perform the QTL mapping. To do this, a parallel back-end has to be specified by the user, e.g. by using <code>registerDoParallel</code> from the <code>doParallel</code> package (see the example below). Besides, in the <code>selQTLMPP</code> function the argument <code>parallel</code> has to be set to <code>TRUE</code>. With these settings the computations are done in parallel per chromosome. Of course, this doesn’t have an effect on the output. The MQM below gives exactly the same results as the non-parallel one described earlier in the vignette.</p>
+<p>To improve performance, it is possible to use parallel computing to
+perform the QTL mapping. To do this, a parallel back-end has to be
+specified by the user, e.g. by using <code>registerDoParallel</code>
+from the <code>doParallel</code> package (see the example below).
+Besides, in the <code>selQTLMPP</code> function the argument
+<code>parallel</code> has to be set to <code>TRUE</code>. With these
+settings the computations are done in parallel per chromosome. Of
+course, this doesn’t have an effect on the output. The MQM below gives
+exactly the same results as the non-parallel one described earlier in
+the vignette.</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Register parallel back-end with 2 cores.</span></span>
 <span><span class="fu">doParallel</span><span class="fu">::</span><span class="fu">registerDoParallel</span><span class="op">(</span>cores <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
@@ -582,36 +833,66 @@ A map file is also required. This should also be a tab-delimited file with three
 <div class="section level2">
 <h2 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
 </h2>
-<p>The properties of using statgenMPP for QTL mapping in MPPs have been shown with several examples we demonstrated here. This easy-to-use R package, integrating the HMM method for IBD calculation and the mixed-model approach for QTL mapping, provides us with a general framework to estimate multi-allelic QTL effects in terms of parent origins.</p>
+<p>The properties of using statgenMPP for QTL mapping in MPPs have been
+shown with several examples we demonstrated here. This easy-to-use R
+package, integrating the HMM method for IBD calculation and the
+mixed-model approach for QTL mapping, provides us with a general
+framework to estimate multi-allelic QTL effects in terms of parent
+origins.</p>
 <hr>
 </div>
 <div class="section level2 unnumbered">
-<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+<h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<div id="refs" class="references">
-<div id="ref-Giraud2014">
-<p>Giraud, Héloı̈se, Christina Lehermeier, Eva Bauer, Matthieu Falque, Vincent Segura, Cyril Bauland, Christian Camisan, et al. 2014. “Linkage Disequilibrium with Linkage Analysis of Multiline Crosses Reveals Different Multiallelic QTL for Hybrid Performance in the Flint and Dent Heterotic Groups of Maize.” <em>Genetics</em> 198 (4): 1717–34. <a href="https://doi.org/10.1534/genetics.114.169367" class="external-link">https://doi.org/10.1534/genetics.114.169367</a>.</p>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Giraud2014" class="csl-entry">
+Giraud, Héloı̈se, Christina Lehermeier, Eva Bauer, Matthieu Falque,
+Vincent Segura, Cyril Bauland, Christian Camisan, et al. 2014.
+<span>“Linkage Disequilibrium with Linkage Analysis of Multiline Crosses
+Reveals Different Multiallelic <span>QTL</span> for Hybrid Performance
+in the Flint and Dent Heterotic Groups of Maize.”</span>
+<em>Genetics</em> 198 (4): 1717–34. <a href="https://doi.org/10.1534/genetics.114.169367" class="external-link">https://doi.org/10.1534/genetics.114.169367</a>.
 </div>
-<div id="ref-Huang2011">
-<p>Huang, Xueqing, Maria-João Paulo, Martin Boer, Sigi Effgen, Paul Keizer, Maarten Koornneef, and Fred A Van Eeuwijk. 2011. “Analysis of natural allelic variation in Arabidopsis using a multiparent recombinant inbred line population.” <a href="https://doi.org/10.1073/pnas.1100465108" class="external-link">https://doi.org/10.1073/pnas.1100465108</a>.</p>
+<div id="ref-Huang2011" class="csl-entry">
+Huang, Xueqing, Maria-João Paulo, Martin Boer, Sigi Effgen, Paul Keizer,
+Maarten Koornneef, and Fred A Van Eeuwijk. 2011. <span>“<span class="nocase">Analysis of natural allelic variation in Arabidopsis
+using a multiparent recombinant inbred line population</span>.”</span>
+<a href="https://doi.org/10.1073/pnas.1100465108" class="external-link">https://doi.org/10.1073/pnas.1100465108</a>.
 </div>
-<div id="ref-Lander1987">
-<p>Lander, Eric S., and Philip Green. 1987. “Construction of multilocus genetic linkage maps in humans (restriction fragment length polymorphism/EM algorithm/genetic reconstruction algorithm/human genetics/plant genetics).” <em>Proc. Nati. Acad. Sci. USA</em> 84 (2): 2363–7. <a href="https://www.jstor.org/stable/29713" class="external-link">https://www.jstor.org/stable/29713</a>.</p>
+<div id="ref-Lander1987" class="csl-entry">
+Lander, Eric S., and Philip Green. 1987. <span>“<span class="nocase">Construction of multilocus genetic linkage maps in humans
+(restriction fragment length polymorphism/EM algorithm/genetic
+reconstruction algorithm/human genetics/plant genetics)</span>.”</span>
+<em>Proc. Nati. Acad. Sci. USA</em> 84 (2): 2363–67. <a href="https://www.jstor.org/stable/29713" class="external-link">https://www.jstor.org/stable/29713</a>.
 </div>
-<div id="ref-Li2021">
-<p>Li, Wenhao, Martin P. Boer, Chaozhi Zheng, Ronny V. L. Joosen, and Fred A. Van Eeuwijk. 2021. “An IBD-based mixed model approach for QTL mapping in multiparental populations.” <em>Theor. Appl. Genet. 2021</em> 1 (August): 1–18. <a href="https://doi.org/10.1007/S00122-021-03919-7" class="external-link">https://doi.org/10.1007/S00122-021-03919-7</a>.</p>
+<div id="ref-Li2021" class="csl-entry">
+Li, Wenhao, Martin P. Boer, Chaozhi Zheng, Ronny V. L. Joosen, and Fred
+A. Van Eeuwijk. 2021. <span>“<span class="nocase">An IBD-based mixed
+model approach for QTL mapping in multiparental
+populations</span>.”</span> <em>Theor. Appl. Genet. 2021</em> 1
+(August): 1–18. <a href="https://doi.org/10.1007/S00122-021-03919-7" class="external-link">https://doi.org/10.1007/S00122-021-03919-7</a>.
 </div>
-<div id="ref-Liller2017-jz">
-<p>Liller, Corinna B, Agatha Walla, Martin P Boer, Pete Hedley, Malcolm Macaulay, Sieglinde Effgen, Maria von Korff, G Wilma van Esse, and Maarten Koornneef. 2017. “Fine Mapping of a Major QTL for Awn Length in Barley Using a Multiparent Mapping Population.” <em>Züchter Genet. Breed. Res.</em> 130 (2): 269–81. <a href="https://doi.org/10.1007/s00122-016-2807-y" class="external-link">https://doi.org/10.1007/s00122-016-2807-y</a>.</p>
+<div id="ref-Liller2017-jz" class="csl-entry">
+Liller, Corinna B, Agatha Walla, Martin P Boer, Pete Hedley, Malcolm
+Macaulay, Sieglinde Effgen, Maria von Korff, G Wilma van Esse, and
+Maarten Koornneef. 2017. <span>“Fine Mapping of a Major <span>QTL</span>
+for Awn Length in Barley Using a Multiparent Mapping Population.”</span>
+<em>Z<span>ü</span>chter Genet. Breed. Res.</em> 130 (2): 269–81. <a href="https://doi.org/10.1007/s00122-016-2807-y" class="external-link">https://doi.org/10.1007/s00122-016-2807-y</a>.
 </div>
-<div id="ref-Zheng2015">
-<p>Zheng, Chaozhi, Martin P Boer, and Fred A Van Eeuwijk. 2015. “Reconstruction of Genome Ancestry Blocks in Multiparental Populations.” <em>Genetics</em> 200 (4): 1073–87. <a href="https://doi.org/10.1534/GENETICS.115.177873" class="external-link">https://doi.org/10.1534/GENETICS.115.177873</a>.</p>
+<div id="ref-Zheng2014" class="csl-entry">
+Zheng, Chaozhi, Martin P Boer, and Fred A Van Eeuwijk. 2014. <span>“A
+General Modeling Framework for Genome Ancestral Origins in Multiparental
+Populations.”</span> <em>Genetics</em> 198 (1): 87–101. <a href="https://doi.org/10.1534/genetics.114.163006" class="external-link">https://doi.org/10.1534/genetics.114.163006</a>.
 </div>
-<div id="ref-Zheng2018">
-<p>———. 2018. “Recursive Algorithms for Modeling Genomic Ancestral Origins in a Fixed Pedigree.” <em>G3 Genes|Genomes|Genetics</em> 8 (10): 3231–45. <a href="https://doi.org/10.1534/G3.118.200340" class="external-link">https://doi.org/10.1534/G3.118.200340</a>.</p>
+<div id="ref-Zheng2015" class="csl-entry">
+———. 2015. <span>“Reconstruction of Genome Ancestry Blocks in
+Multiparental Populations.”</span> <em>Genetics</em> 200 (4): 1073–87.
+<a href="https://doi.org/10.1534/genetics.115.177873" class="external-link">https://doi.org/10.1534/genetics.115.177873</a>.
 </div>
-<div id="ref-Zheng2014">
-<p>———. 2014. “A General Modeling Framework for Genome Ancestral Origins in Multiparental Populations.” <em>Genetics</em> 198 (1): 87–101. <a href="https://doi.org/10.1534/genetics.114.163006" class="external-link">https://doi.org/10.1534/genetics.114.163006</a>.</p>
+<div id="ref-Zheng2018" class="csl-entry">
+———. 2018. <span>“<span class="nocase">Recursive Algorithms for Modeling
+Genomic Ancestral Origins in a Fixed Pedigree</span>.”</span> <em>G3
+Genes|Genomes|Genetics</em> 8 (10): 3231–45. <a href="https://doi.org/10.1534/G3.118.200340" class="external-link">https://doi.org/10.1534/G3.118.200340</a>.
 </div>
 </div>
 </div>
