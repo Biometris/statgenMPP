@@ -1,3 +1,7 @@
+# statgenMPP 1.0.2.9000
+
+* Functions no longer rely on soft-deprecated ggplot2 functions.
+
 # statgenMPP 1.0.2
 
 * A minor bug in the summary for `gDataMPP` objects is fixed. Now the correct number of genotypes is shown also when there is only one cross.

@@ -294,7 +294,7 @@ plot.QTLMPP <- function(x,
       ## Add title here to assure font is the same as for other plots.
       p1 <- plot(x, chr = dotArgs$chr, plotType = "QTLProfile", title = title,
                  output = FALSE) +
-        ggplot2::geom_vline(ggplot2::aes_string(xintercept = "x"),
+        ggplot2::geom_vline(ggplot2::aes(xintercept = .data[["x"]]),
                             linetype = "dashed", data = vertDat[-1, ]) +
         ggplot2::theme(axis.ticks.x = ggplot2::element_blank(),
                        axis.text.x = ggplot2::element_blank(),

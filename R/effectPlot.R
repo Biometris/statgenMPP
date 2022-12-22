@@ -51,7 +51,7 @@ effectPlot <- function(effectDat,
                       by = "snp", sort = FALSE)
   ## Only plotting the effects for significant SNPs. Remove all others.
   parEffData <- parEffData[interaction(parEffData[["snp"]], parEffData[["trait"]]) %in%
-                              interaction(signSnp[["snp"]], signSnp[["trait"]]), ]
+                             interaction(signSnp[["snp"]], signSnp[["trait"]]), ]
   if (nrow(parEffData) > 0) {
     maxVal <- max(abs(parEffData$effect), na.rm = TRUE)
   }
@@ -73,8 +73,10 @@ effectPlot <- function(effectDat,
                    plot.title = ggplot2::element_text(hjust = 0.5))
   if (nrow(parEffData) > 0) {
     p <- p +
-      ggplot2::geom_tile(ggplot2::aes_string(x = "cumPos", y = "trait",
-                                             fill = "effect", width = "width"),
+      ggplot2::geom_tile(ggplot2::aes(x = .data[["cumPos"]],
+                                      y = .data[["trait"]],
+                                      fill = .data[["effect"]],
+                                      width = .data[["width"]]),
                          height = 1, data = parEffData) +
       ggplot2::scale_fill_gradientn(colors = c("blue", "cyan", "white",
                                                "yellow","red"),
