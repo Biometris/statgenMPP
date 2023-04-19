@@ -31,3 +31,6 @@ constructRinv <- getFromNamespace(x = "constructRinv", ns = "LMMsolver")
 
 #' @keywords internal
 sparseMixedModels <- getFromNamespace(x = "sparseMixedModels", ns = "LMMsolver")
+
+#' @keywords internal
+calcStandardErrors <- getFromNamespace(x = "calcStandardErrors", ns = "LMMsolver")

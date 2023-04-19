@@ -11,6 +11,7 @@ scanQTL <- function(modDat,
                     Usc = NULL,
                     trait = NULL,
                     maxIter = 100,
+                    se = FALSE,
                     parallel = FALSE,
                     verbose = FALSE) {
   ## Get info from input.
@@ -55,8 +56,8 @@ scanQTL <- function(modDat,
     chrMrk <- rownames(map)[map[["chr"]] == chrs[i]]
     QTLRegion <- setNames(logical(length = length(chrMrk)), chrMrk)
     minlog10p <- setNames(numeric(length = length(chrMrk)), chrMrk)
-    effects <- matrix(nrow = length(chrMrk), ncol = nPar,
-                      dimnames = list(chrMrk, parents))
+    effects <- se_effects <- matrix(nrow = length(chrMrk), ncol = nPar,
+                                    dimnames = list(chrMrk, parents))
     for (scanMrk in chrMrk) {
       ## Get cofactors for current markers.
       cofMrk <- selectCofactors(map = map,
@@ -113,18 +114,26 @@ scanQTL <- function(modDat,
       minlog10p[scanMrk] <- min(-log10(0.5 * pchisq(dev, 1,
                                                     lower.tail = FALSE)), 300)
       effects[scanMrk, ] <- fitModMrk$a[(1 + nCross):(length(parents) + nCross)]
+      if (se) {
+        se_tot <- calcStandardErrors(C = fitModMrk$C,
+                                     D = spam::diag.spam(x = 1, nrow = nrow(fitModMrk$C)))
+        se_effects[scanMrk, ] <- se_tot[(1 + nCross):(length(parents) + nCross)]
+      }
     }
-    list(QTLRegion, minlog10p, effects)
+    list(QTLRegion, minlog10p, effects, se_effects)
   }
   QTLRegion <- do.call(c, lapply(X = scanFull, FUN = `[[`, 1))
   minlog10p <- do.call(c, lapply(X = scanFull, FUN = `[[`, 2))
   effects <- do.call(rbind, args = lapply(X = scanFull, FUN = `[[`, 3))
+  se_effects <- do.call(rbind, args = lapply(X = scanFull, FUN = `[[`, 4))
   dimnames(effects) <- list(rownames(map), paste0("eff_", parents))
+  dimnames(se_effects) <- list(rownames(map), paste0("se_eff_", parents))
   scanRes <- data.table::data.table(trait = trait,
                                     snp = rownames(map),
                                     map,
                                     pValue = 10 ^ -minlog10p,
                                     effects,
+                                    se_effects,
                                     minlog10p = minlog10p,
                                     QTLRegion = QTLRegion)
   return(scanRes)

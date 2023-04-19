@@ -38,7 +38,7 @@ Imports:
     foreach,
     ggplot2,
     gridExtra,
-    LMMsolver,
+    LMMsolver (>= 1.0.5),
     Matrix,
     rlang,
     scales,

@@ -14,6 +14,7 @@ scanQTL(
   Usc = NULL,
   trait = NULL,
   maxIter = 100,
+  se = FALSE,
   parallel = FALSE,
   verbose = FALSE
 )

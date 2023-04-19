@@ -230,6 +230,7 @@ selQTLMPP <- function(MPPobj,
                      QTLwindow = QTLwindow,
                      cof = cofactors,
                      Usc = Usc,
+                     se = TRUE,
                      parallel = parallel,
                      verbose = verbose)
   ## Flatten cofactor markers to 2D structure.
