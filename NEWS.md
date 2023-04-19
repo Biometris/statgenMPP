@@ -1,5 +1,6 @@
 # statgenMPP 1.0.2.9000
 
+* The output of `selQTLMPP` now contains the standard errors of the effects. The standard errors are added in both the full output (GWAResult) and the table with QTLs (signSnp).
 * Functions no longer rely on soft-deprecated ggplot2 functions.
 
 # statgenMPP 1.0.2
