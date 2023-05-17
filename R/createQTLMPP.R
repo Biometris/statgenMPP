@@ -47,7 +47,8 @@ summary.QTLMPP <- function(object,
   signSnp[["evalPos"]] <- signSnp[["snp"]]
   ## Restrict columns for nicer output.
   signSnp <- signSnp[, c("evalPos", "chr", "pos", "mrkNear", "minlog10p",
-                         "varExpl", paste0("eff_", parents)), with = FALSE]
+                         "varExpl", paste0("eff_", parents),
+                         paste0("se_eff_", parents)), with = FALSE]
   ## Add attributes used for printing.
   res <- structure(signSnp,
                    class = c("summary.QTLMPP", "data.frame"),
