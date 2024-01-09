@@ -152,6 +152,8 @@ selQTLMPP <- function(MPPobj,
   markers <- markers[rownames(markers) %in% modDat[["genotype"]], , ]
   ## Restrict modDat to genotypes in markers.
   modDat <- droplevels(modDat[modDat[["genotype"]] %in% rownames(markers), ])
+  ## Reorder markers according to genotypes in modDat.
+  markers <- markers[modDat[["genotype"]], , ]
   ## Compute kinship matrices.
   if (computeKin) {
     K <- kinshipIBD(map = map, markers = markers)
