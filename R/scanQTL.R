@@ -40,11 +40,12 @@ scanQTL <- function(modDat,
                             rep(0, nPar * (length(cof) - i) +
                                   if (!is.null(Usc)) nEigChr else 0)))
     })
+    names(lGinv0) <- cof
     if (!is.null(UscChr)) {
       ZChr <- spam::cbind.spam(Z0, UscChr)
       lGinv1 <- spam::diag.spam(x = c(rep(0, times = length(cof) * nPar),
                                           rep(1, nEigChr)))
-      LGinvChr <- c(lGinv0, list(lGinv1))
+      LGinvChr <- c(lGinv0, list(K = lGinv1))
     } else {
       ZChr <- Z0
       LGinvChr <- lGinv0
@@ -74,11 +75,12 @@ scanQTL <- function(modDat,
                               rep(0, nPar * (length(selMrk) - i) +
                                     if (!is.null(UscChr)) nEigChr else 0)))
       })
+      names(lGinvMrk) <- selMrk
       if (!is.null(UscChr)) {
         ZMrk <- spam::cbind.spam(ZMrk, UscChr)
         lGinv1Mrk <- spam::diag.spam(x = c(rep(0, times = length(selMrk) * nPar),
                                         rep(1, nEigChr)))
-        lGinvMrk <- c(lGinvMrk, list(lGinv1Mrk))
+        lGinvMrk <- c(lGinvMrk, list(K = lGinv1Mrk))
       }
       ## Fit model for current marker.
       fitModMrk <- sparseMixedModels(y = y, X = X, Z = ZMrk,
@@ -99,11 +101,12 @@ scanQTL <- function(modDat,
                                 rep(0, nPar * (length(cofMrk) - i) +
                                       if (!is.null(UscChr)) nEigChr else 0)))
         })
+        names(lGinvMrk2) <- cofMrk
         if (!is.null(UscChr)) {
           ZMrk2 <- cbind(ZMrk2, UscChr)
           lGinv1Mrk2 <- spam::diag.spam(x = c(rep(0, times = length(cofMrk) * nPar),
                                              rep(1, nEigChr)))
-          lGinvMrk2 <- c(lGinvMrk2, list(lGinv1Mrk2))
+          lGinvMrk2 <- c(lGinvMrk2, list(K = lGinv1Mrk2))
         }
         fitModCof <- sparseMixedModels(y = y, X = X, Z = ZMrk2,
                                        lRinv = lRinv, lGinv = lGinvMrk2,

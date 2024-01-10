@@ -18,11 +18,11 @@ selectCofactors <- function(map,
   if (length(cofactors) == 0) return(NULL)
   minDist <- 0.5 * QTLwindow
   dist <- sapply(cofactors, function(x) calcDistance(map, marker, x))
-  if (min(dist) > minDist) {
-    return(cofactors)
-  } else {
-    return(cofactors[-which.min(dist)])
+  if (min(dist) <= minDist) {
+    cofactors <- cofactors[-which.min(dist)]
+    if (length(cofactors) == 0) return(NULL)
   }
+  return(cofactors)
 }
 
 #' @importFrom stats aggregate
