@@ -178,7 +178,7 @@ createGDataMPPInternal <- function(gDataMPP = NULL,
         ## This might occur in RABBIT output.
         ## Remove those genotypes.
         genoNA <- apply(X = markers, MARGIN = 1, function(x) {
-          anyNA(x)
+          anyNA(x) | any(is.infinite(x))
         })
         if (any(genoNA)) {
           warning("The following genotypes have been removed because ",
