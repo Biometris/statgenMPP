@@ -87,12 +87,12 @@ print.summary.QTLMPP <- function(x,
 #'
 #' Creates a plot of an object of S3 class \code{QTLMPP}. The following types of
 #' plot can be made:
-#' \itemize{
-#' \item{QTLProfile}{ A QTL profile plot, i.e. a plot of \eqn{-log10(p)} values
+#' \describe{
+#' \item{QTLProfile}{A QTL profile plot, i.e. a plot of \eqn{-log10(p)} values
 #' per marker.}
-#' \item{parEffs} { A plot of effect sizes and directions per parent.}
-#' \item{QTLRegion}{ A plot highlighting the QTLs found on the genetic map.}
-#' \item{QTLProfileExt}{ A combination of the QTL profile and parental effects
+#' \item{parEffs}{A plot of effect sizes and directions per parent.}
+#' \item{QTLRegion}{A plot highlighting the QTLs found on the genetic map.}
+#' \item{QTLProfileExt}{A combination of the QTL profile and parental effects
 #' plotted above each other.}
 #' }
 #' See details for a detailed description of the plots and the plot options

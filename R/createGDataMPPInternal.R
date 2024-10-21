@@ -348,7 +348,7 @@ print.summary.gDataMPP <- function(x,
 #'
 #' Creates a plot of an object of S3 class \code{gDataMPP}. The following types
 #' of plot can be made:
-#' \itemize{
+#' \describe{
 #' \item{\code{genMap}}{ A plot of the genetic map.}
 #' \item{\code{allGeno}}{ A plot showing for all genotypes the IBD
 #' probabilities of the parent with the highest probability per marker.}
