@@ -18,7 +18,7 @@ before_script:
   # Uncomment lines below for installation of develop versions of statgenGWAS/statgenIBD
   # - r -e 'remotes::install_github("Biometris/statgenGWAS", ref = "develop", dependencies = TRUE)'
   # - r -e 'remotes::install_github("Biometris/statgenIBD", ref = "develop", dependencies = TRUE)'
-  - r -e 'devtools::install_dev_deps(upgrade = FALSE)'
+  - r -e 'devtools::install_dev_deps(upgrade = "never")'
 
 r-release:
   stage: test
