@@ -1,7 +1,7 @@
 Package: statgenMPP
 Title: QTL Mapping for Multi Parent Populations
 Version: 1.0.2.9000
-Date: 2022-12-2
+Date: 2024-10-21
 Authors@R: c(person(given = "Wenhao", 
                     family = "Li", 
                     email = "wenhao.li@wur.nl", 
@@ -29,7 +29,7 @@ License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Depends:
     R (>= 3.6),
     statgenGWAS (>= 1.0.9)

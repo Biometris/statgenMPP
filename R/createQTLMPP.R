@@ -312,11 +312,12 @@ plot.QTLMPP <- function(x,
       ## Get widths.
       g1 <- ggplot2::ggplotGrob(p1)
       g2 <- ggplot2::ggplotGrob(p2)
-      maxWidth = grid::unit.pmax(g1$widths[2:9], g2$widths[2:9])
+      g1Widths <- g1$widths[-1]
+      g2Widths <- g2$widths[-1]
+      maxWidths <- grid::unit.pmax(g1Widths, g2Widths)
       ## Set widths.
-      g1$widths[2:9] <- maxWidth
-      g2$widths[2:9] <- maxWidth
-
+      g1$widths[-1] <- maxWidths
+      g2$widths[-1] <- maxWidths
       p <- gridExtra::grid.arrange(g1, g2)
     }
   }
