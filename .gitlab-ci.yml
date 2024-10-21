@@ -11,7 +11,7 @@ variables:
 before_script:
   - apt-get update
   - apt-get install -y --no-install-recommends ${APT_PKGS}
-  - apt-get install -y --no-install-recommends qpdf pandoc pandoc-citeproc
+  # - apt-get install -y --no-install-recommends qpdf pandoc pandoc-citeproc
   - export PATH="/usr/local/lib/R/site-library/littler/examples/:${PATH}"
   - echo "options(Ncpus = $(nproc --all))" >> /usr/local/lib/R/etc/Rprofile.site
   - install2.r devtools remotes
@@ -24,7 +24,7 @@ r-release:
   stage: test
   tags:
     - Docker
-  image: rocker/r-ver:latest
+  image: rocker/verse:latest
   script:
     - r -e 'devtools::check(check_dir = ".")'
   artifacts:
@@ -37,7 +37,7 @@ r-devel:
   stage: test
   tags:
     - Docker
-  image: rocker/r-ver:devel
+  image: rocker/verse:devel
   script:
     - r -e 'devtools::check(check_dir = ".")'
   artifacts:
@@ -50,7 +50,7 @@ coverage:
   stage: deploy
   tags:
     - Docker
-  image: rocker/r-ver:latest
+  image: rocker/verse:latest
   when: on_success
   script:
     - install2.r covr
