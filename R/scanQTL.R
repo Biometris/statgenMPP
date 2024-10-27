@@ -121,8 +121,9 @@ scanQTL <- function(modDat,
         Cinv <- spam::solve.spam(fitModMrk$C)
         nPar <- length(parents)
         Dg <- spam::spam(x=0, nrow=nPar, ncol = nrow(fitModMrk$C))
-        P <- spam::diag.spam(1, nPar)
-        Dg[1:nPar, (nCross+1):(nCross+nPar)] <- P
+        I <- spam::diag.spam(1, nPar)
+        J <- spam::spam(x=1, nrow = nPar, ncol = nPar)
+        Dg[1:nPar, (nCross+1):(nCross+nPar)] <- I - (1/nPar)*J
         se_eff <- as.vector(sqrt(spam::diag.spam(Dg %*% Cinv %*% t(Dg))))
         se_effects[scanMrk, ] <- se_eff
       }
