@@ -118,9 +118,13 @@ scanQTL <- function(modDat,
                                                     lower.tail = FALSE)), 300)
       effects[scanMrk, ] <- fitModMrk$a[(1 + nCross):(length(parents) + nCross)]
       if (se) {
-        se_tot <- calcStandardErrors(C = fitModMrk$C,
-                                     D = spam::diag.spam(x = 1, nrow = nrow(fitModMrk$C)))
-        se_effects[scanMrk, ] <- se_tot[(1 + nCross):(length(parents) + nCross)]
+        Cinv <- spam::solve.spam(fitModMrk$C)
+        nPar <- length(parents)
+        Dg <- spam::spam(x=0, nrow=nPar, ncol = nrow(fitModMrk$C))
+        P <- spam::diag.spam(1, nPar)
+        Dg[1:nPar, (nCross+1):(nCross+nPar)] <- P
+        se_eff <- as.vector(sqrt(spam::diag.spam(Dg %*% Cinv %*% t(Dg))))
+        se_effects[scanMrk, ] <- se_eff
       }
     }
     list(QTLRegion, minlog10p, effects, se_effects)
