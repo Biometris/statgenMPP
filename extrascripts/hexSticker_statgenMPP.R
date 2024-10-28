@@ -53,7 +53,7 @@ p
 #        h_fill = "lightyellow", p_color="blue",h_color="green",
 #        filename="statgenMPP_hexSticker.png")
 
-sticker(p, package="statgenMPP", p_size=20, s_x=0.85, s_y=.7, s_width=1.4, s_height=1.0,
+sticker(p, package="statgenMPP", p_size=20, s_x=0.87, s_y=.7, s_width=1.4, s_height=1.0,
         h_fill = "lightyellow", p_color="blue",h_color="green",
         filename="statgenMPP_hexSticker.png")
 
