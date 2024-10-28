@@ -1,17 +1,16 @@
 Package: statgenMPP
 Title: QTL Mapping for Multi Parent Populations
 Version: 1.0.2.9000
-Date: 2024-10-21
-Authors@R: c(person(given = "Wenhao", 
-                    family = "Li", 
-                    email = "wenhao.li@wur.nl", 
-                    role = "aut",
-                    comment = c(ORCID = "0000-0001-5719-5775")),
-             person(given = "Martin", 
+Date: 2024-10-28
+Authors@R: c(person(given = "Martin", 
                     family = "Boer", 
                     email = "martin.boer@wur.nl", 
                     role = "aut",
                     comment = c(ORCID = "0000-0002-1879-4588")),
+             person(given = "Wenhao", 
+                    family = "Li", 
+                    role = "aut",
+                    comment = c(ORCID = "0000-0001-5719-5775")),        
              person(given = "Bart-Jan", 
                     family = "van Rossum", 
                     email = "bart-jan.vanrossum@wur.nl", 
