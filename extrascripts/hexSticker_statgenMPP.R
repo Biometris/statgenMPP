@@ -42,18 +42,18 @@ p <- plot(ABCMQM, plotType = "QTLProfile", chr=c(1,2,3))
 #p <- plot(maizeSQM, plotType = "QTLProfile",chr=c(1,2,3,4))
 #p <- p + theme_void() + theme_transparent()
 #p <- plot(ABCMQM, plotType = "parEffs")
-p <- p + geom_text(x=80, y=18, label="QTL 1", size=8, col='blue')
-p <- p + geom_text(x=180, y=11.2, label="QTL 2", size=8, col='blue')
-p <- p + geom_text(x=260, y=14.2, label="QTL 3", size=8, col='blue')
+p <- p + geom_text(x=80, y=18, label="QTL 1", size=8, col='darkblue')
+p <- p + geom_text(x=180, y=11.2, label="QTL 2", size=8, col='darkblue')
+p <- p + geom_text(x=260, y=14.2, label="QTL 3", size=8, col='darkblue')
 
-p <- p + theme_transparent()
+p <- p + theme_transparent() + theme(axis.title=element_blank())
 p
 
 #sticker(p, package="statgenMPP", p_size=20, s_x=1.0, s_y=.85, s_width=1.2, s_height=0.9,
 #        h_fill = "lightyellow", p_color="blue",h_color="green",
 #        filename="statgenMPP_hexSticker.png")
 
-sticker(p, package="statgenMPP", p_size=20, s_x=0.82, s_y=.7, s_width=1.4, s_height=1.0,
+sticker(p, package="statgenMPP", p_size=20, s_x=0.85, s_y=.7, s_width=1.4, s_height=1.0,
         h_fill = "lightyellow", p_color="blue",h_color="green",
         filename="statgenMPP_hexSticker.png")
 
