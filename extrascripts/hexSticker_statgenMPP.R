@@ -42,9 +42,9 @@ p <- plot(ABCMQM, plotType = "QTLProfile", chr=c(1,2,3))
 #p <- plot(maizeSQM, plotType = "QTLProfile",chr=c(1,2,3,4))
 #p <- p + theme_void() + theme_transparent()
 #p <- plot(ABCMQM, plotType = "parEffs")
-p <- p + geom_text(x=70, y=17.5, label="QTL 1", size=5, col='blue')
-p <- p + geom_text(x=180, y=11.0, label="QTL 2", size=5, col='blue')
-p <- p + geom_text(x=260, y=14.0, label="QTL 3", size=5, col='blue')
+p <- p + geom_text(x=80, y=18, label="QTL 1", size=8, col='blue')
+p <- p + geom_text(x=180, y=11.2, label="QTL 2", size=8, col='blue')
+p <- p + geom_text(x=260, y=14.2, label="QTL 3", size=8, col='blue')
 
 p <- p + theme_transparent()
 p
