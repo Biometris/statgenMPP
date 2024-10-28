@@ -1,81 +1,29 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/404.html</loc>
-  </url>
-  <url>
-    <loc>/articles/QTLMapping_in_MultiParentPopulations.html</loc>
-  </url>
-  <url>
-    <loc>/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/news/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/barleyMQM.html</loc>
-  </url>
-  <url>
-    <loc>/reference/barleyPheno.html</loc>
-  </url>
-  <url>
-    <loc>/reference/calcDistance.html</loc>
-  </url>
-  <url>
-    <loc>/reference/calcIBDmpp.html</loc>
-  </url>
-  <url>
-    <loc>/reference/createGDataMPP.html</loc>
-  </url>
-  <url>
-    <loc>/reference/effectPlot.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/kinshipIBD.html</loc>
-  </url>
-  <url>
-    <loc>/reference/maizeMQM.html</loc>
-  </url>
-  <url>
-    <loc>/reference/maizeSQM.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot.QTLMPP.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot.gDataMpp.html</loc>
-  </url>
-  <url>
-    <loc>/reference/print.summary.QTLMPP.html</loc>
-  </url>
-  <url>
-    <loc>/reference/randomQTLmodel.html</loc>
-  </url>
-  <url>
-    <loc>/reference/readRABBITMPP.html</loc>
-  </url>
-  <url>
-    <loc>/reference/scanQTL.html</loc>
-  </url>
-  <url>
-    <loc>/reference/selQTLMPP.html</loc>
-  </url>
-  <url>
-    <loc>/reference/statgenMPP-package.html</loc>
-  </url>
-  <url>
-    <loc>/reference/summary.QTLMPP.html</loc>
-  </url>
-  <url>
-    <loc>/reference/summary.gDataMpp.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/articles/QTLMapping_in_MultiParentPopulations.html</loc></url>
+<url><loc>/articles/index.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/news/index.html</loc></url>
+<url><loc>/reference/barleyMQM.html</loc></url>
+<url><loc>/reference/barleyPheno.html</loc></url>
+<url><loc>/reference/calcDistance.html</loc></url>
+<url><loc>/reference/calcIBDmpp.html</loc></url>
+<url><loc>/reference/createGDataMPP.html</loc></url>
+<url><loc>/reference/effectPlot.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/kinshipIBD.html</loc></url>
+<url><loc>/reference/maizeMQM.html</loc></url>
+<url><loc>/reference/maizeSQM.html</loc></url>
+<url><loc>/reference/plot.QTLMPP.html</loc></url>
+<url><loc>/reference/plot.gDataMpp.html</loc></url>
+<url><loc>/reference/print.summary.QTLMPP.html</loc></url>
+<url><loc>/reference/randomQTLmodel.html</loc></url>
+<url><loc>/reference/readRABBITMPP.html</loc></url>
+<url><loc>/reference/scanQTL.html</loc></url>
+<url><loc>/reference/selQTLMPP.html</loc></url>
+<url><loc>/reference/statgenMPP-package.html</loc></url>
+<url><loc>/reference/summary.QTLMPP.html</loc></url>
+<url><loc>/reference/summary.gDataMpp.html</loc></url>
 </urlset>
+
