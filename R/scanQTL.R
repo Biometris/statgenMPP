@@ -44,7 +44,7 @@ scanQTL <- function(modDat,
     if (!is.null(UscChr)) {
       ZChr <- spam::cbind.spam(Z0, UscChr)
       lGinv1 <- spam::diag.spam(x = c(rep(0, times = length(cof) * nPar),
-                                          rep(1, nEigChr)))
+                                      rep(1, nEigChr)))
       LGinvChr <- c(lGinv0, list(K = lGinv1))
     } else {
       ZChr <- Z0
@@ -57,8 +57,8 @@ scanQTL <- function(modDat,
     chrMrk <- rownames(map)[map[["chr"]] == chrs[i]]
     QTLRegion <- setNames(logical(length = length(chrMrk)), chrMrk)
     minlog10p <- setNames(numeric(length = length(chrMrk)), chrMrk)
-    effects <- se_effects <- matrix(nrow = length(chrMrk), ncol = nPar,
-                                    dimnames = list(chrMrk, parents))
+    effects <- seEffects <- matrix(nrow = length(chrMrk), ncol = nPar,
+                                   dimnames = list(chrMrk, parents))
     for (scanMrk in chrMrk) {
       ## Get cofactors for current markers.
       cofMrk <- selectCofactors(map = map,
@@ -79,7 +79,7 @@ scanQTL <- function(modDat,
       if (!is.null(UscChr)) {
         ZMrk <- spam::cbind.spam(ZMrk, UscChr)
         lGinv1Mrk <- spam::diag.spam(x = c(rep(0, times = length(selMrk) * nPar),
-                                        rep(1, nEigChr)))
+                                           rep(1, nEigChr)))
         lGinvMrk <- c(lGinvMrk, list(K = lGinv1Mrk))
       }
       ## Fit model for current marker.
@@ -105,7 +105,7 @@ scanQTL <- function(modDat,
         if (!is.null(UscChr)) {
           ZMrk2 <- cbind(ZMrk2, UscChr)
           lGinv1Mrk2 <- spam::diag.spam(x = c(rep(0, times = length(cofMrk) * nPar),
-                                             rep(1, nEigChr)))
+                                              rep(1, nEigChr)))
           lGinvMrk2 <- c(lGinvMrk2, list(K = lGinv1Mrk2))
         }
         fitModCof <- sparseMixedModels(y = y, X = X, Z = ZMrk2,
@@ -119,29 +119,28 @@ scanQTL <- function(modDat,
       effects[scanMrk, ] <- fitModMrk$a[(1 + nCross):(length(parents) + nCross)]
       if (se) {
         Cinv <- spam::solve.spam(fitModMrk$C)
-        nPar <- length(parents)
-        Dg <- spam::spam(x=0, nrow=nPar, ncol = nrow(fitModMrk$C))
+        Dg <- spam::spam(x = 0, nrow = nPar, ncol = nrow(fitModMrk$C))
         I <- spam::diag.spam(1, nPar)
-        J <- spam::spam(x=1, nrow = nPar, ncol = nPar)
-        Dg[1:nPar, (nCross+1):(nCross+nPar)] <- I - (1/nPar)*J
-        se_eff <- as.vector(sqrt(spam::diag.spam(Dg %*% Cinv %*% t(Dg))))
-        se_effects[scanMrk, ] <- se_eff
+        J <- spam::spam(x = 1 / nPar, nrow = nPar, ncol = nPar)
+        Dg[1:nPar, (nCross + 1):(nCross + nPar)] <- I - J
+        seEffects[scanMrk, ] <-
+          as.vector(sqrt(spam::diag.spam(Dg %*% Cinv %*% t(Dg))))
       }
     }
-    list(QTLRegion, minlog10p, effects, se_effects)
+    list(QTLRegion, minlog10p, effects, seEffects)
   }
   QTLRegion <- do.call(c, lapply(X = scanFull, FUN = `[[`, 1))
   minlog10p <- do.call(c, lapply(X = scanFull, FUN = `[[`, 2))
   effects <- do.call(rbind, args = lapply(X = scanFull, FUN = `[[`, 3))
-  se_effects <- do.call(rbind, args = lapply(X = scanFull, FUN = `[[`, 4))
+  seEffects <- do.call(rbind, args = lapply(X = scanFull, FUN = `[[`, 4))
   dimnames(effects) <- list(rownames(map), paste0("eff_", parents))
-  dimnames(se_effects) <- list(rownames(map), paste0("se_eff_", parents))
+  dimnames(seEffects) <- list(rownames(map), paste0("se_eff_", parents))
   scanRes <- data.table::data.table(trait = trait,
                                     snp = rownames(map),
                                     map,
                                     pValue = 10 ^ -minlog10p,
                                     effects,
-                                    se_effects,
+                                    seEffects,
                                     minlog10p = minlog10p,
                                     QTLRegion = QTLRegion)
   return(scanRes)

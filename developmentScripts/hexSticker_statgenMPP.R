@@ -1,4 +1,4 @@
-# note: run usethis::use_logo() to generate the generate correct size
+# note: run usethis::use_logo() to generate the correct size
 
 library(hexSticker)
 library(ggplot2)
