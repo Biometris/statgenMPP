@@ -84,9 +84,9 @@ plot(ACMQM, plotType = "QTLProfileExt")
 <img src="man/figures/README-plotQPEACMQM-1.png" width="100%" />
 
 A summary of the QTL-analyis gives a short overview containing the total
-number of markers and the number of QTLs found. Also for all QTL their
+number of markers and the number of QTLs found. Also for all QTLs their
 position on the chromosome is shown as well as the nearest marker on the
-original map, the explained variance and the effects and the standard
+original map, the explained variance, and the effects and the standard
 errors of all parents:
 
 ``` r

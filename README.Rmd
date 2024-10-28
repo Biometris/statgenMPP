@@ -78,12 +78,10 @@ The QTL-mapping profile and parental effects:
 plot(ACMQM, plotType = "QTLProfileExt")
 ```
 
-A summary of the QTL-analyis gives a short overview containing the total number of markers and the number of QTLs found. Also for all QTL their position on the chromosome is shown as well as the nearest marker on the original map, the explained variance and the effects and the standard errors of all parents:
+A summary of the QTL-analyis gives a short overview containing the total number of markers and the number of QTLs found. Also for all QTLs their position on the chromosome is shown as well as the nearest marker on the original map, the explained variance, and the effects and the standard errors of all parents:
 
 ```{r sumACMQM}
 ## Print summary
 summary(ACMQM)
 ```
-
-
 
