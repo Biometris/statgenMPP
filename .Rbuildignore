@@ -1,4 +1,5 @@
 ^statgenMPP\.Rproj$
+pkgdown
 ^\.Rproj\.user$
 ^testScripts$
 .gitlab-ci.yml
