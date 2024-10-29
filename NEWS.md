@@ -1,4 +1,4 @@
-# statgenMPP 1.0.2.9000
+# statgenMPP 1.0.3
 
 * The output of `selQTLMPP` now contains the standard errors of the effects. The standard errors are added in both the full output (GWAResult) and the table with QTLs (signSnp).
 * The output of the two plots in QTLProfileExt is properly aligned again.
