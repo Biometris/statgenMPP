@@ -10,7 +10,7 @@
 #' genotype comes from. This column is ignored if the `IBDprob` has an
 #' attribute genoCross containing this information (the default behaviour).
 #'
-#' @return An object of class \code{gDataMPP}
+#' @returns An object of class \code{gDataMPP}
 #'
 #' @examples
 #' ## Read phenotypic data.

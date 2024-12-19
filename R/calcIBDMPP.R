@@ -51,7 +51,7 @@
 #' marker existing marker positions (\code{FALSE}).
 #' @param verbose Should progress be printed?
 #'
-#' @return An object of class \code{gDataMPP} with the following components:
+#' @returns An object of class \code{gDataMPP} with the following components:
 #' \item{\code{map}}{a data.frame containing map data. Map is sorted by
 #' chromosome and position.}
 #' \item{\code{markers}}{a 3D matrix containing IBD probabilities.}

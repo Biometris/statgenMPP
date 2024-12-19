@@ -18,7 +18,7 @@
 #' @param chrSpecific Should chromosome specific kinship matrices be
 #' computed?
 #'
-#' @return A kinship matrix or a list of chromosome specific kinship matrices.
+#' @returns A kinship matrix or a list of chromosome specific kinship matrices.
 #'
 #' @examples
 #' ## Read phenotypic data.

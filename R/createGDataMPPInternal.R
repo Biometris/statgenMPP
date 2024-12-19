@@ -41,7 +41,7 @@
 #' @param covar A data.frame with extra covariates per genotype. Genotypes
 #' should be in the rows.
 #'
-#' @return An object of class \code{gData} with the following components:
+#' @returns An object of class \code{gData} with the following components:
 #' \item{\code{map}}{a data.frame containing map data. Map is sorted by
 #' chromosome and position.}
 #' \item{\code{markers}}{a sparse matrix from the Matrix package containing
@@ -235,7 +235,7 @@ createGDataMPPInternal <- function(gDataMPP = NULL,
 #' be either numeric indices or character names of list items in \code{pheno}.
 #' If \code{NULL}, all trials are included.
 #'
-#' @return A list with a most four components:
+#' @returns A list with a most four components:
 #' \describe{
 #' \item{mapSum}{A list with number of markers and number of chromosomes in
 #' the map.}
@@ -424,7 +424,7 @@ print.summary.gDataMPP <- function(x,
 #' ## Plot the pedigree.
 #' plot(ABC, plotType = "pedigree")
 #'
-#' @return A ggplot object is invisibly returned.
+#' @returns A ggplot object is invisibly returned.
 #'
 #' @importFrom utils packageVersion
 #' @export

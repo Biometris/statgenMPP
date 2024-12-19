@@ -36,7 +36,7 @@
 #' parallel? This requires a parallel back-end to be registered. See examples.
 #' @param verbose Should progress and intermediate plots be output?
 #'
-#' @return An object of class \code{QTLMPP}
+#' @returns An object of class \code{QTLMPP}
 #'
 #' @examples
 #' ## Read phenotypic data.
