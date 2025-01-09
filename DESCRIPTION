@@ -49,3 +49,6 @@ Suggests:
     knitr,
     tinytest
 VignetteBuilder: knitr
+URL: https://biometris.github.io/statgenMPP/index.html, https://github.com/Biometris/statgenMPP/
+BugReports: https://github.com/Biometris/statgenMPP/issues
+

@@ -10,6 +10,15 @@
 
 For Multi Parent Populations (MPP) Identity By Descend (IBD) probabilities are computed using Hidden Markov Models. These probabilities are then used in a mixed model approach for QTL Mapping as described in Li et al. (\doi{10.1007/s00122-021-03919-7}).
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://biometris.github.io/statgenMPP/index.html}
+  \item \url{https://github.com/Biometris/statgenMPP/}
+  \item Report bugs at \url{https://github.com/Biometris/statgenMPP/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Bart-Jan van Rossum \email{bart-jan.vanrossum@wur.nl} (\href{https://orcid.org/0000-0002-8673-2514}{ORCID})
 
