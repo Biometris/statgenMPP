@@ -64,7 +64,7 @@ expect_inherits(barleyMPP4$pheno$pheno, "data.frame")
 expect_inherits(barleyMPP4$covar, "data.frame")
 
 expect_inherits(attr(barleyMPP2, "genoCross"), "data.frame")
-expect_inherits(attr(barleyMPP2, "pedigree"), "data.frame")
+expect_null(attr(barleyMPP2, "pedigree"))
 
 ## map and markers should be the same for all.
 expect_equal(barleyMPP$map, barleyMPP4$map)
@@ -78,7 +78,3 @@ expect_equal(attr(barleyMPP2, "genoCross"), attr(barleyMPP4, "genoCross"))
 ## Covar read from pheno should be identical to that read from pedFile.
 expect_equal(barleyMPP3$pheno, barleyMPP4$pheno)
 expect_equal(barleyMPP3$covar, barleyMPP4$covar)
-
-
-
-

@@ -316,11 +316,6 @@ As for the maize example we can summarize and plot the imported data to get a fi
 summary(barleyMPP)
 ```
 
-```{r plotPbarleyIBD}
-## Plot structure of the pedigree.
-plot(barleyMPP, plotType = "pedigree")
-```
-
 Performing SQM and MQM for imported RABBIT output works in the same way as for IBD probabilities computed directly in the package. Since a full scan would take long we precomputed the results and included them in the package.
 
 ```{r barleyMQM, eval=FALSE}
