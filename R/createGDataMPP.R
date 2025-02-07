@@ -44,10 +44,6 @@ createGDataMPP <- function(IBDprob,
   }
   genoCross <- attr(IBDprob, "genoCross")
   markers <- IBDprob$markers
-  if (packageVersion("statgenIBD") <= "1.0.4") {
-    markers <- aperm(markers, c(2, 1, 3))
-    dimnames(markers)[[3]] <- substring(dimnames(markers)[[3]], first = 2)
-  }
   ## If pedFile is included cross will be read from there.
   minCols <- "genotype"
   missCols <- minCols[!sapply(X = minCols, FUN = function(minCol) {

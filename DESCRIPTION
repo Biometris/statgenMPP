@@ -41,7 +41,7 @@ Imports:
     rlang,
     scales,
     spam,
-    statgenIBD (>= 1.0.5)
+    statgenIBD (>= 1.0.8)
 Suggests: 
     rmarkdown,
     knitr,
