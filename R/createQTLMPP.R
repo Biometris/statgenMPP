@@ -94,6 +94,8 @@ print.summary.QTLMPP <- function(x,
 #' \item{QTLRegion}{A plot highlighting the QTLs found on the genetic map.}
 #' \item{QTLProfileExt}{A combination of the QTL profile and parental effects
 #' plotted above each other.}
+#' \item{parCIs}{A plot of the effect sizes and confidence intervals for each
+#' parent for each of the QTLs found.}
 #' }
 #' See details for a detailed description of the plots and the plot options
 #' specific to the different plots.
@@ -152,6 +154,11 @@ print.summary.QTLMPP <- function(x,
 #' subset of chromosomes.}
 #' }
 #'
+#' @section Parental Confidence Interval Plot:
+#' A plot of the parental effects and the confidence intervals around them for
+#' each of the QTLs found. Significant effects are shown in red, all other
+#' effects are shown in black.
+#'
 #' @param x An object of class \code{QTLMPP}.
 #' @param ... further arguments to be passed on to the actual plotting
 #' functions.
@@ -198,11 +205,15 @@ print.summary.QTLMPP <- function(x,
 #' plot(ABC_MQM, plotType = "QTLProfileExt")
 #' }
 #'
+#' ## Parental confidence interval plot.
+#' plot(ABC_MQM, plotType = "parCIs")
+#' }
+#'
 #' @export
 plot.QTLMPP <- function(x,
                         ...,
                         plotType = c("QTLProfile", "parEffs", "QTLRegion",
-                                     "QTLProfileExt"),
+                                     "QTLProfileExt", "parCIs"),
                         title = NULL,
                         output = TRUE) {
   plotType <- match.arg(plotType)
@@ -319,6 +330,31 @@ plot.QTLMPP <- function(x,
       g1$widths[-1] <- maxWidths
       g2$widths[-1] <- maxWidths
       p <- gridExtra::grid.arrange(g1, g2)
+    } else if (plotType == "parCIs") {
+      parents <- x$GWASInfo$parents
+      trait <- GWAResult[["trait"]][1]
+      signSnp <- signSnp[signSnp[["snpStatus"]] == "significant SNP", ]
+      ## Create QTL effect data - basically a long format version of signSnp
+      parCIsDat <- lapply(X = parents, FUN = function(parent) {
+        parDat <- signSnp
+        parDat[["snp"]] <- paste("QTL at chr", parDat[["chr"]],
+                                 round(parDat[["pos"]], 0), "cM")
+        parDat[["parent"]] <- parent
+        parDat[["effect"]] <- parDat[[paste0("eff_", parent)]]
+        parDat[["seEffect"]] <- parDat[[paste0("se_eff_", parent)]]
+        return(parDat)
+      })
+      parCIsDat <- do.call(rbind, parCIsDat)
+      parCIsDat <- parCIsDat[c("snp", "parent", "effect", "seEffect")]
+      parCIsDat[["parent"]] <- factor(parCIsDat[["parent"]],
+                                         levels = parents)
+      p <- do.call(parCIsPlot,
+                   args = c(list(parCIsDat = parCIsDat,
+                                 title = title,
+                                 trait = trait,
+                                 output = output),
+                            dotArgs[!(names(dotArgs) == "parCIsDat")]))
+
     }
   }
   invisible(p)
