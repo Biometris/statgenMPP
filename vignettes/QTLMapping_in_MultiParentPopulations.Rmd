@@ -170,11 +170,18 @@ It is also possible to plot the size of the parental effects for each of the QTL
 plot(ABCMQM, plotType = "parEffs")
 ```
 
-Finally a combined plot of the QTL profile and the parental can be made. In this plot the two previous plots are plotted above each other with the chromosomes and positions aligned to allow for easily getting an overview of which effect belongs to which QTL in the QTL profile. This plot can be made using `plotType = "QTLProfileExt"`.
+Also a combined plot of the QTL profile and the parental can be made. In this plot the two previous plots are plotted above each other with the chromosomes and positions aligned to allow for easily getting an overview of which effect belongs to which QTL in the QTL profile. This plot can be made using `plotType = "QTLProfileExt"`.
 
 ```{r plotQPEABCMQM}
 ## Plot QTL Profile for ABC MQM.
 plot(ABCMQM, plotType = "QTLProfileExt")
+```
+
+Finally a plot of the confidence intervals around the estimated parental effects can be made for each of the QTLs found. This plot can be made using `plotType = "parCIs"`. The plot will show per QTL the effects for each of the parents, as well as the confidence intervals around those effects (calculated as $2 \times se$). Confidence intervals that don't contain the origin, are assumed to be significant and are shown in red. All other intervals are shown in black.
+
+```{r plotCIABCMQM}
+## Plot confidence intervals for parental effects for ABC MQM.
+plot(ABCMQM, plotType = "parCIs")
 ```
 
 A summary of the QTL-analyis gives a short overview containing the total number of markers and the number of QTLs found. Also for all QTL their position on the chromosome is shown as well as the nearest marker on the original map, the explained variance and the effects and the standard errors of all parents.
@@ -281,6 +288,13 @@ We only look at the combined plot of the QTL Profile and the parental effects. T
 plot(maizeMQM, plotType = "QTLProfileExt")
 ```
 
+Finally we can have a look at the confidence intervals around the parental effects for the QTLs found.
+
+```{r plotCIamizeMQM}
+## Plot confidence intervals for parental effects for maize MQM.
+plot(maizeMQM, plotType = "parCIs")
+```
+
 ## Example barley
 
 Instead of performing IBD calculations directly with the package, it is also possible to import IBD probabilities computed using RABBIT software [@Zheng2014; @Zheng2015; @Zheng2018]. The main advantage of using RABBIT for IBD calculations is that it can handle complex pedigree populations and therefore can also be used in cases where the population structure is more complex than those that can be computed using `statgenIBD`, e.g. in the maize NAM population described before.
@@ -335,6 +349,13 @@ plot(barleyMQM, plotType = "QTLProfileExt", chr = 1:6)
 ```{r QPbarleyMQM7}
 ## Plot QTL Profile for barley MQM - chromosome 7.
 plot(barleyMQM, plotType = "QTLProfileExt", chr = 7)
+```
+
+Finally we can have a look at the confidence intervals around the parental effects for the QTLs found.
+
+```{r plotCIbarleyMQM}
+## Plot confidence intervals for parental effects for maize MQM.
+plot(barleyMQM, plotType = "parCIs")
 ```
 
 The QTLs found are very similar in both position, size and effects as described in @Liller2017-jz. This can also be clearly seen by comparing the summary of the MQM with the table of effects in this paper.
