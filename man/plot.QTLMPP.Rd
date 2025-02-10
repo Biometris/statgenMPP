@@ -7,7 +7,7 @@
 \method{plot}{QTLMPP}(
   x,
   ...,
-  plotType = c("QTLProfile", "parEffs", "QTLRegion", "QTLProfileExt"),
+  plotType = c("QTLProfile", "parEffs", "QTLRegion", "QTLProfileExt", "parCIs"),
   title = NULL,
   output = TRUE
 )
@@ -36,6 +36,8 @@ per marker.}
 \item{QTLRegion}{A plot highlighting the QTLs found on the genetic map.}
 \item{QTLProfileExt}{A combination of the QTL profile and parental effects
 plotted above each other.}
+\item{parCIs}{A plot of the effect sizes and confidence intervals for each
+parent for each of the QTLs found.}
 }
 See details for a detailed description of the plots and the plot options
 specific to the different plots.
@@ -76,7 +78,7 @@ Extra parameter options:
 \code{"Chromosomes"}}
 \item{\code{yLab}}{A character string, the y-axis label. Default =
 \code{"Parents"}}
-#' \item{\code{chr}}{A vector of chromosomes to be plotted. By default, all
+\item{\code{chr}}{A vector of chromosomes to be plotted. By default, all
 chromosomes are plotted. Using this option allows restricting the plot to a
 subset of chromosomes.}
 }
@@ -100,6 +102,13 @@ Extra parameter options:
 chromosomes are plotted. Using this option allows restricting the plot to a
 subset of chromosomes.}
 }
+}
+
+\section{Parental Confidence Interval Plot}{
+
+A plot of the parental effects and the confidence intervals around them for
+each of the QTLs found. Significant effects are shown in red, all other
+effects are shown in black.
 }
 
 \examples{
@@ -137,6 +146,9 @@ plot(ABC_MQM, plotType = "QTLRegion")
 
 ## Extended QTL Profile plot.
 plot(ABC_MQM, plotType = "QTLProfileExt")
+
+## Parental confidence interval plot.
+plot(ABC_MQM, plotType = "parCIs")
 }
 
 }

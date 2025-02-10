@@ -133,7 +133,7 @@ print.summary.QTLMPP <- function(x,
 #' \code{"Chromosomes"}}
 #' \item{\code{yLab}}{A character string, the y-axis label. Default =
 #' \code{"Parents"}}
-#' #' \item{\code{chr}}{A vector of chromosomes to be plotted. By default, all
+#' \item{\code{chr}}{A vector of chromosomes to be plotted. By default, all
 #' chromosomes are plotted. Using this option allows restricting the plot to a
 #' subset of chromosomes.}
 #' }
@@ -203,7 +203,6 @@ print.summary.QTLMPP <- function(x,
 #'
 #' ## Extended QTL Profile plot.
 #' plot(ABC_MQM, plotType = "QTLProfileExt")
-#' }
 #'
 #' ## Parental confidence interval plot.
 #' plot(ABC_MQM, plotType = "parCIs")
