@@ -83,6 +83,14 @@ plot(ACMQM, plotType = "QTLProfileExt")
 
 <img src="man/figures/README-plotQPEACMQM-1.png" width="100%" />
 
+The confidence intervals around the parental effects for each QTL:
+
+``` r
+plot(ACMQM, plotType = "parCIs")
+```
+
+<img src="man/figures/README-plotCIACMQM-1.png" width="100%" />
+
 A summary of the QTL-analyis gives a short overview containing the total
 number of markers and the number of QTLs found. Also for all QTLs their
 position on the chromosome is shown as well as the nearest marker on the

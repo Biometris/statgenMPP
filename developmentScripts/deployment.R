@@ -15,6 +15,7 @@ rhub::check_with_roldrel(path = "C:/Projects/R_packages/statgenMPP/")
 
 ## Rebuild readme.
 devtools::build_readme()
+
 ## Build site for local check.
 pkgdown::clean_site()
 pkgdown::build_site()
