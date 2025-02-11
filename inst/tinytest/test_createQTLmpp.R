@@ -44,3 +44,10 @@ expect_inherits(p3, "ggplot")
 p4 <- plot(ABC_MQM, plotType = "QTLProfileExt")
 expect_inherits(p4, "gtable")
 
+## Confidence intervals around parental effects.
+p5 <- plot(ABC_MQM, plotType = "parCIs")
+expect_inherits(p5, "ggplot")
+
+
+
+

@@ -65,7 +65,6 @@ The population has the following simple structure, for more complicated examples
 plot(ACMPP, plotType = "pedigree")
 ```
 
-
 The next step is to select QTLs using `selQTLMPP`:
 
 ```{r ACMQM}
@@ -76,6 +75,11 @@ The QTL-mapping profile and parental effects:
 
 ```{r plotQPEACMQM}
 plot(ACMQM, plotType = "QTLProfileExt")
+```
+
+The confidence intervals around the parental effects for each QTL:
+```{r plotCIACMQM}
+plot(ACMQM, plotType = "parCIs")
 ```
 
 A summary of the QTL-analyis gives a short overview containing the total number of markers and the number of QTLs found. Also for all QTLs their position on the chromosome is shown as well as the nearest marker on the original map, the explained variance, and the effects and the standard errors of all parents:
