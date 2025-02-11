@@ -114,8 +114,12 @@
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ACMQM</span>, plotType <span class="op">=</span> <span class="st">"QTLProfileExt"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-plotQPEACMQM-1.png" width="100%"></p>
-<p>A summary of the QTL-analyis gives a short overview containing the total number of markers and the number of QTLs found. Also for all QTLs their position on the chromosome is shown as well as the nearest marker on the original map, the explained variance, and the effects and the standard errors of all parents:</p>
+<p>The confidence intervals around the parental effects for each QTL:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ACMQM</span>, plotType <span class="op">=</span> <span class="st">"parCIs"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-plotCIACMQM-1.png" width="100%"></p>
+<p>A summary of the QTL-analyis gives a short overview containing the total number of markers and the number of QTLs found. Also for all QTLs their position on the chromosome is shown as well as the nearest marker on the original map, the explained variance, and the effects and the standard errors of all parents:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Print summary</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">ACMQM</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Trait analysed: yield </span></span>
