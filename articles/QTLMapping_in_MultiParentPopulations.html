@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="QTL Mapping in Multi-Parent Populations">
 </head>
 <body>
@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">statgenMPP</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,9 +70,9 @@
                         <h4 data-toc-skip class="author">Wenhao Li,
 Martin Boer, and Bart-Jan van Rossum</h4>
             
-            <h4 data-toc-skip class="date">2024-10-29</h4>
+            <h4 data-toc-skip class="date">2025-02-11</h4>
       
-
+      <small class="dont-index">Source: <a href="https://github.com/Biometris/statgenMPP/blob/main/vignettes/QTLMapping_in_MultiParentPopulations.Rmd" class="external-link"><code>vignettes/QTLMapping_in_MultiParentPopulations.Rmd</code></a></small>
       <div class="d-none name"><code>QTLMapping_in_MultiParentPopulations.Rmd</code></div>
     </div>
 
@@ -387,21 +387,34 @@ This plot can be made using <code>plotType = "parEffs"</code>.</p>
 <code class="sourceCode R"><span><span class="co">## Plot QTL Profile for ABC MQM.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ABCMQM</span>, plotType <span class="op">=</span> <span class="st">"parEffs"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/plotPEABCMQM-1.png" width="672"></p>
-<p>Finally a combined plot of the QTL profile and the parental can be
-made. In this plot the two previous plots are plotted above each other
-with the chromosomes and positions aligned to allow for easily getting
-an overview of which effect belongs to which QTL in the QTL profile.
-This plot can be made using <code>plotType = "QTLProfileExt"</code>.</p>
+<p>Also a combined plot of the QTL profile and the parental can be made.
+In this plot the two previous plots are plotted above each other with
+the chromosomes and positions aligned to allow for easily getting an
+overview of which effect belongs to which QTL in the QTL profile. This
+plot can be made using <code>plotType = "QTLProfileExt"</code>.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Plot QTL Profile for ABC MQM.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ABCMQM</span>, plotType <span class="op">=</span> <span class="st">"QTLProfileExt"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/plotQPEABCMQM-1.png" width="672"></p>
-<p>A summary of the QTL-analyis gives a short overview containing the
+<p>Finally a plot of the confidence intervals around the estimated
+parental effects can be made for each of the QTLs found. This plot can
+be made using <code>plotType = "parCIs"</code>. The plot will show per
+QTL the effects for each of the parents, as well as the confidence
+intervals around those effects (calculated as
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>×</mo><mi>s</mi><mi>e</mi></mrow><annotation encoding="application/x-tex">2 \times se</annotation></semantics></math>).
+Confidence intervals that don’t contain the origin, are assumed to be
+significant and are shown in red for positive effects and in blue for
+negative effects. All other intervals are shown in black.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## Plot confidence intervals for parental effects for ABC MQM.</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">ABCMQM</span>, plotType <span class="op">=</span> <span class="st">"parCIs"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/plotCIABCMQM-1.png" width="672"></p>
+<p>A summary of the QTL-analysis gives a short overview containing the
 total number of markers and the number of QTLs found. Also for all QTL
 their position on the chromosome is shown as well as the nearest marker
 on the original map, the explained variance and the effects and the
 standard errors of all parents.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Print summary</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">ABCMQM</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Trait analysed: yield </span></span>
@@ -426,7 +439,7 @@ shows how to extract them. The output will contain columns evalPos, chr
 and pos with name, chromosome number and evaluation position and columns
 pValue and eff_par1, eff_par2, eff_par.. with the effects of all parents
 for that marker.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Extract results of QTL mapping.</span></span>
 <span><span class="va">ABCMQMres</span> <span class="op">&lt;-</span> <span class="va">ABCMQM</span><span class="op">$</span><span class="va">GWAResult</span><span class="op">$</span><span class="va">yield</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ABCMQMres</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">]</span><span class="op">)</span></span>
@@ -439,7 +452,7 @@ that can be extracted as shown below. The columns in this
 <code>data.table</code> are identical to those in the full results
 except for an additional column at the end, snpStatus, that shows
 whether a marker is a QTL or within the window of a QTL.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Extract QTLs and markers within QTL windows.</span></span>
 <span><span class="va">ABCMQMQTL</span> <span class="op">&lt;-</span> <span class="va">ABCMQM</span><span class="op">$</span><span class="va">signSnp</span><span class="op">$</span><span class="va">yield</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ABCMQMQTL</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">8</span>, <span class="fl">10</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
@@ -459,7 +472,7 @@ days to silking (“mean_DtSILK”) across all locations. The data for this
 population is available from the package in zipped format.</p>
 <p>As for the simulated data, before doing QTL detection we first
 compute IBD probabilities on a grid of positions along the genome.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Define names of crosses.</span></span>
 <span><span class="va">crosses</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"F353x"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"B73"</span>, <span class="st">"D06"</span>, <span class="st">"D09"</span>, <span class="st">"EC169"</span>, <span class="st">"F252"</span>, <span class="st">"F618"</span>, </span>
 <span>                             <span class="st">"Mo17"</span>, <span class="st">"UH250"</span>, <span class="st">"UH304"</span>, <span class="st">"W117"</span><span class="op">)</span><span class="op">)</span></span>
@@ -498,7 +511,7 @@ compute IBD probabilities on a grid of positions along the genome.</p>
 <span>                       evalDist <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
 <p>We then have a look at the summary and some of the plots to get an
 overview of the pedigree and the computed probabilities.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Print summary</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">maizeMPP</span><span class="op">)</span></span>
 <span><span class="co">#&gt; map</span></span>
@@ -525,12 +538,12 @@ overview of the pedigree and the computed probabilities.</p>
 <span><span class="co">#&gt;  F353xUH250: 94  </span></span>
 <span><span class="co">#&gt;  F353xUH304: 81  </span></span>
 <span><span class="co">#&gt;  F353xW117 : 84</span></span></code></pre></div>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Plot structure of the pedigree.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">maizeMPP</span>, plotType <span class="op">=</span> <span class="st">"pedigree"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/plotPmaizeIBD-1.png" width="672"></p>
 <p>Now we can use the computed IBD probabilities to perform SQM.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Perform Single-QTL Mapping.</span></span>
 <span><span class="va">maizeSQM</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/selQTLMPP.html">selQTLMPP</a></span><span class="op">(</span>MPPobj <span class="op">=</span> <span class="va">maizeMPP</span>,</span>
 <span>                      trait <span class="op">=</span> <span class="st">"mean_DtSILK"</span>,</span>
@@ -538,7 +551,7 @@ overview of the pedigree and the computed probabilities.</p>
 <p>We plot the QTL profile for the SQM to get an idea of reasonable
 values to use for the <code>threshold</code> and <code>QTLwindow</code>
 in the MQM that we do next.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Plot QTL Profile for maize SQM.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">maizeSQM</span>, plotType <span class="op">=</span> <span class="st">"QTLProfile"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/QPmaizeSQM-1.png" width="672"></p>
@@ -546,7 +559,7 @@ in the MQM that we do next.</p>
 to restrict a bit the number of QTLs that will be detected in the MQM.
 The <code>QTLwindow</code> is not specified and therefore left at its
 default value of 10cM.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Perform Multi-QTL Mapping.</span></span>
 <span><span class="va">maizeMQM</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/selQTLMPP.html">selQTLMPP</a></span><span class="op">(</span>MPPobj <span class="op">=</span> <span class="va">maizeMPP</span>,</span>
 <span>                      trait <span class="op">=</span> <span class="st">"mean_DtSILK"</span>,</span>
@@ -554,10 +567,16 @@ default value of 10cM.</p>
 <p>We only look at the combined plot of the QTL Profile and the parental
 effects. This should give us the most direct insight in the QTLs found
 and the effects the different parents in the crosses have.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Plot QTL Profile for maize MQM.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">maizeMQM</span>, plotType <span class="op">=</span> <span class="st">"QTLProfileExt"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/plotQPEmaizeMQM-1.png" width="672"></p>
+<p>Finally we can have a look at the confidence intervals around the
+parental effects for the QTLs found.</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## Plot confidence intervals for parental effects for maize MQM.</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">maizeMQM</span>, plotType <span class="op">=</span> <span class="st">"parCIs"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/plotCIamizeMQM-1.png" width="672"></p>
 </div>
 <div class="section level2">
 <h2 id="example-barley">Example barley<a class="anchor" aria-label="anchor" href="#example-barley"></a>
@@ -588,7 +607,7 @@ Without it QTL mapping can still be performed. As for
 <code>calcIBDMPP</code> the phenotypic data has to be provided as a
 <code>data.frame</code>. This <code>data.frame</code> has been included
 in the package.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Specify files containing RABBIT output.</span></span>
 <span><span class="co">## Extract in a temporary directory.</span></span>
 <span><span class="va">tempDir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -608,7 +627,7 @@ in the package.</p>
 <span>                           pheno <span class="op">=</span> <span class="va">barleyPheno</span><span class="op">)</span></span></code></pre></div>
 <p>As for the maize example we can summarize and plot the imported data
 to get a first idea of its content.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Summary.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">barleyMPP</span><span class="op">)</span></span>
 <span><span class="co">#&gt; map</span></span>
@@ -631,15 +650,11 @@ to get a first idea of its content.</p>
 <span><span class="co">#&gt;  53:130  </span></span>
 <span><span class="co">#&gt;  54:167  </span></span>
 <span><span class="co">#&gt;  55:161</span></span></code></pre></div>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## Plot structure of the pedigree.</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">barleyMPP</span>, plotType <span class="op">=</span> <span class="st">"pedigree"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/plotPbarleyIBD-1.png" width="672"></p>
 <p>Performing SQM and MQM for imported RABBIT output works in the same
 way as for IBD probabilities computed directly in the package. Since a
 full scan would take long we precomputed the results and included them
 in the package.</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Perform Multi-QTL Mapping with threshold 4.</span></span>
 <span><span class="va">barleyMQM</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/selQTLMPP.html">selQTLMPP</a></span><span class="op">(</span>MPPobj <span class="op">=</span> <span class="va">barleyMPP</span>,</span>
 <span>                       trait <span class="op">=</span> <span class="st">"Awn_length"</span>,</span>
@@ -647,19 +662,25 @@ in the package.</p>
 <p>There is a very large QTL on chromosome 7. To be able to more clearly
 distinguish the differences between the other QTLs they are plotted
 separately.</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Plot QTL Profile for barley MQM - chromosome 1-6.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">barleyMQM</span>, plotType <span class="op">=</span> <span class="st">"QTLProfileExt"</span>, chr <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span></span></code></pre></div>
 <p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/QPbarleyMQM16-1.png" width="672"></p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Plot QTL Profile for barley MQM - chromosome 7.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">barleyMQM</span>, plotType <span class="op">=</span> <span class="st">"QTLProfileExt"</span>, chr <span class="op">=</span> <span class="fl">7</span><span class="op">)</span></span></code></pre></div>
 <p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/QPbarleyMQM7-1.png" width="672"></p>
+<p>Finally we can have a look at the confidence intervals around the
+parental effects for the QTLs found.</p>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## Plot confidence intervals for parental effects for maize MQM.</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">barleyMQM</span>, plotType <span class="op">=</span> <span class="st">"parCIs"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="QTLMapping_in_MultiParentPopulations_files/figure-html/plotCIbarleyMQM-1.png" width="672"></p>
 <p>The QTLs found are very similar in both position, size and effects as
 described in <span class="citation">Liller et al. (<a href="#ref-Liller2017-jz">2017</a>)</span>. This can also be clearly
 seen by comparing the summary of the MQM with the table of effects in
 this paper.</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Summary.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">barleyMQM</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Trait analysed: Awn_length </span></span>
@@ -709,7 +730,7 @@ settings the computations are done in parallel per chromosome. Of
 course, this doesn’t have an effect on the output. The MQM below gives
 exactly the same results as the non-parallel one described earlier in
 the vignette.</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Register parallel back-end with 2 cores.</span></span>
 <span><span class="fu">doParallel</span><span class="fu">::</span><span class="fu">registerDoParallel</span><span class="op">(</span>cores <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span></span>

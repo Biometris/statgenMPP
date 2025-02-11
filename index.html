@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="An R package for QTL mapping in multi parent populations">
 <meta name="description" content="For Multi Parent Populations (MPP) Identity By Descend (IBD) probabilities are computed using Hidden Markov Models. These probabilities are then used in a mixed model approach for QTL Mapping as described in Li et al. (&lt;doi:10.1007/s00122-021-03919-7&gt;).">
 <meta property="og:description" content="For Multi Parent Populations (MPP) Identity By Descend (IBD) probabilities are computed using Hidden Markov Models. These probabilities are then used in a mixed model approach for QTL Mapping as described in Li et al. (&lt;doi:10.1007/s00122-021-03919-7&gt;).">
@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="index.html">statgenMPP</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,7 +69,7 @@
 <img src="logo.png" class="logo" alt=""><h1 id="statgenmpp-">statgenMPP <a class="anchor" aria-label="anchor" href="#statgenmpp-"></a>
 </h1>
 </div>
-<p><a href="https://www.r-pkg.org/pkg/statgenMPP" class="external-link"><img src="https://www.r-pkg.org/badges/version/statgenMPP"></a> <a href="https://www.r-pkg.org/pkg/statgenMPP" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/statgenMPP" alt="CRAN RStudio mirror downloads"></a> <a href="https://github.com/Biometris/statgenMPP/actions?workflow=R-CMD-check" class="external-link"><img src="https://github.com/Biometris/statgenMPP/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a> <a href="https://app.codecov.io/gh/Biometris/statgenMPP" class="external-link"><img src="https://codecov.io/gh/Biometris/statgenMPP/branch/master/graph/badge.svg" alt="codecov"></a></p>
+<p><a href="https://www.r-pkg.org/pkg/statgenMPP" class="external-link"><img src="https://www.r-pkg.org/badges/version/statgenMPP"></a> <a href="https://www.r-pkg.org/pkg/statgenMPP" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/statgenMPP" alt="CRAN RStudio mirror downloads"></a> <a href="https://github.com/Biometris/statgenMPP/actions?workflow=R-CMD-check" class="external-link"><img src="https://github.com/Biometris/statgenMPP/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a> <a href="https://app.codecov.io/gh/Biometris/statgenMPP" class="external-link"><img src="https://codecov.io/gh/Biometris/statgenMPP/branch/main/graph/badge.svg" alt="codecov"></a></p>
 <p>The statgenMPP package is developed as an easy-to-use package for QTL mapping in biparental and multi-parent populations. The package has many ways of visualizing inputs and results. First Identity By Descent (IBD) probabilities are computed using Hidden Markov Models. These probabilities are then used in a mixed model approach for QTL Mapping as described in <a href="https://link.springer.com/article/10.1007/s00122-021-03919-7" class="external-link">Li et al. 2021</a>.</p>
 <ul>
 <li>Install from CRAN:</li>
@@ -87,7 +87,7 @@
 <p>Here we give a simple example, using a single biparental population. The example contains simulated data for one F4DH population. The population type F4DH is a cross between two parents, A and C, followed by 3 generations of selfings, followed by a DH generation, see <a href="https://biometris.github.io/statgenIBD/" class="external-link">statgenIBD</a> for details.</p>
 <p>First we load the marker data and phenotypic data and calculate the IBDs using the <code>calcIBDMPP</code> function:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">statgenMPP</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://biometris.github.io/statgenMPP/index.html" class="external-link">statgenMPP</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Loading required package: statgenGWAS</span></span>
 <span></span>
 <span><span class="va">markerFiles</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/multipop"</span>, <span class="st">"AxC.txt"</span>, </span>
@@ -134,6 +134,8 @@
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
 <li><a href="https://cloud.r-project.org/package=statgenMPP" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/Biometris/statgenMPP/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/Biometris/statgenMPP/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
