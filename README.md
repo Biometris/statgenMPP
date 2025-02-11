@@ -8,6 +8,7 @@
 downloads](https://cranlogs.r-pkg.org/badges/statgenMPP)](https://www.r-pkg.org/pkg/statgenMPP)
 [![R-CMD-check](https://github.com/Biometris/statgenMPP/workflows/R-CMD-check/badge.svg)](https://github.com/Biometris/statgenMPP/actions?workflow=R-CMD-check)
 [![codecov](https://codecov.io/gh/Biometris/statgenMPP/branch/main/graph/badge.svg)](https://app.codecov.io/gh/Biometris/statgenMPP)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14849990.svg)](https://doi.org/10.5281/zenodo.14849990)
 
 The statgenMPP package is developed as an easy-to-use package for QTL
 mapping in biparental and multi-parent populations. The package has many
