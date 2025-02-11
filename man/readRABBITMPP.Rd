@@ -29,10 +29,12 @@ RABBIT. Reading this file allows for plotting the pedigree. Phenotypic data
 can be added from a data.frame.
 }
 \examples{
+\dontrun{
 ## Read RABBIT data for barley.
 genoFile <- system.file("extdata/barley", "barley_magicReconstruct.zip",
                        package = "statgenMPP")
 barleyMPMPP <- readRABBITMPP(unzip(genoFile, exdir = tempdir()))
+}
 
 }
 \references{
