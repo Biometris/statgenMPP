@@ -1,3 +1,8 @@
+# statgenMPP 1.0.4
+
+* `readRABBITMPP` now reads the output files producted by open source version of RABBIT, available at <https://github.com/Biometris/RABBIT>. Older files created using Mathematica are still read as well.
+* A new plot (`plotType = "parCIs"`) is now available for plotting the parental effects and the confidence intervals around them.
+
 # statgenMPP 1.0.3
 
 * The output of `selQTLMPP` now contains the standard errors of the effects. The standard errors are added in both the full output (GWAResult) and the table with QTLs (signSnp).
