@@ -13,7 +13,8 @@ parCIsPlot <- function(parCIsDat,
                        output = TRUE) {
   parCIsDat[["sign"]] <- as.factor(
     ifelse(parCIsDat[["effect"]] - 2 * parCIsDat[["seEffect"]] < 0 &
-             parCIsDat[["effect"]] + 2 * parCIsDat[["seEffect"]] > 0, 0, 1))
+             parCIsDat[["effect"]] + 2 * parCIsDat[["seEffect"]] > 0,
+           0, ifelse(parCIsDat[["effect"]] > 0,  1, 2)))
   parCIsDat[["snp"]] <- factor(parCIsDat[["snp"]],
                                levels = unique(parCIsDat[["snp"]]))
   ## Create title.
@@ -36,7 +37,8 @@ parCIsPlot <- function(parCIsDat,
       ggplot2::labs(x = xLab, y = yLab, title = title) +
       ggplot2::facet_wrap(ggplot2::vars(.data[["snp"]])) +
       ggplot2::scale_y_discrete(limits = rev) +
-      ggplot2::scale_color_manual(values = c("0" = "black", "1" = "red"),
+      ggplot2::scale_color_manual(values = c("0" = "black", "1" = "red",
+                                             "2" = "blue"),
                                   guide = "none") +
       ggplot2::theme(panel.background = ggplot2::element_blank(),
                      plot.background = ggplot2::element_blank(),

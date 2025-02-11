@@ -107,8 +107,9 @@ subset of chromosomes.}
 \section{Parental Confidence Interval Plot}{
 
 A plot of the parental effects and the confidence intervals around them for
-each of the QTLs found. Significant effects are shown in red, all other
-effects are shown in black.
+each of the QTLs found. Positive significant effects are shown in red,
+negative significant effects in blue, and all other effects are shown in
+black.
 }
 
 \examples{
