@@ -35,6 +35,8 @@
 #' @param parallel Should the computation of variance components be done in
 #' parallel? This requires a parallel back-end to be registered. See examples.
 #' @param verbose Should progress and intermediate plots be output?
+#' @param biparNotConnect Boolean to calculate the standard errors for not connected biparental population
+#' in the correct way. Default \code{FALSE}.
 #'
 #' @returns An object of class \code{QTLMPP}
 #'
@@ -86,7 +88,8 @@ selQTLMPP <- function(MPPobj,
                       K = NULL,
                       computeKin = FALSE,
                       parallel = FALSE,
-                      verbose = FALSE) {
+                      verbose = FALSE,
+                      biparNotConnect = FALSE) {
   if (!inherits(MPPobj, "gDataMPP")) {
     stop("MPPobj should be an object of class gDataMPP.\n")
   }
@@ -198,7 +201,8 @@ selQTLMPP <- function(MPPobj,
                        cof = cofactors,
                        Usc = Usc,
                        parallel = parallel,
-                       verbose = verbose)
+                       verbose = verbose,
+                       biparNotConnect = biparNotConnect)
     if (verbose) {
       plotIntermediateScan(scanRes,
                            threshold = threshold,
@@ -234,7 +238,8 @@ selQTLMPP <- function(MPPobj,
                      Usc = Usc,
                      se = TRUE,
                      parallel = parallel,
-                     verbose = verbose)
+                     verbose = verbose,
+                     biparNotConnect = biparNotConnect)
   ## Flatten cofactor markers to 2D structure.
   if (!is.null(cofactors)) {
     markersCof <- do.call(cbind, lapply(X = cofactors, FUN = function(mrk) {

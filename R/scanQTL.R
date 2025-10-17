@@ -13,7 +13,8 @@ scanQTL <- function(modDat,
                     maxIter = 100,
                     se = FALSE,
                     parallel = FALSE,
-                    verbose = FALSE) {
+                    verbose = FALSE,
+                    biparNotConnect) {
   ## Get info from input.
   nPar <- length(parents)
   nGeno <- nrow(modDat)
@@ -121,7 +122,17 @@ scanQTL <- function(modDat,
         Cinv <- spam::solve.spam(fitModMrk$C)
         Dg <- spam::spam(x = 0, nrow = nPar, ncol = nrow(fitModMrk$C))
         I <- spam::diag.spam(1, nPar)
-        J <- spam::spam(x = 1 / nPar, nrow = nPar, ncol = nPar)
+        if (!biparNotConnect) {
+          J <- spam::spam(x = 1 / nPar, nrow = nPar, ncol = nPar)
+          cat("J default \n")
+        } else {
+          # biparental populations, not connected:
+          A <- spam::spam(x = 1/2, nrow=2, ncol=2)
+          B <- spam::diag.spam(nCross)
+          J <- B %x% A
+          J
+          cat("J new \n")
+        }
         Dg[1:nPar, (nCross + 1):(nCross + nPar)] <- I - J
         seEffects[scanMrk, ] <-
           as.vector(sqrt(spam::diag.spam(Dg %*% Cinv %*% t(Dg))))
