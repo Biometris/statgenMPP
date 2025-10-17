@@ -16,7 +16,8 @@ scanQTL(
   maxIter = 100,
   se = FALSE,
   parallel = FALSE,
-  verbose = FALSE
+  verbose = FALSE,
+  biparNotConnect
 )
 }
 \description{

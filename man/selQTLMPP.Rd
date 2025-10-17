@@ -13,7 +13,8 @@ selQTLMPP(
   K = NULL,
   computeKin = FALSE,
   parallel = FALSE,
-  verbose = FALSE
+  verbose = FALSE,
+  biparNotConnect = FALSE
 )
 }
 \arguments{
@@ -42,6 +43,9 @@ the models.}
 parallel? This requires a parallel back-end to be registered. See examples.}
 
 \item{verbose}{Should progress and intermediate plots be output?}
+
+\item{biparNotConnect}{Boolean to calculate the standard errors for not connected biparental population
+in the correct way. Default \code{FALSE}.}
 }
 \value{
 An object of class \code{QTLMPP}
