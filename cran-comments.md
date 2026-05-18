@@ -1,11 +1,11 @@
 
-Release with added functionality for reading external files and new visualization option.
+Minor release to accomodate upcoming LMMsolver release.
 
 ----
 
 ## Test environments
 
-* local Windows 10 install, R 4.4.2
+* local Windows 11 install, R 4.6
 * winbuilder (develop)
 * Ubuntu (on github actions, devel and release)
 * macOS (on github actions, release)
