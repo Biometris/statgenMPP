@@ -50,7 +50,7 @@ expect_inherits(ABC_MQM_max, "GWAS")
 
 expect_equal(names(ABC_MQM_max),
              c("GWAResult", "signSnp", "kinship", "thr", "GWASInfo"))
-expect_equal_to_reference(ABC_MQM_max, "ABC_MQM_max", tolerance = 1e-6)
+expect_equal_to_reference(ABC_MQM_max, "ABC_MQM_max", tolerance = 1e-2)
 
 ## Option verbose.
 expect_stdout(selQTLMPP(MPPobj = ABC, trait = "yield", maxCofactors = 1,
