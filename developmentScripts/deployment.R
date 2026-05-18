@@ -21,7 +21,7 @@ pkgdown::clean_site()
 pkgdown::build_site()
 
 ## Submit to CRAN
-devtools::release()
+usethis::use_release_issue()
 
 ## Code coverage - local.
 detach("package:statgenMPP", unload = TRUE)

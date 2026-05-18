@@ -1,3 +1,7 @@
+# statgenMPP 1.0.5
+
+* No user visible changes.
+
 # statgenMPP 1.0.4
 
 * `readRABBITMPP` now reads the output files producted by open source version of RABBIT, available at <https://github.com/Biometris/RABBIT>. Older files created using Mathematica are still read as well.
