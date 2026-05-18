@@ -28,7 +28,6 @@ License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
 Depends:
     R (>= 3.6),
     statgenGWAS (>= 1.0.9)
@@ -49,4 +48,4 @@ Suggests:
 VignetteBuilder: knitr
 URL: https://biometris.github.io/statgenMPP/index.html, https://github.com/Biometris/statgenMPP/
 BugReports: https://github.com/Biometris/statgenMPP/issues
-
+Config/roxygen2/version: 8.0.0

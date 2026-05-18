@@ -6,18 +6,15 @@ variables:
     APT_PKGS: "libcurl4-openssl-dev libssh2-1-dev libssl-dev libxml2-dev zlib1g-dev git build-essential gobjc++ libomp-dev libmagick++-6.q16-dev tk dialog libharfbuzz-dev libfribidi-dev libgit2-dev libudunits2-dev libgdal-dev"
     _R_CHECK_FORCE_SUGGESTS_: "false"
     TT_AT_HOME: "true"
-    GITHUB_PAT: "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"
 
 before_script:
   - apt-get update
   - apt-get install -y --no-install-recommends ${APT_PKGS}
-  - export PATH="/usr/local/lib/R/site-library/littler/examples/:${PATH}"
+  - export LD_LIBRARY_PATH="/usr/local/lib/R/lib:${LD_LIBRARY_PATH}"
   - echo "options(Ncpus = $(nproc --all))" >> /usr/local/lib/R/etc/Rprofile.site
-  - install2.r devtools remotes
-  # Uncomment lines below for installation of develop versions of statgenGWAS/statgenIBD
-  # - r -e 'remotes::install_github("Biometris/statgenGWAS", ref = "develop", dependencies = TRUE)'
-  # - r -e 'remotes::install_github("Biometris/statgenIBD", ref = "develop", dependencies = TRUE)'
-  - r -e 'devtools::install_dev_deps(upgrade = "never")'
+  - Rscript -e "update.packages(ask = FALSE, checkBuilt = TRUE)"
+  - Rscript -e "install.packages('pak')"
+  - Rscript -e 'pak::local_install_dev_deps(upgrade = FALSE)'
 
 r-release:
   stage: test
@@ -25,21 +22,7 @@ r-release:
     - Docker
   image: rocker/verse:latest
   script:
-    - r -e 'devtools::check(check_dir = ".")'
-  artifacts:
-    paths:
-      - "*.Rcheck"
-    name: logs
-    when: always
-    expire_in: 1 month
-
-r-devel:
-  stage: test
-  tags:
-    - Docker
-  image: rocker/verse:devel
-  script:
-    - r -e 'devtools::check(check_dir = ".")'
+    - Rscript -e 'devtools::check(check_dir = ".")'
   artifacts:
     paths:
       - "*.Rcheck"
@@ -55,6 +38,7 @@ coverage:
   when: on_success
   script:
     - install2.r covr
-    - r -e 'devtools::install()'
-    - r -e 'covr::package_coverage(type = "none", code = "tinytest::run_test_dir(at_home = TRUE)")'
+    - Rscript -e 'devtools::install()'
+    - Rscript -e 'covr::package_coverage(type = "none", code = "tinytest::run_test_dir(at_home = TRUE)")'
   coverage: '/Coverage:\s*(\d+.\d+\%)/'
+

@@ -68,7 +68,7 @@ effectPlot <- function(effectDat,
                    strip.background = ggplot2::element_blank(),
                    panel.border = ggplot2::element_rect(fill = NA,
                                                         color = "black",
-                                                        size = 0.5,
+                                                        linewidth = 0.5,
                                                         linetype = "solid"),
                    plot.title = ggplot2::element_text(hjust = 0.5))
   if (nrow(parEffData) > 0) {
@@ -90,7 +90,7 @@ effectPlot <- function(effectDat,
       ggplot2::scale_y_discrete(expand = c(0, 0), limits = rev)
   }
   p <- p + ggplot2::geom_vline(xintercept = chrBnd, color = "grey20",
-                               lty = 2, size = 0.3)
+                               lty = 2, linewidth = 0.3)
   if (output) {
     plot(p)
   }

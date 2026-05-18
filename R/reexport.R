@@ -9,6 +9,7 @@ geneticMapPlot <- getFromNamespace(x = "geneticMapPlot", ns = "statgenGWAS")
 createGWAS <- getFromNamespace(x = "createGWAS", ns = "statgenGWAS")
 
 #' @keywords internal
+#' @exportS3Method
 plot.GWAS <- getFromNamespace(x = "plot.GWAS", ns = "statgenGWAS")
 
 #' @keywords internal

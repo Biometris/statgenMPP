@@ -45,7 +45,7 @@ parCIsPlot <- function(parCIsDat,
                      strip.background = ggplot2::element_blank(),
                      panel.border = ggplot2::element_rect(fill = NA,
                                                           color = "black",
-                                                          size = 0.5,
+                                                          linewidth = 0.5,
                                                           linetype = "solid"),
                      plot.title = ggplot2::element_text(hjust = 0.5))
   }

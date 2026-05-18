@@ -24,6 +24,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Bart-Jan van Rossum \email{bart-jan.vanrossum@wur.nl} (\href{https://orcid.org/0000-0002-8673-2514}{ORCID})
   \item Martin Boer \email{martin.boer@wur.nl} (\href{https://orcid.org/0000-0002-1879-4588}{ORCID})
   \item Wenhao Li (\href{https://orcid.org/0000-0001-5719-5775}{ORCID})
 }

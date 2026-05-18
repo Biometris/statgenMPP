@@ -315,7 +315,7 @@ plot.QTLMPP <- function(x,
                        panel.background = ggplot2::element_blank(),
                        panel.border = ggplot2::element_rect(fill = NA,
                                                             color = "black",
-                                                            size = 0.5,
+                                                            linewidth = 0.5,
                                                             linetype = "solid"))
       p2 <- plot(x, chr = dotArgs$chr, plotType = "parEffs", title = "",
                  output = FALSE) +
