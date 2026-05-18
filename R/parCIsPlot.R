@@ -29,7 +29,7 @@ parCIsPlot <- function(parCIsDat,
       ggplot2::geom_point(color = "black") +
       ggplot2::geom_errorbarh(ggplot2::aes(xmax = .data[["effect"]] + 2 * .data[["seEffect"]],
                                            xmin = .data[["effect"]] - 2 * .data[["seEffect"]]),
-                              height = 0.2) +
+                              width = 0.2) +
       ## Trick to assure symmetrical x-axis.
       ggplot2::geom_blank(ggplot2::aes(xmin = - .data[["effect"]] - 2 * .data[["seEffect"]],
                                        xmax = - .data[["effect"]] + 2 * .data[["seEffect"]])) +
