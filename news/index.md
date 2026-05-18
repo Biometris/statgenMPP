@@ -1,5 +1,9 @@
 # Changelog
 
+## statgenMPP 1.0.5
+
+- No user visible changes.
+
 ## statgenMPP 1.0.4
 
 CRAN release: 2025-02-11
